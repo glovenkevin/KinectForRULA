@@ -1,0 +1,43 @@
+D:\Coding\TA Kinect\Hello world\tutorShowSkeleton\tutorShowSkeleton\obj\Debug\tutorShowSkeleton.csprojAssemblyReference.cache
+D:\Coding\TA Kinect\Hello world\tutorShowSkeleton\tutorShowSkeleton\obj\Debug\MainWindow.g.cs
+D:\Coding\TA Kinect\Hello world\tutorShowSkeleton\tutorShowSkeleton\obj\Debug\App.g.cs
+D:\Coding\TA Kinect\Hello world\tutorShowSkeleton\tutorShowSkeleton\obj\Debug\tutorShowSkeleton_MarkupCompile.cache
+D:\Coding\TA Kinect\Hello world\tutorShowSkeleton\tutorShowSkeleton\obj\Debug\tutorShowSkeleton_MarkupCompile.lref
+D:\Coding\TA Kinect\Hello world\tutorShowSkeleton\tutorShowSkeleton\bin\Debug\tutorShowSkeleton.exe.config
+D:\Coding\TA Kinect\Hello world\tutorShowSkeleton\tutorShowSkeleton\bin\Debug\tutorShowSkeleton.exe
+D:\Coding\TA Kinect\Hello world\tutorShowSkeleton\tutorShowSkeleton\bin\Debug\tutorShowSkeleton.pdb
+D:\Coding\TA Kinect\Hello world\tutorShowSkeleton\tutorShowSkeleton\bin\Debug\LightBuzz.Vitruvius.dll
+D:\Coding\TA Kinect\Hello world\tutorShowSkeleton\tutorShowSkeleton\bin\Debug\Microsoft.Kinect.dll
+D:\Coding\TA Kinect\Hello world\tutorShowSkeleton\tutorShowSkeleton\bin\Debug\Microsoft.Kinect.Face.dll
+D:\Coding\TA Kinect\Hello world\tutorShowSkeleton\tutorShowSkeleton\bin\Debug\LightBuzz.Vitruvius.xml
+D:\Coding\TA Kinect\Hello world\tutorShowSkeleton\tutorShowSkeleton\bin\Debug\Microsoft.Kinect.xml
+D:\Coding\TA Kinect\Hello world\tutorShowSkeleton\tutorShowSkeleton\bin\Debug\Microsoft.Kinect.Face.xml
+D:\Coding\TA Kinect\Hello world\tutorShowSkeleton\tutorShowSkeleton\obj\Debug\MainWindow.baml
+D:\Coding\TA Kinect\Hello world\tutorShowSkeleton\tutorShowSkeleton\obj\Debug\tutorShowSkeleton.g.resources
+D:\Coding\TA Kinect\Hello world\tutorShowSkeleton\tutorShowSkeleton\obj\Debug\tutorShowSkeleton.Properties.Resources.resources
+D:\Coding\TA Kinect\Hello world\tutorShowSkeleton\tutorShowSkeleton\obj\Debug\tutorShowSkeleton.csproj.GenerateResource.cache
+D:\Coding\TA Kinect\Hello world\tutorShowSkeleton\tutorShowSkeleton\obj\Debug\tutorShowSkeleton.csproj.CopyComplete
+D:\Coding\TA Kinect\Hello world\tutorShowSkeleton\tutorShowSkeleton\obj\Debug\tutorShowSkeleton.exe
+D:\Coding\TA Kinect\Hello world\tutorShowSkeleton\tutorShowSkeleton\obj\Debug\tutorShowSkeleton.pdb
+F:\Skipsi\Coding\Hello world\tutorShowSkeleton\tutorShowSkeleton\bin\Debug\tutorShowSkeleton.exe.config
+F:\Skipsi\Coding\Hello world\tutorShowSkeleton\tutorShowSkeleton\obj\Debug\tutorShowSkeleton.exe
+F:\Skipsi\Coding\Hello world\tutorShowSkeleton\tutorShowSkeleton\obj\Debug\tutorShowSkeleton.pdb
+F:\Skipsi\Coding\Hello world\tutorShowSkeleton\tutorShowSkeleton\obj\Debug\tutorShowSkeleton.csprojResolveAssemblyReference.cache
+F:\Skipsi\Coding\Hello world\tutorShowSkeleton\tutorShowSkeleton\obj\Debug\SettingWindow.baml
+F:\Skipsi\Coding\Hello world\tutorShowSkeleton\tutorShowSkeleton\obj\Debug\MainWindow.g.cs
+F:\Skipsi\Coding\Hello world\tutorShowSkeleton\tutorShowSkeleton\obj\Debug\SettingWindow.g.cs
+F:\Skipsi\Coding\Hello world\tutorShowSkeleton\tutorShowSkeleton\obj\Debug\App.g.cs
+F:\Skipsi\Coding\Hello world\tutorShowSkeleton\tutorShowSkeleton\obj\Debug\tutorShowSkeleton_MarkupCompile.cache
+F:\Skipsi\Coding\Hello world\tutorShowSkeleton\tutorShowSkeleton\obj\Debug\tutorShowSkeleton_MarkupCompile.lref
+F:\Skipsi\Coding\Hello world\tutorShowSkeleton\tutorShowSkeleton\bin\Debug\tutorShowSkeleton.exe
+F:\Skipsi\Coding\Hello world\tutorShowSkeleton\tutorShowSkeleton\bin\Debug\tutorShowSkeleton.pdb
+F:\Skipsi\Coding\Hello world\tutorShowSkeleton\tutorShowSkeleton\bin\Debug\LightBuzz.Vitruvius.dll
+F:\Skipsi\Coding\Hello world\tutorShowSkeleton\tutorShowSkeleton\bin\Debug\Microsoft.Kinect.dll
+F:\Skipsi\Coding\Hello world\tutorShowSkeleton\tutorShowSkeleton\bin\Debug\Microsoft.Kinect.Face.dll
+F:\Skipsi\Coding\Hello world\tutorShowSkeleton\tutorShowSkeleton\bin\Debug\LightBuzz.Vitruvius.xml
+F:\Skipsi\Coding\Hello world\tutorShowSkeleton\tutorShowSkeleton\bin\Debug\Microsoft.Kinect.xml
+F:\Skipsi\Coding\Hello world\tutorShowSkeleton\tutorShowSkeleton\bin\Debug\Microsoft.Kinect.Face.xml
+F:\Skipsi\Coding\Hello world\tutorShowSkeleton\tutorShowSkeleton\obj\Debug\MainWindow.baml
+F:\Skipsi\Coding\Hello world\tutorShowSkeleton\tutorShowSkeleton\obj\Debug\tutorShowSkeleton.g.resources
+F:\Skipsi\Coding\Hello world\tutorShowSkeleton\tutorShowSkeleton\obj\Debug\tutorShowSkeleton.Properties.Resources.resources
+F:\Skipsi\Coding\Hello world\tutorShowSkeleton\tutorShowSkeleton\obj\Debug\tutorShowSkeleton.csproj.GenerateResource.Cache

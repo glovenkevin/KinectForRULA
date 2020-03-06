@@ -1,0 +1,42 @@
+﻿<Window x:Class="tutorShowSkeleton.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:tutorShowSkeleton"
+        mc:Ignorable="d"
+        Closed="Window_Closed"
+        Title="MainWindow" Height="600" Width="800">
+    <Grid>
+        <Image Name="camera" 
+               Height="500" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                Width="500"/>
+        <Canvas Name="canvas" HorizontalAlignment="Stretch"
+               VerticalAlignment="Stretch"
+                Height="500" 
+                Width="500"/>
+
+        <Label Content="Upper Arm" HorizontalAlignment="Left" Margin="10,96,0,0" VerticalAlignment="Top"/>
+        <TextBox IsReadOnly="True" HorizontalAlignment="Left" Height="46" Margin="10,127,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="125" Name="textUpperArm" FontSize="36"/>
+
+        <Label Content="Lower Arm" HorizontalAlignment="Left" Margin="10,187,0,0" VerticalAlignment="Top"/>
+        <TextBox IsReadOnly="True" HorizontalAlignment="Left" Height="46" Margin="10,213,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="125" x:Name="textLowerArm" FontSize="36"/>
+
+        <Label Content="Wrist arm" HorizontalAlignment="Left" Margin="10,271,0,0" VerticalAlignment="Top"/>
+        <TextBox IsReadOnly="True" HorizontalAlignment="Left" Height="46" Margin="10,302,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="125" x:Name="textWristArm" FontSize="36"/>
+
+        <Label Content="Neck" HorizontalAlignment="Left" Margin="741,95,0,0" VerticalAlignment="Top"/>
+        <TextBox IsReadOnly="True" HorizontalAlignment="Left" Height="46" Margin="653,126,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="125" x:Name="textNeck" FontSize="36"/>
+
+        <Label Content="Trunk" HorizontalAlignment="Left" Margin="739,186,0,0" VerticalAlignment="Top"/>
+        <TextBox IsReadOnly="True" HorizontalAlignment="Left" Height="46" Margin="653,212,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="125" x:Name="textTrunk" FontSize="36"/>
+
+        <Button Content="Connect" HorizontalAlignment="Left" Height="33" Margin="10,34,0,0" VerticalAlignment="Top" Width="54"
+                Click="Connect_Event"/>
+        <Label Content="Label" HorizontalAlignment="Left" Margin="76,38,0,0" VerticalAlignment="Top" Name="Status"/>
+
+        <Button Content="Default Setting" HorizontalAlignment="Left" Height="38" Margin="10,378,0,0" VerticalAlignment="Top" Width="101"
+                Click="Call_Setting"/>
+
+    </Grid>
+</Window>
