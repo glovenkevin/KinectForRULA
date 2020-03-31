@@ -57,6 +57,7 @@ namespace tutorShowSkeleton
                 this.controller.CloseReader();
                 this.Status.Content = "Disconnect";
                 this.camera.Source = null;
+                this.canvas.Children.Clear();
             }
         }
 
