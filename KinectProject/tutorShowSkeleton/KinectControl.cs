@@ -111,15 +111,21 @@ namespace tutorShowSkeleton
             //double angle = this.calcUpperArm(start, poros, trunk);
             double angle = this.calculateAngle(poros.Position.Y, poros.Position.Z,
                 start.Position.Y, start.Position.Z, -1, poros.Position.Z);
-            //double angle = this.Calc2D(start, poros, body.Joints[JointType.SpineShoulder]);
             this.textUpperArm.Text = angle.ToString("0");
 
             // Lengan Bawah - oke
             start = body.Joints[JointType.ShoulderLeft];
             Joint end = body.Joints[JointType.WristLeft];
             poros = body.Joints[JointType.ElbowLeft];
-            angle = poros.Angle(start, end) - 140;
+            angle = poros.Angle(start, end) - 180;
             this.textLowerArm.Text = angle.ToString("0");
+
+            // Cek arah lengan bwah apakah keluar dari batas midlane
+            start = body.Joints[JointType.SpineShoulder];
+            end = body.Joints[JointType.WristLeft];
+            poros = body.Joints[JointType.ShoulderLeft];
+            angle = poros.Angle(start, end) - 260; // dalam rentang -10 -> 10 masih dalam posisi tengah
+            //this.textLowerArm.Text = angle.ToString("0");
 
             // Pergelangan Tangan - oke
             start = body.Joints[JointType.ElbowLeft];
@@ -132,14 +138,24 @@ namespace tutorShowSkeleton
             start = body.Joints[JointType.Head];
             end = body.Joints[JointType.SpineShoulder];
             poros = body.Joints[JointType.Neck];
-            angle = poros.Angle(start, end) - 180;
+            angle = poros.Angle(start, end) - 190;
             this.textNeck.Text = angle.ToString("0");
             
-            // Batang tubuh
+            // Batang tubuh - oke
             start = body.Joints[JointType.SpineShoulder];
             end = body.Joints[JointType.SpineBase];
             poros = body.Joints[JointType.SpineMid];
-            angle = poros.Angle(start, end) - 180;
+            //angle = poros.Angle(start, end) - 180;
+            angle = this.calculateAngle(poros.Position.X, poros.Position.Z,
+                    start.Position.X, start.Position.Z, 1, poros.Position.Z);
+            if (angle <= 90)
+            {
+                angle = 90 - angle;
+            }
+            else
+            {
+                angle -= 90;
+            }
             this.textTrunk.Text = angle.ToString("0");
     }
 
@@ -161,45 +177,6 @@ namespace tutorShowSkeleton
         }
 
         return angleDeg;
-    }
-
-    public double Calc2D(Joint a, Joint b, Joint c)
-    {
-        double dotProduct= 0.0;
-        Vector Siku = convertToVector(a);
-        Vector Pundak = convertToVector(b);
-        Vector dada = convertToVector(c);
-
-        dotProduct = Math.Atan2(Pundak.Y - Siku.Y , Pundak.X - Siku.X) - 
-            Math.Atan2(Pundak.Y - dada.Y, Pundak.X - dada.X);
-        return (dotProduct * 180)/Math.PI;
-    }
-
-    public double Calc3D(Joint a, Joint b, Joint c)
-    {
-        Vector3 vector1 = new Vector3();
-        vector1.X = 0;
-        vector1.Y = a.Position.Y;
-        vector1.Z = a.Position.Z;
-        vector1.Normalize();
-
-        Vector3 vector2 = new Vector3();
-        vector2.X = b.Position.X;
-        vector2.Y = b.Position.Y;
-        vector2.Z = b.Position.Z;
-        vector2.Normalize();
-
-        Vector3 vector3 = new Vector3();
-        vector3.X = c.Position.X;
-        vector3.Y = c.Position.Y;
-        vector3.Z = c.Position.Z;
-        //vector3.X = 1;
-        //vector3.Y = 0;
-        //vector3.Z = 0;
-        vector3.Normalize();
-
-        double dotProduct = Vector3.DotProduct(vector1 - vector2, vector3 - vector2);
-        return (double)Math.Acos(dotProduct) * (180 / Math.PI);
     }
 
     public Vector3 convertJointToVector(Joint j)

@@ -47,8 +47,7 @@ namespace tutorShowSkeleton
 
         private String[] wristDeviasi = new String[] {
             "None",
-            "Menyimpang ke kiri/ke kanan",
-            "Menyimpang ke kiri dan ke kanan"
+            "Menyimpang ke kiri/ke kanan"
         };
 
         private String[] wristRotation = new String[] {
@@ -162,10 +161,6 @@ namespace tutorShowSkeleton
             if (String.Equals(temp, wristDeviasi[1]))
             {
                 this.pergelanganTangan += 1;
-            }
-            else if (String.Equals(temp, wristDeviasi[2]))
-            {
-                this.pergelanganTangan += 2;
             }
 
             temp = this.putaranPergelanganTangan.Text;

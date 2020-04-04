@@ -1,0 +1,4 @@
+// Hitung sudut Upper arm vektor
+https://stackoverflow.com/a/39673693/6759373
+https://stackoverflow.com/a/25546387/6759373
+https://math.stackexchange.com/questions/361412/finding-the-angle-between-three-points
