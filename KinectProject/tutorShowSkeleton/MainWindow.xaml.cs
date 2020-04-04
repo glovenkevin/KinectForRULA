@@ -13,7 +13,6 @@ namespace tutorShowSkeleton
         public static MainWindow mainWindow;
         SettingWindow setWin = new SettingWindow();
 
-        public static int[] scoreSetting = new int[11];
         /*   
          *  0 -> upper arm
          *  1 -> lower arm
@@ -30,7 +29,20 @@ namespace tutorShowSkeleton
          *  9 -> otot postur B
          *  10 -> beban eksternal Postur B
          */
+        public static int[] scoreSetting = new int[11];
         
+        /*
+         *  Group A:
+         *      0 -> Upper Arm
+         *      1 -> Lower Arm
+         *      2 -> Wrist
+         *     
+         *  Group B:
+         *      3 -> Leher
+         *      4 -> Punggung
+         */ 
+        public static int[] scorePosture = new int[5];
+
         public MainWindow()
         {
             InitializeComponent();
