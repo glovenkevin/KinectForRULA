@@ -23,18 +23,22 @@ namespace tutorShowSkeleton
         private int statusLenganAtas = 0;
         private int statusLenganBawah = 0;
         private int pergelanganTangan = 0;
-        private int rotasiPergelanganTangan = 0;
+        private int rotasiPergelanganTangan = 1;
         private int bebanOtotTangan = 0;
         private int totalBebanEksternalTangan = 0;
 
         // Variabel Nilai Tambahan untuk postur Tubuh B
-        private int kondisiKaki = 0;
+        private int kondisiKaki = 1;
         private int kondisiLeher = 0;
         private int kondisiBatangTubuh = 0;
         private int bebanOtotBadan = 0;
         private int totalBebanEksternalBadan = 0;
 
         // List jawaban
+        private String[] sisiBadan = new String[] {
+            "kiri",
+            "kanan"
+        };
 
         private String[] kondisiLenganAtas = new String[] {
             "None", // 0 
@@ -51,7 +55,6 @@ namespace tutorShowSkeleton
         };
 
         private String[] wristRotation = new String[] {
-            "None",
             "Kisaran menengah",
             "Perputaran sampai di ujung"
         };
@@ -78,8 +81,7 @@ namespace tutorShowSkeleton
 
         private String[] kondisiPutaranBatangTubuh = new String[] {
             "None",
-            "Batang tubuh berputar",
-            "Batang tubuh bengkok ke kiri / kanan",
+            "Batang tubuh berputar atau bengkok ke kiri/kanan",
             "Batang tubuh berputar dan bengkok"
         };
 
@@ -97,6 +99,10 @@ namespace tutorShowSkeleton
 
         void InitializeComboboxItem()
         {
+            // Setting bagian badan
+            this.sidePosition.ItemsSource = sisiBadan;
+            this.sidePosition.SelectedIndex = 0;
+
             // Setting kondisi lengan atas
             this.kondisiLengan.ItemsSource = kondisiLenganAtas;
             this.kondisiLengan.SelectedIndex = 0;
@@ -137,7 +143,14 @@ namespace tutorShowSkeleton
         void applyData()
         {
             // Menentukan Posisi badan 
-            String sisiBadan = this.sidePosition.Text;
+            if (String.Equals(this.sidePosition.Text, sisiBadan[0]))
+            {
+                tutorShowSkeleton.MainWindow.sisiBadan = 0;
+            }
+            else
+            {
+                tutorShowSkeleton.MainWindow.sisiBadan = 1;
+            }
 
             // Postur Tubuh A -------------------------------------------------
             // Lengan atas
@@ -145,58 +158,71 @@ namespace tutorShowSkeleton
             if (String.Equals(temp, kondisiLenganAtas[1]) ||
                 String.Equals(temp, kondisiLenganAtas[4]))
             {
-                this.statusLenganAtas += 1;
+                this.statusLenganAtas = 1;
             }
             else if (String.Equals(temp, kondisiLenganAtas[3]))
             {
-                this.statusLenganAtas += 2;
+                this.statusLenganAtas = 2;
             }
             else if (String.Equals(temp, kondisiLenganAtas[5]))
             {
-                this.statusLenganAtas -= 1;
+                this.statusLenganAtas = -1;
+            }
+            else
+            {
+                this.statusLenganAtas = 0;
             }
 
             // Pergelangan tangan
             temp = this.deviasiPergelanganTangan.Text;
             if (String.Equals(temp, wristDeviasi[1]))
             {
-                this.pergelanganTangan += 1;
+                this.pergelanganTangan = 1;
+            }
+            else
+            {
+                this.pergelanganTangan = 0;
             }
 
             temp = this.putaranPergelanganTangan.Text;
-            if (String.Equals(temp, wristRotation[1]))
+            if (String.Equals(temp, wristRotation[0]))
             {
-                this.rotasiPergelanganTangan += 1;
+                this.rotasiPergelanganTangan = 1;
             }
-            else if (String.Equals(temp, wristRotation[2]))
+            else if (String.Equals(temp, wristRotation[1]))
             {
-                this.rotasiPergelanganTangan += 2;
+                this.rotasiPergelanganTangan = 2;
             }
 
-            // Beban Posutr A 
+            // Beban Postur A 
             // kekuatan otot tangan 
             temp = this.kekuatanOtotTangan.Text;
-            if (String.Equals(temp, wristMusclePower[1]))
+            if (String.Equals(temp, wristMusclePower[1]) || 
+                String.Equals(temp, wristMusclePower[2]))
             {
-                this.bebanOtotTangan += 1;
+                this.bebanOtotTangan = 1;
             }
-            else if (String.Equals(temp, wristMusclePower[2]))
+            else
             {
-                this.bebanOtotTangan += 2;
+                this.bebanOtotTangan = 0;
             }
 
             temp = this.bebanEksternalTangan.Text;
             if (String.Equals(temp, bebanEksternal[1]))
             {
-                this.totalBebanEksternalTangan += 1;
+                this.totalBebanEksternalTangan = 1;
             }
             else if (String.Equals(temp, bebanEksternal[2]))
             {
-                this.totalBebanEksternalTangan += 2;
+                this.totalBebanEksternalTangan = 2;
             }
             else if (String.Equals(temp, bebanEksternal[3]))
             {
-                this.totalBebanEksternalTangan += 3;
+                this.totalBebanEksternalTangan = 3;
+            }
+            else
+            {
+                this.totalBebanEksternalTangan = 0;
             }
             // End Postur A -------------------------------------------------------
             
@@ -204,9 +230,9 @@ namespace tutorShowSkeleton
             // Beban Kaki
             if (this.bebanKaki.IsChecked == true)
             {
-                this.kondisiKaki += 1;
+                this.kondisiKaki = 1;
             } else {
-                this.kondisiKaki += 2;
+                this.kondisiKaki = 2;
             }
 
             // Kondisi Leher
@@ -214,53 +240,65 @@ namespace tutorShowSkeleton
             if (String.Equals(temp, kondisiStatusLeher[1]) || 
                 String.Equals(temp, kondisiStatusLeher[2]))
             {
-                this.kondisiLeher += 1;
+                this.kondisiLeher = 1;
             }
             else if (String.Equals(temp, kondisiStatusLeher[3]))
             {
-                this.kondisiLeher += 2;
+                this.kondisiLeher = 2;
+            }
+            else
+            {
+                this.kondisiLeher = 0;
             }
 
             // Kondisi sudut batang tubuh
             temp = this.kondisiRotasiBatangTubuh.Text;
-            if (String.Equals(temp, kondisiPutaranBatangTubuh[1]) ||
-                String.Equals(temp, kondisiPutaranBatangTubuh[2]))
+            if (String.Equals(temp, kondisiPutaranBatangTubuh[1]))
             {
-                this.kondisiBatangTubuh += 1;
+                this.kondisiBatangTubuh = 1;
             }
             else if (String.Equals(temp, kondisiPutaranBatangTubuh[3]))
             {
-                this.kondisiBatangTubuh += 2;
+                this.kondisiBatangTubuh = 2;
+            }
+            else
+            {
+                this.kondisiBatangTubuh = 0;
             }
 
             // Beban postur B
             temp = this.kekuatanOtotBadan.Text;
-            if (String.Equals(temp, wristMusclePower[1]))
+            if (String.Equals(temp, wristMusclePower[1]) || 
+                String.Equals(temp, wristMusclePower[2]))
             {
-                this.bebanOtotBadan += 1;
+                this.bebanOtotBadan = 1;
             }
-            else if (String.Equals(temp, wristMusclePower[2]))
+            else                            
             {
-                this.bebanOtotBadan += 2;
+                this.bebanOtotBadan = 0;
             }
 
             temp = this.bebanEksternalBadan.Text;
             if (String.Equals(temp, bebanEksternal[1]))
             {
-                this.totalBebanEksternalBadan += 1;
+                this.totalBebanEksternalBadan = 1;
             }
             else if (String.Equals(temp, bebanEksternal[2]))
             {
-                this.totalBebanEksternalBadan += 2;
+                this.totalBebanEksternalBadan = 2;
             }
             else if (String.Equals(temp, bebanEksternal[3]))
             {
-                this.totalBebanEksternalBadan += 3;
+                this.totalBebanEksternalBadan = 3;
+            }
+            else
+            {
+                this.totalBebanEksternalBadan = 0;
             }
 
             // End Postur Tubuh B -----------------------------------------------------
 
-            // Start Perhitungan 
+            // Pindahkan ke Array Global 
 
             /*  Patokan Array:
              *  0 -> upper arm

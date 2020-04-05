@@ -11,7 +11,8 @@ namespace tutorShowSkeleton
   class KinectControl
   {
     public KinectControl(Func<IBodyDrawer> bodyDrawerFactory, Image image, 
-        TextBox textUpperArm, TextBox textLowerArm, TextBox textWristArm, TextBox textNeck, TextBox textTrunk)
+        TextBox textUpperArm, TextBox textLowerArm, TextBox textWristArm, TextBox textNeck, TextBox textTrunk,
+        TextBlock finalScore, TextBlock finalScoreMsg)
     {
       this.bodyDrawerFactory = bodyDrawerFactory;
       this.camera = image;
@@ -20,6 +21,8 @@ namespace tutorShowSkeleton
       this.textWristArm = textWristArm;
       this.textNeck = textNeck;
       this.textTrunk = textTrunk;
+      this.finalScore = finalScore;
+      this.finalScoreMsg = finalScoreMsg;
     }
 
     public void GetSensor(Canvas canvas)
@@ -87,7 +90,11 @@ namespace tutorShowSkeleton
             if (this.bodies[i].IsTracked)
             {
               this.bodyDrawers[i].DrawFrame(this.bodies[i]);
+
+              // Hitung sudut dari sensor kamera RULA
               this.calculateAngle(this.bodies[i]);
+              // Lakukan perhitungan RULA
+              this.calculateRulaEngine();
             }
             else
             {
@@ -105,17 +112,23 @@ namespace tutorShowSkeleton
         
     public void calculateAngle(Body body)
     {
+        Joint start, end, poros;
+        double angle;
+        int sisiBadan = tutorShowSkeleton.MainWindow.sisiBadan;
+        if (0 == sisiBadan) // sisi Kiri
+        {
             // Lengan atas Oke
-            Joint start = body.Joints[JointType.ElbowLeft];
-            Joint poros = body.Joints[JointType.ShoulderLeft];
+            start = body.Joints[JointType.ElbowLeft];
+            poros = body.Joints[JointType.ShoulderLeft];
             //double angle = this.calcUpperArm(start, poros, trunk);
-            double angle = this.calculateAngle(poros.Position.Y, poros.Position.Z,
+            angle = this.calculateAngle(poros.Position.Y, poros.Position.Z,
                 start.Position.Y, start.Position.Z, -1, poros.Position.Z);
+            RulaCalculation.calculateUpperArm(angle);
             this.textUpperArm.Text = angle.ToString("0");
 
             // Lengan Bawah - oke
             start = body.Joints[JointType.ShoulderLeft];
-            Joint end = body.Joints[JointType.WristLeft];
+            end = body.Joints[JointType.WristLeft];
             poros = body.Joints[JointType.ElbowLeft];
             angle = poros.Angle(start, end) - 180;
             this.textLowerArm.Text = angle.ToString("0");
@@ -124,46 +137,83 @@ namespace tutorShowSkeleton
             start = body.Joints[JointType.SpineShoulder];
             end = body.Joints[JointType.WristLeft];
             poros = body.Joints[JointType.ShoulderLeft];
-            angle = poros.Angle(start, end) - 260; // dalam rentang -10 -> 10 masih dalam posisi tengah
+            double deviasiWrist = poros.Angle(start, end) - 260; // dalam rentang -10 -> 10 masih dalam posisi tengah
             //this.textLowerArm.Text = angle.ToString("0");
+            RulaCalculation.calculateLowerArm(angle, deviasiWrist);
 
             // Pergelangan Tangan - oke
             start = body.Joints[JointType.ElbowLeft];
             end = body.Joints[JointType.HandLeft];
             poros = body.Joints[JointType.WristLeft];
             angle = poros.Angle(start, end) - 180;
+            RulaCalculation.calculateWrist(angle);
             this.textWristArm.Text = angle.ToString("0");
+        }
+        else // sisi Kanan
+        {
+            // Lengan atas Oke
+            start = body.Joints[JointType.ElbowRight];
+            poros = body.Joints[JointType.ShoulderRight];
+            //double angle = this.calcUpperArm(start, poros, trunk);
+            angle = this.calculateAngle(poros.Position.Y, poros.Position.Z,
+                start.Position.Y, start.Position.Z, -1, poros.Position.Z);
+            RulaCalculation.calculateUpperArm(angle);
+            this.textUpperArm.Text = angle.ToString("0");
 
-            // Leher - oke 
-            start = body.Joints[JointType.Head];
-            end = body.Joints[JointType.SpineShoulder];
-            poros = body.Joints[JointType.Neck];
-            angle = poros.Angle(start, end) - 190;
-            this.textNeck.Text = angle.ToString("0");
-            
-            // Batang tubuh - oke
+            // Lengan Bawah - oke
+            start = body.Joints[JointType.ShoulderRight];
+            end = body.Joints[JointType.WristRight];
+            poros = body.Joints[JointType.ElbowLeft];
+            angle = poros.Angle(start, end) - 180;
+            this.textLowerArm.Text = angle.ToString("0");
+
+            // Cek arah lengan bwah apakah keluar dari batas midlane
             start = body.Joints[JointType.SpineShoulder];
-            end = body.Joints[JointType.SpineBase];
-            poros = body.Joints[JointType.SpineMid];
-            //angle = poros.Angle(start, end) - 180;
-            angle = this.calculateAngle(poros.Position.X, poros.Position.Z,
-                    start.Position.X, start.Position.Z, 1, poros.Position.Z);
-            if (angle <= 90)
-            {
-                angle = 90 - angle;
-            }
-            else
-            {
-                angle -= 90;
-            }
-            this.textTrunk.Text = angle.ToString("0");
+            end = body.Joints[JointType.WristRight];
+            poros = body.Joints[JointType.ShoulderRight];
+            double deviasiWrist = poros.Angle(start, end) - 260; // dalam rentang -10 -> 10 masih dalam posisi tengah
+            //this.textLowerArm.Text = angle.ToString("0");
+            RulaCalculation.calculateLowerArm(angle, deviasiWrist);
+
+            // Pergelangan Tangan - oke
+            start = body.Joints[JointType.ElbowRight];
+            end = body.Joints[JointType.HandRight];
+            poros = body.Joints[JointType.WristRight];
+            angle = poros.Angle(start, end) - 180;
+            RulaCalculation.calculateWrist(angle);
+            this.textWristArm.Text = angle.ToString("0");
+        }
+
+        // Leher - oke 
+        start = body.Joints[JointType.Head];
+        end = body.Joints[JointType.SpineShoulder];
+        poros = body.Joints[JointType.Neck];
+        angle = poros.Angle(start, end) - 190;
+        RulaCalculation.calculateNeck(angle);
+        this.textNeck.Text = angle.ToString("0");
+            
+        // Batang tubuh - oke
+        start = body.Joints[JointType.SpineShoulder];
+        end = body.Joints[JointType.SpineBase];
+        poros = body.Joints[JointType.SpineMid];
+        //angle = poros.Angle(start, end) - 180;
+        angle = this.calculateAngle(poros.Position.X, poros.Position.Z,
+                start.Position.X, start.Position.Z, 1, poros.Position.Z);
+        if (angle <= 90)
+        {
+            angle = 90 - angle;
+        }
+        else
+        {
+            angle -= 90;
+        }
+        RulaCalculation.calculateTrunk(angle);
+        this.textTrunk.Text = angle.ToString("0");
     }
 
     private double calculateAngle(double P1X, double P1Y, double P2X, double P2Y,
             double P3X, double P3Y)
     {
-
-
         double numerator = P2Y * (P1X - P3X) + P1Y * (P3X - P2X) + P3Y * (P2X - P1X);
         double denominator = (P2X - P1X) * (P1X - P3X) + (P2Y - P1Y) * (P1Y - P3Y);
         double ratio = numerator / denominator;
@@ -179,23 +229,15 @@ namespace tutorShowSkeleton
         return angleDeg;
     }
 
-    public Vector3 convertJointToVector(Joint j)
+    private void calculateRulaEngine()
     {
-        Vector3 vector = new Vector3();
-        vector.X = j.Position.X;
-        vector.Y = j.Position.Y;
-        vector.Z = j.Position.Z;
-        vector.Normalize();
-        return vector;
-    }
+        // Hitung nilai keseluruhan
+        finalResult = RulaCalculation.calculateRula();
+        finalMsg = RulaCalculation.getFinalScoreMsg(finalResult);
 
-    public Vector convertToVector(Joint j)
-    {
-        Vector vector = new Vector();
-        vector.X = j.Position.X;
-        vector.Y = j.Position.Y;
-        vector.Normalize();
-        return vector;
+        // Set Ke TexBlocknya
+        this.finalScore.Text = finalResult.ToString();
+        this.finalScoreMsg.Text = finalMsg;
     }
 
     Body[] bodies;
@@ -205,6 +247,10 @@ namespace tutorShowSkeleton
     Func<IBodyDrawer> bodyDrawerFactory;
     Image camera;
     MultiSourceFrameReader colorReader;
+    
+    // FinalScore Item
+    int finalResult;
+    String finalMsg;
 
     //Text box untuk badan kiri
     TextBox textUpperArm;
@@ -212,6 +258,8 @@ namespace tutorShowSkeleton
     TextBox textWristArm;
     TextBox textNeck;
     TextBox textTrunk;
+    TextBlock finalScore;
+    TextBlock finalScoreMsg;
 
     static Brush[] brushes = 
     {

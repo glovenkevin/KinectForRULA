@@ -6,15 +6,11 @@
         xmlns:local="clr-namespace:tutorShowSkeleton"
         mc:Ignorable="d"
         Closed="Window_Closed"
-        Title="MainWindow" Height="600" Width="800">
+        ResizeMode="NoResize"
+        Title="MainWindow" Height="700" Width="800">
     <Grid>
-        <Image Name="camera" 
-               Height="500" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-                Width="500"/>
-        <Canvas Name="canvas" HorizontalAlignment="Stretch"
-               VerticalAlignment="Stretch"
-                Height="500" 
-                Width="500"/>
+        <Image Name="camera" Height="500" Width="500" Margin="147,36,147,35" VerticalAlignment="Top"/>
+        <Canvas Name="canvas" Height="500" Width="500"  Margin="147,36,147,0" VerticalAlignment="Top"/>
 
         <Label Content="Upper Arm" HorizontalAlignment="Left" Margin="10,96,0,0" VerticalAlignment="Top"/>
         <TextBox IsReadOnly="True" HorizontalAlignment="Left" Height="46" Margin="10,127,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="125" Name="textUpperArm" FontSize="36"/>
@@ -37,6 +33,10 @@
 
         <Button Content="Default Setting" HorizontalAlignment="Left" Height="38" Margin="10,378,0,0" VerticalAlignment="Top" Width="101"
                 Click="Call_Setting"/>
+
+        <!--Final Score-->
+        <TextBlock Name="finalScore" HorizontalAlignment="Left" Margin="251,0,0,84" TextWrapping="Wrap" Text="TextBlock" Width="290" FontSize="36" TextAlignment="Center" Height="46" VerticalAlignment="Bottom"/>
+        <TextBlock Name="finalScoreMsg" HorizontalAlignment="Left" Height="66" Margin="76,595,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="635" FontSize="24" TextAlignment="Center"/>
 
     </Grid>
 </Window>

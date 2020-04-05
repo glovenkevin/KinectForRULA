@@ -116,5 +116,13 @@ namespace tutorShowSkeleton
             {5, 5, 6, 6, 7, 7, 7},
             {5, 5, 6, 7, 7, 7, 7}
         };
+
+        // Pesan penjelasan nilai Final Score
+        public static String[] Message = new String[] {
+            "Postur masih bisa diterima",                                           // 1 - 2
+            "Perlu investigasi lebih lanjut",                                       // 3 - 4
+            "Perlu investigasi lebih lanjut dan harus segera mengganti postur",     // 5 - 6
+            "Investigasi dan langsung mengganti postur"                             // 7
+        };
     }
 }

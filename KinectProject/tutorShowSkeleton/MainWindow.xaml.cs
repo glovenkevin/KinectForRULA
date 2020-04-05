@@ -12,6 +12,9 @@ namespace tutorShowSkeleton
         KinectControl controller;
         public static MainWindow mainWindow;
         SettingWindow setWin = new SettingWindow();
+        
+        // 0 -> Kiri (default) || 1 -> Kanan
+        public static int sisiBadan = 0; 
 
         /*   
          *  0 -> upper arm
@@ -29,7 +32,9 @@ namespace tutorShowSkeleton
          *  9 -> otot postur B
          *  10 -> beban eksternal Postur B
          */
-        public static int[] scoreSetting = new int[11];
+        public static int[] scoreSetting = new int[11] {
+            0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0                 // Inisialisasi Awal
+        };
         
         /*
          *  Group A:
@@ -86,7 +91,9 @@ namespace tutorShowSkeleton
                 this.textLowerArm ,
                 this.textWristArm ,
                 this.textNeck,
-                this.textTrunk
+                this.textTrunk,
+                this.finalScore,
+                this.finalScoreMsg
                 );
             controller.GetSensor(this.canvas);
         }
