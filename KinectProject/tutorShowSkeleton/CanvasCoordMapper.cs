@@ -24,8 +24,8 @@ namespace tutorShowSkeleton
 
             return (new Point()
             {
-                X = (colourSpacePosition.X / colourFrameSize.Width) * canvasWidth,
-                Y = (colourSpacePosition.Y / colourFrameSize.Height) * canvasHeight
+                X = (colourSpacePosition.X / colourFrameSize.Width ) * canvasWidth,
+                Y = (colourSpacePosition.Y / colourFrameSize.Height ) * canvasHeight
             });
         }
         Canvas canvas;

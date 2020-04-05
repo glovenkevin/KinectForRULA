@@ -45,20 +45,37 @@ namespace tutorShowSkeleton
       }
     }
 
-    public void openColorReader()
+    public void openReader()
     {
-        this.colorReader = this.sensor.OpenMultiSourceFrameReader(FrameSourceTypes.Color);
+        this.colorReader = this.sensor.OpenMultiSourceFrameReader(FrameSourceTypes.Color | FrameSourceTypes.Depth);
         this.colorReader.MultiSourceFrameArrived += OnColorFrameArrived;
     }
 
     void OnColorFrameArrived(Object sender, MultiSourceFrameArrivedEventArgs e)
     {
+        // Warna
         var reference = e.FrameReference.AcquireFrame();
         using (var frame = reference.ColorFrameReference.AcquireFrame())
         {
             if (frame != null)
             {
-                this.camera.Source = frame.ToBitmap();
+                if (String.Equals("color", tutorShowSkeleton.MainWindow._mode))
+                {
+                    this.camera.Source = frame.ToBitmap();
+                }
+            }
+        }
+
+        // Depth
+        var referenceDept = e.FrameReference.AcquireFrame();
+        using (var frame = referenceDept.DepthFrameReference.AcquireFrame())
+        {
+            if (frame != null)
+            {
+                if (String.Equals("depth", tutorShowSkeleton.MainWindow._mode))
+                {
+                    this.camera.Source = frame.ToBitmap();
+                }
             }
         }
     }
@@ -205,7 +222,7 @@ namespace tutorShowSkeleton
         }
         else
         {
-            angle -= 90;
+            angle = (angle - 90) * -1;
         }
         RulaCalculation.calculateTrunk(angle);
         this.textTrunk.Text = angle.ToString("0");
@@ -237,6 +254,24 @@ namespace tutorShowSkeleton
 
         // Set Ke TexBlocknya
         this.finalScore.Text = finalResult.ToString();
+        // Set pewarnaan logo nya
+        if (finalResult <= 2)
+        {
+            this.finalScore.Foreground = Brushes.Green;
+        }
+        else if (finalResult > 2 && finalResult <= 4)
+        {
+            this.finalScore.Foreground = Brushes.GreenYellow;
+        }
+        else if (finalResult > 4 && finalResult <= 7)
+        {
+            this.finalScore.Foreground = Brushes.Yellow;
+        }
+        else
+        {
+            this.finalScore.Foreground = Brushes.Red;
+        }
+
         this.finalScoreMsg.Text = finalMsg;
     }
 

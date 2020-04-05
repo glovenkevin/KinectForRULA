@@ -13,6 +13,8 @@ namespace tutorShowSkeleton
         public static MainWindow mainWindow;
         SettingWindow setWin = new SettingWindow();
         
+        public static String _mode = "depth";
+
         // 0 -> Kiri (default) || 1 -> Kanan
         public static int sisiBadan = 0; 
 
@@ -65,7 +67,7 @@ namespace tutorShowSkeleton
         {
             if ("Disconnect".Equals(this.Status.Content))
             {
-                this.controller.openColorReader();
+                this.controller.openReader();
                 this.controller.OpenReaderBodySkeleton();
                 this.Status.Content = "Connected";
             } 
@@ -98,10 +100,6 @@ namespace tutorShowSkeleton
             controller.GetSensor(this.canvas);
         }
 
-        public void setColorVideo()
-        {
-            controller.openColorReader();
-        }
         public void setBodySkeleton()
         {
             controller.OpenReaderBodySkeleton();

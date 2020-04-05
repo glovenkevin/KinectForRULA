@@ -65,15 +65,9 @@ namespace tutorShowSkeleton
       foreach (var item in body.Joints)
       {
         JointType jointType = item.Key;
-        Joint joint = item.Value.ScaleTo(Convert.ToInt32(canvas.ActualWidth),
-            Convert.ToInt32(canvas.ActualHeight));
+        Joint joint = item.Value;
 
-        //Point jointCanvasPosition = this.canvasCoordMapper.MapCameraSpacePoint(joint.Position);        
-        Point jointCanvasPosition = new Point()
-        {
-            X = joint.Position.X,
-            Y = joint.Position.Y
-        };
+        Point jointCanvasPosition = this.canvasCoordMapper.MapCameraSpacePoint(joint.Position);
 
         bool draw = IsJointForDrawing(joint, jointCanvasPosition);
 

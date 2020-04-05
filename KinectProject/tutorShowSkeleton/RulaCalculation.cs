@@ -74,7 +74,7 @@ namespace tutorShowSkeleton
         public static void calculateWrist(double angle)
         {
             // Hitung sudut pergelangan tangan dari sensor
-            if (angle > 0 && angle <= 5)
+            if ( angle <= 5)
             {
                 tutorShowSkeleton.MainWindow.scorePosture[2] = 1;
             } 
@@ -118,7 +118,7 @@ namespace tutorShowSkeleton
         public static void calculateTrunk(double angle)
         {
             // Hitung sudut punggung / trunk dari nilai sensor
-            if (angle > -10 && angle <= 10)
+            if (angle <= 10)
             {
                 tutorShowSkeleton.MainWindow.scorePosture[4] = 1;
             }
@@ -175,7 +175,7 @@ namespace tutorShowSkeleton
             }
 
             // Get Nilai Final
-            ScoreGroupC = GlobalVal.GroupC[ScoreGroupA, ScoreGroupB];
+            ScoreGroupC = GlobalVal.GroupC[ScoreGroupA - 1, ScoreGroupB - 1];
 
             // Kembalikan nilai Final
             return ScoreGroupC;
