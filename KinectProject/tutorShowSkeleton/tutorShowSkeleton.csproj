@@ -64,7 +64,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="DotNetMatrix\CholeskyDecomposition.cs" />
+    <Compile Include="DotNetMatrix\EigenvalueDecomposition.cs" />
+    <Compile Include="DotNetMatrix\GeneralMatrix.cs" />
+    <Compile Include="DotNetMatrix\LUDecomposition.cs" />
+    <Compile Include="DotNetMatrix\QRDecomposition.cs" />
+    <Compile Include="DotNetMatrix\SingularValueDecomposition.cs" />
     <Compile Include="GlobalVal.cs" />
+    <Compile Include="kinectFilter.cs" />
     <Compile Include="RulaCalculation.cs" />
     <Compile Include="SettingWindow.xaml.cs">
       <DependentUpon>SettingWindow.xaml</DependentUpon>

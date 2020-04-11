@@ -55,21 +55,21 @@ namespace tutorShowSkeleton
         };
 
         private String[] wristRotation = new String[] {
-            "Kisaran menengah",
-            "Perputaran sampai di ujung"
+            "Twisted mainly in mid-range",
+            "Twist at near end of twisting"
         };
 
         private String[] wristMusclePower = new String[] {
             "None",
-            "Sebagian statis dan dipertahankan > 1 menit",
-            "Gerakan diulang lebih dari 4 kali / menit"
+            "Posture mainly static",
+            "Action repeatedly occurs 4 times per minute"
         };
 
         private String[] bebanEksternal = new String[] {
-            "Kurang dari 2kg atau tenaga intermitten", 
-            "Beban 2kg - 10kg ", // 1  
-            "Beban 2kg - 10kg dan dilakukan berulang / dengan kejut", // 2 
-            "Lebih dari 10kg dan dilakukan berulang" // 3
+            "intermittent", 
+            "Load 2 kg - 10 kg ", // 1  
+            "Load 2 kg - 10 kg (static or repeated)", // 2 
+            "Load more than 10 kg or repeated or shock" // 3
         };
 
         private String[] kondisiStatusLeher = new String[] {

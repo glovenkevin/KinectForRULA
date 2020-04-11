@@ -3,11 +3,34 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Kinect;
 
 namespace tutorShowSkeleton
 {
     static class GlobalVal
     {
+        // Body Part that being use for kalman filter
+        public static JointType[] BodyPart = new JointType[] {
+            // Group A
+            // Left
+            JointType.ShoulderLeft,
+            JointType.ElbowLeft,
+            JointType.WristLeft,
+            JointType.HandLeft,
+            // Right
+            JointType.ShoulderRight,
+            JointType.ElbowRight,
+            JointType.WristRight,
+            JointType.HandRight,
+            
+            // Group B
+            JointType.Head,
+            JointType.Neck,
+            JointType.SpineShoulder,
+            JointType.SpineMid,
+            JointType.SpineBase
+        };
+
         // Score Group A
         // Urutan { Lengan Atas, Postur pergelangan, Putaran Pergelangan, Lengan Bawah }
         public static int[, , ,] GroupA = new int[6, 4, 2, 3]

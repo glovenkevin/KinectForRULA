@@ -2,3 +2,13 @@
 https://stackoverflow.com/a/39673693/6759373
 https://stackoverflow.com/a/25546387/6759373
 https://math.stackexchange.com/questions/361412/finding-the-angle-between-three-points
+
+// Filter built in Kinect
+https://social.msdn.microsoft.com/Forums/en-US/850b61ce-a1f4-4e05-a0c9-b0c208276bec/joint-smoothing-code-for-c?forum=kinectv2sdk
+
+// Kalman Filter
+https://wangready.wordpress.com/2013/05/02/kalman-filter/
+https://piptools.net/algoritma-kalman-filter/
+https://github.com/KonstantinosAng/Kinect2-Kalman/blob/master/depth_kalman_kinectv2.m
+http://bilgin.esme.org/BitsAndBytes/KalmanFilterforDummies
+
