@@ -25,7 +25,7 @@ namespace tutorShowSkeleton
         *  10 -> beban eksternal Postur B
         */
 
-        public static void calculateUpperArm(double angle)
+        public static void calculateUpperArm(double angle, double angleAbduction)
         {
             // Hitung sudut dari inputan sensor
             if (-20 >= angle && angle <= 20)
@@ -43,6 +43,19 @@ namespace tutorShowSkeleton
             else if (angle > 90)
             {
                 tutorShowSkeleton.MainWindow.scorePosture[0] = 4;
+            }
+
+            // is Abducted
+            if (angle > 100 && (angleAbduction > 125 || angleAbduction < 90))
+            {
+                tutorShowSkeleton.MainWindow.scorePosture[0] += 1;
+            }
+            else if (angle < 90 || angle > 75 && angleAbduction > 90)
+            {
+                tutorShowSkeleton.MainWindow.scorePosture[0] += 1;
+            }
+            else if (angle < 100 && angleAbduction < 160) {
+                tutorShowSkeleton.MainWindow.scorePosture[0] += 1;
             }
 
             // Tambahkan nilai sudut dengan setting yang diberikan
@@ -91,7 +104,7 @@ namespace tutorShowSkeleton
             tutorShowSkeleton.MainWindow.scorePosture[2] += tutorShowSkeleton.MainWindow.scoreSetting[2];
         }
 
-        public static void calculateNeck(double angle)
+        public static void calculateNeck(double angle, double neckBending)
         {
             // Hitung sudut leher terhadap garis tegak lurus dari punggung
             if (angle < 0)
@@ -109,6 +122,12 @@ namespace tutorShowSkeleton
             else if (angle > 20)
             {
                 tutorShowSkeleton.MainWindow.scorePosture[3] = 3;
+            }
+
+            // Neck Bending
+            if (neckBending < 95 || neckBending > 105)
+            {
+                tutorShowSkeleton.MainWindow.scorePosture[3] += 1;
             }
 
             // tambahkan score setting

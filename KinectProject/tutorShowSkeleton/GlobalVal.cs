@@ -17,11 +17,13 @@ namespace tutorShowSkeleton
             JointType.ElbowLeft,
             JointType.WristLeft,
             JointType.HandLeft,
+            JointType.HandTipLeft,
             // Right
             JointType.ShoulderRight,
             JointType.ElbowRight,
             JointType.WristRight,
             JointType.HandRight,
+            JointType.HandTipRight,
             
             // Group B
             JointType.Head,

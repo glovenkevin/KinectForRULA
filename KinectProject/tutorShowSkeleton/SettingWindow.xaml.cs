@@ -49,11 +49,6 @@ namespace tutorShowSkeleton
             "Lengan disandarkan" // -1
         };
 
-        private String[] wristDeviasi = new String[] {
-            "None",
-            "Menyimpang ke kiri/ke kanan"
-        };
-
         private String[] wristRotation = new String[] {
             "Twisted mainly in mid-range",
             "Twist at near end of twisting"
@@ -70,13 +65,6 @@ namespace tutorShowSkeleton
             "Load 2 kg - 10 kg ", // 1  
             "Load 2 kg - 10 kg (static or repeated)", // 2 
             "Load more than 10 kg or repeated or shock" // 3
-        };
-
-        private String[] kondisiStatusLeher = new String[] {
-            "None",
-            "Leher berputar",
-            "Leher bengkok ke kiri / kanan",
-            "Leher berputar dan bengkok"
         };
 
         private String[] kondisiPutaranBatangTubuh = new String[] {
@@ -107,10 +95,6 @@ namespace tutorShowSkeleton
             this.kondisiLengan.ItemsSource = kondisiLenganAtas;
             this.kondisiLengan.SelectedIndex = 0;
 
-            // Setting sudut tangan
-            this.deviasiPergelanganTangan.ItemsSource = wristDeviasi;
-            this.deviasiPergelanganTangan.SelectedIndex = 0;
-
             // Setting putaran pergelangan tangan
             this.putaranPergelanganTangan.ItemsSource = wristRotation;
             this.putaranPergelanganTangan.SelectedIndex = 0;
@@ -122,10 +106,6 @@ namespace tutorShowSkeleton
             // Setting Beban Eskternal tangan
             this.bebanEksternalTangan.ItemsSource = bebanEksternal;
             this.bebanEksternalTangan.SelectedIndex = 0;
-
-            // Setting kondisi leher
-            this.kondisiSudutLeher.ItemsSource = kondisiStatusLeher;
-            this.kondisiSudutLeher.SelectedIndex = 0;
 
             // Seting kondisi batang tubuh
             this.kondisiRotasiBatangTubuh.ItemsSource = kondisiPutaranBatangTubuh;
@@ -152,7 +132,7 @@ namespace tutorShowSkeleton
                 tutorShowSkeleton.MainWindow.sisiBadan = 1;
             }
 
-            // Postur Tubuh A -------------------------------------------------
+            /******************** Group A ****************************************/
             // Lengan atas
             String temp = this.kondisiLengan.Text;
             if (String.Equals(temp, kondisiLenganAtas[1]) ||
@@ -174,14 +154,9 @@ namespace tutorShowSkeleton
             }
 
             // Pergelangan tangan
-            temp = this.deviasiPergelanganTangan.Text;
-            if (String.Equals(temp, wristDeviasi[1]))
+            if (this.wristDeviation.IsChecked == true)
             {
                 this.pergelanganTangan = 1;
-            }
-            else
-            {
-                this.pergelanganTangan = 0;
             }
 
             temp = this.putaranPergelanganTangan.Text;
@@ -225,8 +200,8 @@ namespace tutorShowSkeleton
                 this.totalBebanEksternalTangan = 0;
             }
             // End Postur A -------------------------------------------------------
-            
-            // Postur Tubuh B -----------------------------------------------------
+
+            /********************************* Group B ****************************************/
             // Beban Kaki
             if (this.bebanKaki.IsChecked == true)
             {
@@ -236,19 +211,9 @@ namespace tutorShowSkeleton
             }
 
             // Kondisi Leher
-            temp = this.kondisiSudutLeher.Text;
-            if (String.Equals(temp, kondisiStatusLeher[1]) || 
-                String.Equals(temp, kondisiStatusLeher[2]))
+            if (this.neckTwist.IsChecked == true)
             {
                 this.kondisiLeher = 1;
-            }
-            else if (String.Equals(temp, kondisiStatusLeher[3]))
-            {
-                this.kondisiLeher = 2;
-            }
-            else
-            {
-                this.kondisiLeher = 0;
             }
 
             // Kondisi sudut batang tubuh
@@ -257,7 +222,7 @@ namespace tutorShowSkeleton
             {
                 this.kondisiBatangTubuh = 1;
             }
-            else if (String.Equals(temp, kondisiPutaranBatangTubuh[3]))
+            else if (String.Equals(temp, kondisiPutaranBatangTubuh[2]))
             {
                 this.kondisiBatangTubuh = 2;
             }

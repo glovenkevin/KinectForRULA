@@ -173,56 +173,68 @@ namespace tutorShowSkeleton
         
     public void calculateAngle(Body body)
     {
-        Joint start, end, poros;
-        double angle;
         int sisiBadan = tutorShowSkeleton.MainWindow.sisiBadan;
+        Joint spineShoulder = kalmanFilterFull(convertJoinToMatrix(body.Joints[JointType.SpineShoulder]),
+            getBodyTypeSeq(JointType.SpineShoulder));
+        Joint spineBase = kalmanFilterFull(convertJoinToMatrix(body.Joints[JointType.SpineBase]),
+            getBodyTypeSeq(JointType.SpineBase));
+        Vector3D trunk = convertJointoVector(spineBase) - convertJointoVector(spineShoulder);
 
         // Group A
-        calculateUpperArm(body, sisiBadan);
+        calculateUpperArm(body, trunk, sisiBadan);
         calculateLowerArm(body, sisiBadan);
         calculateWrist(body, sisiBadan);
         
         // Group B
-        calculateNect(body);
+        calculateNeck(body);
         calculateTrunk(body);
     }
 
     /******************* Method Angle Calc Body Part ******************/
 
-    private void calculateUpperArm(Body body, int sisiBadan)
+    private void calculateUpperArm(Body body, Vector3D trunk, int sisiBadan)
     {
         Joint start, poros;
-        int pos = 0;
         double angle;
 
         if (0 == sisiBadan) // sisi Kiri
         {
-            pos = getBodyTypeSeq(JointType.ElbowLeft);
-            start = kalmanFilterFull(convertJoinToMatrix(body.Joints[JointType.ElbowLeft]), pos);
+            // Upper arm correspondent to sagittal Plane
+            start = kalmanFilterFull(convertJoinToMatrix(body.Joints[JointType.ElbowLeft]), 
+                getBodyTypeSeq(JointType.ElbowLeft));
 
-            pos = getBodyTypeSeq(JointType.ShoulderLeft);
-            poros = kalmanFilterFull(convertJoinToMatrix(body.Joints[JointType.ShoulderLeft]), pos);
+            poros = kalmanFilterFull(convertJoinToMatrix(body.Joints[JointType.ShoulderLeft]), 
+                getBodyTypeSeq(JointType.ShoulderLeft));
             
             // Calculate Angle
             angle = this.calculateAngle(poros.Position.Y, poros.Position.Z,
                 start.Position.Y, start.Position.Z, -1, poros.Position.Z);
-            RulaCalculation.calculateUpperArm(angle);
             this.textUpperArm.Text = angle.ToString("0");
+
+            // Upper Arm Abduction
+            double angleAbduction = this.calculateAngle(poros.Position.X, poros.Position.Y,
+                start.Position.X, start.Position.Y, poros.Position.X, -1);
+           
+            RulaCalculation.calculateUpperArm(angle, angleAbduction);
         }
         else
         {
             // Lengan atas Oke
-            pos = getBodyTypeSeq(JointType.ElbowRight);
-            start = kalmanFilterFull(convertJoinToMatrix(body.Joints[JointType.ElbowRight]), pos);
+            start = kalmanFilterFull(convertJoinToMatrix(body.Joints[JointType.ElbowRight]), 
+                getBodyTypeSeq(JointType.ElbowRight));
 
-            pos = getBodyTypeSeq(JointType.ShoulderRight);
-            poros = kalmanFilterFull(convertJoinToMatrix(body.Joints[JointType.ShoulderRight]), pos);
+            poros = kalmanFilterFull(convertJoinToMatrix(body.Joints[JointType.ShoulderRight]), 
+                getBodyTypeSeq(JointType.ShoulderRight));
 
             // Calculate Angle
             angle = this.calculateAngle(poros.Position.Y, poros.Position.Z,
                 start.Position.Y, start.Position.Z, -1, poros.Position.Z);
-            RulaCalculation.calculateUpperArm(angle);
-            this.textUpperArm.Text = angle.ToString("0");
+
+            // Upper Arm Abduction
+            double angleAbduction = this.calculateAngle(poros.Position.X, poros.Position.Y,
+                start.Position.X, start.Position.Y, poros.Position.X, 1);
+
+            RulaCalculation.calculateUpperArm(angle, angleAbduction);
         }
     }
 
@@ -251,6 +263,7 @@ namespace tutorShowSkeleton
                 getBodyTypeSeq(JointType.SpineShoulder));
 
             double deviasiWrist = poros.Angle(start, end) - 260; // dalam rentang -10 -> 10 masih dalam posisi tengah
+            
             RulaCalculation.calculateLowerArm(angle, deviasiWrist);
         }
         else
@@ -284,17 +297,23 @@ namespace tutorShowSkeleton
         double angle;
         if (0 == sisiBadan)
         {
-            // Pergelangan Tangan - oke
+            // Wrist Angle coresponding Horizontall plane
             start = kalmanFilterFull(convertJoinToMatrix(body.Joints[JointType.ElbowLeft]),
                 getBodyTypeSeq(JointType.ElbowLeft));
 
-            end = kalmanFilterFull(convertJoinToMatrix(body.Joints[JointType.HandLeft]),
-                getBodyTypeSeq(JointType.HandLeft));
+            end = kalmanFilterFull(convertJoinToMatrix(body.Joints[JointType.HandTipLeft]),
+                getBodyTypeSeq(JointType.HandTipLeft));
 
             poros = kalmanFilterFull(convertJoinToMatrix(body.Joints[JointType.WristLeft]),
-                getBodyTypeSeq(JointType.WristLeft));
+                getBodyTypeSeq(JointType.HandLeft));
 
-            angle = poros.Angle(start, end) - 180;
+            angle = calculateAngle(poros.Position.X, poros.Position.Y, start.Position.X, poros.Position.Y,
+                end.Position.X, end.Position.Y);
+            if (angle > 100)
+            {
+                angle = 180 - angle;
+            }
+
             RulaCalculation.calculateWrist(angle);
             this.textWristArm.Text = angle.ToString("0");
         }
@@ -304,23 +323,29 @@ namespace tutorShowSkeleton
             start = kalmanFilterFull(convertJoinToMatrix(body.Joints[JointType.ElbowRight]),
                 getBodyTypeSeq(JointType.ElbowRight));
 
-            end = kalmanFilterFull(convertJoinToMatrix(body.Joints[JointType.HandRight]),
-                getBodyTypeSeq(JointType.HandRight));
+            end = kalmanFilterFull(convertJoinToMatrix(body.Joints[JointType.HandTipRight]),
+                getBodyTypeSeq(JointType.HandTipRight));
 
             poros = kalmanFilterFull(convertJoinToMatrix(body.Joints[JointType.WristRight]),
                 getBodyTypeSeq(JointType.WristRight));
 
-            angle = poros.Angle(start, end) - 180;
+            angle = calculateAngle(poros.Position.X, poros.Position.Y, start.Position.X, poros.Position.Y,
+                end.Position.X, end.Position.Y);
+            if (angle > 100)
+            {
+                angle = 180 - angle;
+            }
             RulaCalculation.calculateWrist(angle);
             this.textWristArm.Text = angle.ToString("0");
         }
     }
 
-    private void calculateNect(Body body)
+    private void calculateNeck(Body body)
     {
         Joint start, end, poros;
         double angle;
 
+        // Neck Angle corespondent to sagittal plane
         start = kalmanFilterFull(convertJoinToMatrix(body.Joints[JointType.Head]),
                 getBodyTypeSeq(JointType.Head));
 
@@ -330,14 +355,32 @@ namespace tutorShowSkeleton
         poros = kalmanFilterFull(convertJoinToMatrix(body.Joints[JointType.Neck]),
             getBodyTypeSeq(JointType.Neck));
 
-        angle = poros.Angle(start, end) - 190;
-        RulaCalculation.calculateNeck(angle);
+        angle = calculateAngle(poros.Position.X, poros.Position.Y, start.Position.X, start.Position.Y,
+            end.Position.X, end.Position.Y);
+        if (angle < 20)
+        {
+            angle *= -1;
+        }
+        else if (angle > 20)
+        {
+            angle = 180 - angle;
+        }
+
+        // Neck Bending
+        poros = end;
+        end = kalmanFilterFull(convertJoinToMatrix(body.Joints[JointType.ShoulderLeft]),
+            getBodyTypeSeq(JointType.ShoulderLeft));
+
+        double bendingAngle = calculateAngle(poros.Position.Y, poros.Position.Z, 
+            start.Position.Y, start.Position.Z, poros.Position.Y, poros.Position.Z + start.Position.Z);
+        this.textUpperArm.Text = bendingAngle.ToString("0");
+        RulaCalculation.calculateNeck(angle, bendingAngle);
         this.textNeck.Text = angle.ToString("0");
     }
 
     private void calculateTrunk(Body body)
     {
-        Joint start, end, poros;
+        Joint start, poros;
         double angle;
 
         start = kalmanFilterFull(convertJoinToMatrix(body.Joints[JointType.SpineShoulder]),
@@ -347,7 +390,7 @@ namespace tutorShowSkeleton
             getBodyTypeSeq(JointType.SpineMid));
 
         angle = this.calculateAngle(poros.Position.X, poros.Position.Z,
-                start.Position.X, start.Position.Z, 1, poros.Position.Z);
+                start.Position.X, start.Position.Z, 3, poros.Position.Z);
         if (angle <= 90)
         {
             angle = 90 - angle;
@@ -411,6 +454,15 @@ namespace tutorShowSkeleton
         j.Position.Z = (float) x.GetElement(2, 0);
 
         return j;
+    }
+
+    private Vector3D convertJointoVector(Joint j)
+    {
+        Vector3D v = new Vector3D();
+        v.X = j.Position.X;
+        v.Y = j.Position.Y;
+        v.Z = j.Position.Z;
+        return v;
     }
 
     private void calculateRulaEngine()
