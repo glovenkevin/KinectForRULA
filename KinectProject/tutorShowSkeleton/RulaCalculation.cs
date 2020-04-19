@@ -25,7 +25,7 @@ namespace tutorShowSkeleton
         *  10 -> beban eksternal Postur B
         */
 
-        public static void calculateUpperArm(double angle, double angleAbduction)
+        public static void calculateUpperArm(double angle, double angleAbduction, double shoulderRaised)
         {
             // Hitung sudut dari inputan sensor
             if (-20 >= angle && angle <= 20)
@@ -58,6 +58,12 @@ namespace tutorShowSkeleton
                 tutorShowSkeleton.MainWindow.scorePosture[0] += 1;
             }
 
+            // Shoulder is raised
+            if (shoulderRaised > 262)
+            {
+                tutorShowSkeleton.MainWindow.scorePosture[0] += 1;
+            }
+
             // Tambahkan nilai sudut dengan setting yang diberikan
             tutorShowSkeleton.MainWindow.scorePosture[0] += tutorShowSkeleton.MainWindow.scoreSetting[0];
         }
@@ -87,15 +93,15 @@ namespace tutorShowSkeleton
         public static void calculateWrist(double angle)
         {
             // Hitung sudut pergelangan tangan dari sensor
-            if ( angle <= 5)
+            if ( angle < 10)
             {
                 tutorShowSkeleton.MainWindow.scorePosture[2] = 1;
             } 
-            else if (angle <= 15 && angle > 5)
+            else if (angle < 25 && angle > 10)
             {
                 tutorShowSkeleton.MainWindow.scorePosture[2] = 2;
             }
-            else if (angle > 15)
+            else if (angle > 25)
             {
                 tutorShowSkeleton.MainWindow.scorePosture[2] = 3;
             }
@@ -125,7 +131,7 @@ namespace tutorShowSkeleton
             }
 
             // Neck Bending
-            if (neckBending < 95 || neckBending > 105)
+            if (neckBending < 80 || neckBending > 70)
             {
                 tutorShowSkeleton.MainWindow.scorePosture[3] += 1;
             }
@@ -134,7 +140,7 @@ namespace tutorShowSkeleton
             tutorShowSkeleton.MainWindow.scorePosture[3] += tutorShowSkeleton.MainWindow.scoreSetting[4];
         }
 
-        public static void calculateTrunk(double angle)
+        public static void calculateTrunk(double angle, double trunkBending)
         {
             // Hitung sudut punggung / trunk dari nilai sensor
             if (angle <= 10)
@@ -152,6 +158,12 @@ namespace tutorShowSkeleton
             else if (angle > 60)
             {
                 tutorShowSkeleton.MainWindow.scorePosture[4] = 4;
+            }
+
+            // Side Bending
+            if (trunkBending < 100)
+            {
+                tutorShowSkeleton.MainWindow.scorePosture[4] += 1;
             }
 
             // tambahkan score setting 

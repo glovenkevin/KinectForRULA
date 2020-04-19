@@ -30,7 +30,11 @@ namespace tutorShowSkeleton
             JointType.Neck,
             JointType.SpineShoulder,
             JointType.SpineMid,
-            JointType.SpineBase
+            JointType.SpineBase,
+            JointType.HipLeft,
+            JointType.HipRight,
+            JointType.AnkleLeft,
+            JointType.AnkleRight
         };
 
         // Score Group A

@@ -1,75 +1,73 @@
 ﻿<Window x:Class="tutorShowSkeleton.SettingWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="SettingWindow" Height="687.5" Width="400"
+        Title="SettingWindow" Height="602.5" Width="303"
         ResizeMode="NoResize"
         WindowStyle="ToolWindow">
     <Grid>
-        <StackPanel Orientation="Horizontal" Margin="95,10,0,0" HorizontalAlignment="Left" Width="208" Height="32" VerticalAlignment="Top" >
+        <StackPanel Orientation="Horizontal" Margin="43,0,46,532" Height="32" VerticalAlignment="Bottom" HorizontalAlignment="Center" Width="208" >
             <Label Content="Body Position: " Height="30" VerticalAlignment="Top"/>
             <ComboBox Name="sidePosition" IsEditable="False" Width="120" Height="20"></ComboBox>
         </StackPanel>
 
-        <TextBlock TextAlignment="Center" Padding="10" Margin="0,45,0,390" ><Run Text="Arms and Wrists manual Settings" /></TextBlock>
+        <TextBlock TextAlignment="Center" Padding="10" Margin="0,45,0,0" Height="35" VerticalAlignment="Top" ><Run Text="Arms and Wrists manual Settings" /></TextBlock>
 
-        <GroupBox Header="Arm and Wrist" Margin="10,85,10,0" Height="245" VerticalAlignment="Top">
-            <StackPanel Height="219" VerticalAlignment="Top">
+        <GroupBox Header="Arm and Wrist" Margin="10,85,0,0" Height="197" VerticalAlignment="Top" HorizontalAlignment="Left" Width="278">
+            <StackPanel Margin="0,0,0,2">
                 <!-- Lengan -->
-                <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
-                    <Label Content="Kondisi Lengan atas: " Width="200" />
-                    <ComboBox Width="150" Height="30" IsEditable="False" Name="kondisiLengan" ></ComboBox>
+                <StackPanel Orientation="Horizontal" Margin="5, 5, 0, 0" >
+                    <CheckBox x:Name="upperArmLean" Content="Arm is supported or person is leaning" />
                 </StackPanel>
 
                 <!-- Pergelangan tangan-->
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Width="360" Margin="0, 5, 0, 0" >
+                <StackPanel Orientation="Horizontal" Margin="5, 5, 0, 0" >
                     <CheckBox x:Name="wristDeviation" Content="Wrist Deviation Right/Left" />
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
-                    <Label Content="Perputaran pergelangan tangan: " Width="200" />
+                    <Label Content="Wrist Twist: " Width="100" />
                     <ComboBox Width="150" Height="30" IsEditable="False" Name="putaranPergelanganTangan" />
                 </StackPanel>
 
                 <!--Beban pada postur A-->
                 <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
-                    <Label Content="Penggunaan kekuatan otot tangan: " Width="200" />
+                    <Label Content="Muscle Use: " Width="100" />
                     <ComboBox Width="150" Height="30" IsEditable="False" Name="kekuatanOtotTangan"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
-                    <Label Content="Beban yang dipegang/dibawa: " Width="200" />
+                    <Label Content="Arm Load: " Width="100" />
                     <ComboBox Width="150" Height="30" IsEditable="False" Name="bebanEksternalTangan" />
                 </StackPanel>
             </StackPanel>
         </GroupBox>
 
-        <TextBlock TextAlignment="Center" Padding="10" Margin="0,335,0,0" Height="38" VerticalAlignment="Top" ><Run Text="Neck and Trunk manual Settings" /></TextBlock>
-        <GroupBox Header="Neck and Trunk" HorizontalAlignment="Left" Margin="10,378,0,0" Height="218" VerticalAlignment="Top">
-            <StackPanel VerticalAlignment="Top" Margin="0,0,0,-1" Orientation="Vertical">
+        <TextBlock TextAlignment="Center" Padding="10" Margin="0,287,0,0" Height="38" VerticalAlignment="Top" ><Run Text="Neck and Trunk manual Settings" /></TextBlock>
+        <GroupBox Header="Neck and Trunk" HorizontalAlignment="Left" Margin="10,325,0,0" Height="182" VerticalAlignment="Top">
+            <StackPanel VerticalAlignment="Top" Orientation="Vertical" Width="263">
                 <!--Tambahan pada postur B-->
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Width="360" Margin="0, 5, 0, 0" >
+                <StackPanel Orientation="Horizontal" Margin="5, 5, 0, 0" >
                     <CheckBox x:Name="bebanKaki" Content="Leg and feet NOT supported and balanced" />
                 </StackPanel>
-                <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                <StackPanel Orientation="Horizontal" Margin="5,10,0,0">
                     <CheckBox x:Name="neckTwist" Content="Is Neck Twisted" />
                 </StackPanel>
-                <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
-                    <Label Content="Kondisi Batang tubuh: " Width="200" />
-                    <ComboBox Width="150" Height="30" Name="kondisiRotasiBatangTubuh" ></ComboBox>
+                <StackPanel Orientation="Horizontal" Margin="5,10,0,0">
+                    <CheckBox x:Name="trunkTwist" Content="Is trunk Twisted" />
                 </StackPanel>
 
                 <!--Beban pada postur B-->
                 <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
-                    <Label Content="Penggunaan kekuatan otot tangan: " Width="200" />
+                    <Label Content="Muscle User: " Width="100" />
                     <ComboBox Width="150" Height="30" IsEditable="False" Name="kekuatanOtotBadan"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
-                    <Label Content="Beban yang dipegang/dibawa: " Width="200" />
+                    <Label Content="Arm Load: " Width="100" />
                     <ComboBox Width="150" Height="30" IsEditable="False" Name="bebanEksternalBadan" />
                 </StackPanel>
             </StackPanel>
         </GroupBox>
 
         <!--apply-->
-        <TextBlock Padding="5" TextAlignment="Center" Margin="0,601,0,0" Height="42" VerticalAlignment="Top">
+        <TextBlock Padding="5" TextAlignment="Center" Margin="0,0,0,15" Height="42" VerticalAlignment="Bottom">
             <Button Height="30" Width="150" Content="Apply Setting" Click="Apply_Setting" ></Button>
         </TextBlock>
     </Grid>

@@ -2,6 +2,10 @@
 This my Kinect for RULA (Raipd Upper Limb Assessment) Calculate using C# and WPF App.
 Purpose of this application is for calculating body joint using kinect. after that application will transform the data into a RULA score.
 
+# Citate
+I am got inspired to do this for my thesis is from this Ergonomic Journal. Here is the DOI, so you can know what i am trying to do here
+ - https://doi.org/10.1016/j.apergo.2017.02.015
+
 #Here some of my reference
 reference for calculating angle but on different condition, example: Upper arm must be calculate in Saggital Plane.
 1. https://stackoverflow.com/a/39673693/6759373

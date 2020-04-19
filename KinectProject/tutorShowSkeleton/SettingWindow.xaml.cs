@@ -40,15 +40,6 @@ namespace tutorShowSkeleton
             "kanan"
         };
 
-        private String[] kondisiLenganAtas = new String[] {
-            "None", // 0 
-            "Pundak di angkat atau lengan abducted", // 1
-            "Pundak di angkat atau lengan abducted dengan bersandar", // 0
-            "Pundak di angkat dan lengan abducted", // 2
-            "Pundak di angkat dan lengan abducted dengan bersandar", // 1
-            "Lengan disandarkan" // -1
-        };
-
         private String[] wristRotation = new String[] {
             "Twisted mainly in mid-range",
             "Twist at near end of twisting"
@@ -65,12 +56,6 @@ namespace tutorShowSkeleton
             "Load 2 kg - 10 kg ", // 1  
             "Load 2 kg - 10 kg (static or repeated)", // 2 
             "Load more than 10 kg or repeated or shock" // 3
-        };
-
-        private String[] kondisiPutaranBatangTubuh = new String[] {
-            "None",
-            "Batang tubuh berputar atau bengkok ke kiri/kanan",
-            "Batang tubuh berputar dan bengkok"
         };
 
         public SettingWindow()
@@ -91,10 +76,6 @@ namespace tutorShowSkeleton
             this.sidePosition.ItemsSource = sisiBadan;
             this.sidePosition.SelectedIndex = 0;
 
-            // Setting kondisi lengan atas
-            this.kondisiLengan.ItemsSource = kondisiLenganAtas;
-            this.kondisiLengan.SelectedIndex = 0;
-
             // Setting putaran pergelangan tangan
             this.putaranPergelanganTangan.ItemsSource = wristRotation;
             this.putaranPergelanganTangan.SelectedIndex = 0;
@@ -106,10 +87,6 @@ namespace tutorShowSkeleton
             // Setting Beban Eskternal tangan
             this.bebanEksternalTangan.ItemsSource = bebanEksternal;
             this.bebanEksternalTangan.SelectedIndex = 0;
-
-            // Seting kondisi batang tubuh
-            this.kondisiRotasiBatangTubuh.ItemsSource = kondisiPutaranBatangTubuh;
-            this.kondisiRotasiBatangTubuh.SelectedIndex = 0;
 
             // Setting kekuatan otot Badan
             this.kekuatanOtotBadan.ItemsSource = wristMusclePower;
@@ -134,23 +111,10 @@ namespace tutorShowSkeleton
 
             /******************** Group A ****************************************/
             // Lengan atas
-            String temp = this.kondisiLengan.Text;
-            if (String.Equals(temp, kondisiLenganAtas[1]) ||
-                String.Equals(temp, kondisiLenganAtas[4]))
-            {
-                this.statusLenganAtas = 1;
-            }
-            else if (String.Equals(temp, kondisiLenganAtas[3]))
-            {
-                this.statusLenganAtas = 2;
-            }
-            else if (String.Equals(temp, kondisiLenganAtas[5]))
+            String temp = "";
+            if (this.upperArmLean.IsChecked == true)
             {
                 this.statusLenganAtas = -1;
-            }
-            else
-            {
-                this.statusLenganAtas = 0;
             }
 
             // Pergelangan tangan
@@ -217,18 +181,9 @@ namespace tutorShowSkeleton
             }
 
             // Kondisi sudut batang tubuh
-            temp = this.kondisiRotasiBatangTubuh.Text;
-            if (String.Equals(temp, kondisiPutaranBatangTubuh[1]))
+            if (trunkTwist.IsChecked == true)
             {
                 this.kondisiBatangTubuh = 1;
-            }
-            else if (String.Equals(temp, kondisiPutaranBatangTubuh[2]))
-            {
-                this.kondisiBatangTubuh = 2;
-            }
-            else
-            {
-                this.kondisiBatangTubuh = 0;
             }
 
             // Beban postur B

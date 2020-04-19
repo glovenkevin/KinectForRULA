@@ -176,9 +176,11 @@ namespace tutorShowSkeleton
         int sisiBadan = tutorShowSkeleton.MainWindow.sisiBadan;
         Joint spineShoulder = kalmanFilterFull(convertJoinToMatrix(body.Joints[JointType.SpineShoulder]),
             getBodyTypeSeq(JointType.SpineShoulder));
+        Joint spineMid = kalmanFilterFull(convertJoinToMatrix(body.Joints[JointType.SpineMid]),
+            getBodyTypeSeq(JointType.SpineMid));
         Joint spineBase = kalmanFilterFull(convertJoinToMatrix(body.Joints[JointType.SpineBase]),
             getBodyTypeSeq(JointType.SpineBase));
-        Vector3D trunk = convertJointoVector(spineBase) - convertJointoVector(spineShoulder);
+        Vector3D trunk = convertJointoVector(spineBase) - convertJointoVector(spineMid) - convertJointoVector(spineShoulder);
 
         // Group A
         calculateUpperArm(body, trunk, sisiBadan);
@@ -187,14 +189,14 @@ namespace tutorShowSkeleton
         
         // Group B
         calculateNeck(body);
-        calculateTrunk(body);
+        calculateTrunk(body, trunk);
     }
 
     /******************* Method Angle Calc Body Part ******************/
 
     private void calculateUpperArm(Body body, Vector3D trunk, int sisiBadan)
     {
-        Joint start, poros;
+        Joint start, end, poros;
         double angle;
 
         if (0 == sisiBadan) // sisi Kiri
@@ -208,14 +210,36 @@ namespace tutorShowSkeleton
             
             // Calculate Angle
             angle = this.calculateAngle(poros.Position.Y, poros.Position.Z,
-                start.Position.Y, start.Position.Z, -1, poros.Position.Z);
-            this.textUpperArm.Text = angle.ToString("0");
+                start.Position.Y, start.Position.Z, poros.Position.Y, -2 * poros.Position.Z);
+            // 0 -> full to backward, 90 -> at stright to the trunk, 180 -> pararell to shoulder
+            if (angle > 90)
+            {
+                angle -= 90;
+            }
+            else if (angle < 90 && angle > 60)
+            {
+                angle = -1 * (90 - angle);
+            }
+            else if (angle < 90)
+            {
+                angle += 90;
+            }
 
             // Upper Arm Abduction
             double angleAbduction = this.calculateAngle(poros.Position.X, poros.Position.Y,
-                start.Position.X, start.Position.Y, poros.Position.X, -1);
-           
-            RulaCalculation.calculateUpperArm(angle, angleAbduction);
+                start.Position.X, start.Position.Y, trunk.X, trunk.Y);
+
+            // Shoulder is Raise 
+            start = poros;
+            end = kalmanFilterFull(convertJoinToMatrix(body.Joints[JointType.Neck]),
+                getBodyTypeSeq(JointType.Neck));
+            poros = kalmanFilterFull(convertJoinToMatrix(body.Joints[JointType.SpineShoulder]), 
+                getBodyTypeSeq(JointType.SpineShoulder));
+
+            double shoulderRaise = poros.Angle(start, end);
+            //this.textUpperArm.Text = angle.ToString("0");
+
+            RulaCalculation.calculateUpperArm(angle, angleAbduction, shoulderRaise);
         }
         else
         {
@@ -228,13 +252,36 @@ namespace tutorShowSkeleton
 
             // Calculate Angle
             angle = this.calculateAngle(poros.Position.Y, poros.Position.Z,
-                start.Position.Y, start.Position.Z, -1, poros.Position.Z);
+                start.Position.Y, start.Position.Z, poros.Position.Y, -2 * poros.Position.Z);
+            // 0 -> full to backward, 90 -> at stright to the trunk, 180 -> pararell to shoulder
+            if (angle > 90)
+            {
+                angle -= 90;
+            }
+            else if (angle < 90 && angle > 60)
+            {
+                angle = -1 * (90 - angle);
+            }
+            else if (angle < 90)
+            {
+                angle += 90;
+            }
 
             // Upper Arm Abduction
             double angleAbduction = this.calculateAngle(poros.Position.X, poros.Position.Y,
-                start.Position.X, start.Position.Y, poros.Position.X, 1);
+                start.Position.X, start.Position.Y, trunk.X, trunk.Y);
 
-            RulaCalculation.calculateUpperArm(angle, angleAbduction);
+            // Shoulder is Raise 
+            start = poros;
+            end = kalmanFilterFull(convertJoinToMatrix(body.Joints[JointType.Neck]),
+                getBodyTypeSeq(JointType.Neck));
+            poros = kalmanFilterFull(convertJoinToMatrix(body.Joints[JointType.SpineShoulder]),
+                getBodyTypeSeq(JointType.SpineShoulder));
+
+            double shoulderRaise = poros.Angle(start, end);
+            //this.textUpperArm.Text = angle.ToString("0");
+
+            RulaCalculation.calculateUpperArm(angle, angleAbduction, shoulderRaise);
         }
     }
 
@@ -254,7 +301,9 @@ namespace tutorShowSkeleton
             poros = kalmanFilterFull(convertJoinToMatrix(body.Joints[JointType.ElbowLeft]), 
                 getBodyTypeSeq(JointType.ElbowLeft));
 
-            angle = poros.Angle(start, end) - 180;
+            angle = calculateAngle(poros.Position.Y, poros.Position.Z, start.Position.Y, start.Position.Z,
+                        end.Position.Y, end.Position.Z);
+            angle = 180 - angle;
             this.textLowerArm.Text = angle.ToString("0");
 
             // Cek arah lengan bwah apakah keluar dari batas midlane
@@ -262,8 +311,8 @@ namespace tutorShowSkeleton
             start = kalmanFilterFull(convertJoinToMatrix(body.Joints[JointType.SpineShoulder]),
                 getBodyTypeSeq(JointType.SpineShoulder));
 
-            double deviasiWrist = poros.Angle(start, end) - 260; // dalam rentang -10 -> 10 masih dalam posisi tengah
-            
+            double deviasiWrist = poros.Angle(start, end) - 250; // dalam rentang -10 -> 10 masih dalam posisi tengah
+         
             RulaCalculation.calculateLowerArm(angle, deviasiWrist);
         }
         else
@@ -286,7 +335,7 @@ namespace tutorShowSkeleton
             start = kalmanFilterFull(convertJoinToMatrix(body.Joints[JointType.SpineShoulder]),
                 getBodyTypeSeq(JointType.SpineShoulder));
 
-            double deviasiWrist = poros.Angle(start, end) - 260; // dalam rentang -10 -> 10 masih dalam posisi tengah
+            double deviasiWrist = poros.Angle(start, end) - 250; // dalam rentang -10 -> 10 masih dalam posisi tengah
             RulaCalculation.calculateLowerArm(angle, deviasiWrist);
         }
     }
@@ -307,12 +356,9 @@ namespace tutorShowSkeleton
             poros = kalmanFilterFull(convertJoinToMatrix(body.Joints[JointType.WristLeft]),
                 getBodyTypeSeq(JointType.HandLeft));
 
-            angle = calculateAngle(poros.Position.X, poros.Position.Y, start.Position.X, poros.Position.Y,
-                end.Position.X, end.Position.Y);
-            if (angle > 100)
-            {
-                angle = 180 - angle;
-            }
+            //angle = calculateAngle(poros.Position.X, poros.Position.Y, start.Position.X, poros.Position.Y,
+            //    end.Position.X, end.Position.Y);
+            angle = poros.Angle(start, end) - 180;
 
             RulaCalculation.calculateWrist(angle);
             this.textWristArm.Text = angle.ToString("0");
@@ -329,12 +375,10 @@ namespace tutorShowSkeleton
             poros = kalmanFilterFull(convertJoinToMatrix(body.Joints[JointType.WristRight]),
                 getBodyTypeSeq(JointType.WristRight));
 
-            angle = calculateAngle(poros.Position.X, poros.Position.Y, start.Position.X, poros.Position.Y,
-                end.Position.X, end.Position.Y);
-            if (angle > 100)
-            {
-                angle = 180 - angle;
-            }
+            //angle = calculateAngle(poros.Position.X, poros.Position.Y, start.Position.X, poros.Position.Y,
+            //    end.Position.X, end.Position.Y);
+            angle = poros.Angle(start, end) - 180;
+
             RulaCalculation.calculateWrist(angle);
             this.textWristArm.Text = angle.ToString("0");
         }
@@ -355,15 +399,15 @@ namespace tutorShowSkeleton
         poros = kalmanFilterFull(convertJoinToMatrix(body.Joints[JointType.Neck]),
             getBodyTypeSeq(JointType.Neck));
 
-        angle = calculateAngle(poros.Position.X, poros.Position.Y, start.Position.X, start.Position.Y,
-            end.Position.X, end.Position.Y);
-        if (angle < 20)
-        {
-            angle *= -1;
-        }
-        else if (angle > 20)
+        angle = calculateAngle(poros.Position.Y, poros.Position.Z, start.Position.Y, start.Position.Z,
+            end.Position.Y, end.Position.Z);
+        if (angle > 100)
         {
             angle = 180 - angle;
+        }
+        else if (angle < 100)
+        {
+            angle = -1 * angle;
         }
 
         // Neck Bending
@@ -371,35 +415,55 @@ namespace tutorShowSkeleton
         end = kalmanFilterFull(convertJoinToMatrix(body.Joints[JointType.ShoulderLeft]),
             getBodyTypeSeq(JointType.ShoulderLeft));
 
-        double bendingAngle = calculateAngle(poros.Position.Y, poros.Position.Z, 
-            start.Position.Y, start.Position.Z, poros.Position.Y, poros.Position.Z + start.Position.Z);
-        this.textUpperArm.Text = bendingAngle.ToString("0");
+        double bendingAngle = calculateAngle(poros.Position.X, poros.Position.Y,
+            start.Position.X, start.Position.Y, end.Position.X, end.Position.Y);
+
         RulaCalculation.calculateNeck(angle, bendingAngle);
         this.textNeck.Text = angle.ToString("0");
     }
 
-    private void calculateTrunk(Body body)
+    private void calculateTrunk(Body body, Vector3D trunk)
     {
-        Joint start, poros;
+        Joint start, end, poros;
         double angle;
 
         start = kalmanFilterFull(convertJoinToMatrix(body.Joints[JointType.SpineShoulder]),
                 getBodyTypeSeq(JointType.SpineShoulder));
 
-        poros = kalmanFilterFull(convertJoinToMatrix(body.Joints[JointType.SpineMid]),
-            getBodyTypeSeq(JointType.SpineMid));
+        poros = kalmanFilterFull(convertJoinToMatrix(body.Joints[JointType.SpineBase]),
+            getBodyTypeSeq(JointType.SpineBase));
 
-        angle = this.calculateAngle(poros.Position.X, poros.Position.Z,
-                start.Position.X, start.Position.Z, 3, poros.Position.Z);
-        if (angle <= 90)
-        {
-            angle = 90 - angle;
-        }
-        else
-        {
-            angle = (angle - 90) * -1;
-        }
-        RulaCalculation.calculateTrunk(angle);
+        end = poros;
+        end.Position.Z = 2 * poros.Position.Z;
+        angle = poros.Angle(start, end);
+        angle -= 85;
+
+        // Trunk twisted
+        start = kalmanFilterFull(convertJoinToMatrix(body.Joints[JointType.SpineMid]),
+            getBodyTypeSeq(JointType.SpineMid));
+        end = kalmanFilterFull(convertJoinToMatrix(body.Joints[JointType.AnkleLeft]),
+            getBodyTypeSeq(JointType.AnkleLeft));
+
+        double trunkTwist = calculateAngle3D(convertJointoVector(start), convertJointoVector(end));
+
+        // Trunk side bending
+        // Create Vector dan perpendicular between hip Joint
+        Vector3D hipLeft = convertJointoVector(kalmanFilterFull(convertJoinToMatrix(body.Joints[JointType.HipLeft]), 
+            getBodyTypeSeq(JointType.HipLeft)));
+        Vector3D hipRight = convertJointoVector(kalmanFilterFull(convertJoinToMatrix(body.Joints[JointType.HipRight]),
+            getBodyTypeSeq(JointType.HipRight)));
+
+        Vector3D horizontalSide = hipLeft - hipRight;
+        Vector3D perpendicularHorizontal = new Vector3D();
+        perpendicularHorizontal.X = trunk.X;
+        perpendicularHorizontal.Y = -1 * horizontalSide.X;
+        perpendicularHorizontal.Z = horizontalSide.Z;
+
+        // Calculate between perpendicular to the horizontal vector 
+        // and trunk vector to get the angle
+        double trunkBending = calculateAngle3D(perpendicularHorizontal, trunk);
+
+        RulaCalculation.calculateTrunk(angle, trunkBending);
         this.textTrunk.Text = angle.ToString("0");
     }
 
@@ -420,6 +484,16 @@ namespace tutorShowSkeleton
         }
 
         return angleDeg;
+    }
+      // Calculate Angle between 2 vector 3D
+    private double calculateAngle3D(Vector3D a, Vector3D b)
+    {
+        double result = 0;
+        double normA = Math.Sqrt(Math.Pow(a.X, 2) + Math.Pow(a.Y, 2) + Math.Pow(a.Z, 2));
+        double normB = Math.Sqrt(Math.Pow(b.X, 2) + Math.Pow(b.Y, 2) + Math.Pow(b.Z, 2));
+
+        result = Math.Acos(Vector3D.DotProduct(a, b) / (normA * normB)) * (360 / (2 * Math.PI));
+        return result;
     }
 
       // Set Measurement Error Base on Joint Type

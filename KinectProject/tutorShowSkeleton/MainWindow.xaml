@@ -7,10 +7,10 @@
         mc:Ignorable="d"
         Closed="Window_Closed"
         ResizeMode="NoResize"
-        Title="MainWindow" Height="700" Width="800">
-    <Grid>
-        <Image Name="camera" Height="500" Width="500" Margin="147,36,147,35" VerticalAlignment="Top"/>
-        <Canvas Name="canvas" Height="500" Width="500"  Margin="147,36,147,0" VerticalAlignment="Top"/>
+        Title="MainWindow" Height="614" Width="804">
+    <Grid Margin="0,0,-6,0">
+        <Image Name="camera" Height="424" Width="512" Margin="147,36,147,35" VerticalAlignment="Top"/>
+        <Canvas Name="canvas" Height="424" Width="512"  Margin="147,36,147,0" VerticalAlignment="Top"/>
 
         <Label Content="Upper Arm" HorizontalAlignment="Left" Margin="10,96,0,0" VerticalAlignment="Top"/>
         <TextBox IsReadOnly="True" HorizontalAlignment="Left" Height="46" Margin="10,127,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="125" Name="textUpperArm" FontSize="36"/>
@@ -21,11 +21,11 @@
         <Label Content="Wrist arm" HorizontalAlignment="Left" Margin="10,271,0,0" VerticalAlignment="Top"/>
         <TextBox IsReadOnly="True" HorizontalAlignment="Left" Height="46" Margin="10,302,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="125" x:Name="textWristArm" FontSize="36"/>
 
-        <Label Content="Neck" HorizontalAlignment="Left" Margin="741,95,0,0" VerticalAlignment="Top"/>
-        <TextBox IsReadOnly="True" HorizontalAlignment="Left" Height="46" Margin="653,126,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="125" x:Name="textNeck" FontSize="36"/>
+        <Label Content="Neck" Margin="0,96,14,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="37"/>
+        <TextBox IsReadOnly="True" Height="46" Margin="665,127,14,0" TextWrapping="Wrap" VerticalAlignment="Top" x:Name="textNeck" FontSize="36"/>
 
-        <Label Content="Trunk" HorizontalAlignment="Left" Margin="739,186,0,0" VerticalAlignment="Top"/>
-        <TextBox IsReadOnly="True" HorizontalAlignment="Left" Height="46" Margin="653,212,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="125" x:Name="textTrunk" FontSize="36"/>
+        <Label Content="Trunk" Margin="0,187,14,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="39"/>
+        <TextBox IsReadOnly="True" Height="46" Margin="665,213,14,0" TextWrapping="Wrap" VerticalAlignment="Top" x:Name="textTrunk" FontSize="36"/>
 
         <Button Content="Connect" HorizontalAlignment="Left" Height="33" Margin="10,34,0,0" VerticalAlignment="Top" Width="54"
                 Click="Connect_Event"/>
@@ -35,8 +35,8 @@
                 Click="Call_Setting"/>
 
         <!--Final Score-->
-        <TextBlock Name="finalScore" HorizontalAlignment="Left" Margin="251,0,0,84" TextWrapping="Wrap" Text="TextBlock" Width="290" FontSize="36" TextAlignment="Center" Height="46" VerticalAlignment="Bottom"/>
-        <TextBlock Name="finalScoreMsg" HorizontalAlignment="Left" Height="66" Margin="76,595,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="635" FontSize="24" TextAlignment="Center"/>
+        <TextBlock Name="finalScore" HorizontalAlignment="Left" Margin="269,465,0,0" TextWrapping="Wrap" Text="TextBlock" Width="290" FontSize="36" TextAlignment="Center" Height="46" VerticalAlignment="Top"/>
+        <TextBlock Name="finalScoreMsg" HorizontalAlignment="Left" Height="66" Margin="102,516,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="635" FontSize="24" TextAlignment="Center"/>
 
     </Grid>
 </Window>
