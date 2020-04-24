@@ -226,8 +226,10 @@ namespace tutorShowSkeleton
             }
 
             // Upper Arm Abduction
+            end = kalmanFilterFull(convertJoinToMatrix(body.Joints[JointType.SpineShoulder]),
+                getBodyTypeSeq(JointType.SpineShoulder));
             double angleAbduction = this.calculateAngle(poros.Position.X, poros.Position.Y,
-                start.Position.X, start.Position.Y, trunk.X, trunk.Y);
+                start.Position.X, start.Position.Y, end.Position.X, end.Position.Y);
 
             // Shoulder is Raise 
             start = poros;
@@ -236,9 +238,10 @@ namespace tutorShowSkeleton
             poros = kalmanFilterFull(convertJoinToMatrix(body.Joints[JointType.SpineShoulder]), 
                 getBodyTypeSeq(JointType.SpineShoulder));
 
-            double shoulderRaise = poros.Angle(start, end);
-            //this.textUpperArm.Text = angle.ToString("0");
+            double shoulderRaise = calculateAngle(poros.Position.X, poros.Position.Y,
+                start.Position.X, start.Position.Y, end.Position.X, end.Position.Y);
 
+            this.textUpperArm.Text = angle.ToString("0");
             RulaCalculation.calculateUpperArm(angle, angleAbduction, shoulderRaise);
         }
         else
@@ -268,6 +271,8 @@ namespace tutorShowSkeleton
             }
 
             // Upper Arm Abduction
+            end = kalmanFilterFull(convertJoinToMatrix(body.Joints[JointType.SpineShoulder]),
+                getBodyTypeSeq(JointType.SpineShoulder));
             double angleAbduction = this.calculateAngle(poros.Position.X, poros.Position.Y,
                 start.Position.X, start.Position.Y, trunk.X, trunk.Y);
 
@@ -278,9 +283,10 @@ namespace tutorShowSkeleton
             poros = kalmanFilterFull(convertJoinToMatrix(body.Joints[JointType.SpineShoulder]),
                 getBodyTypeSeq(JointType.SpineShoulder));
 
-            double shoulderRaise = poros.Angle(start, end);
-            //this.textUpperArm.Text = angle.ToString("0");
+            double shoulderRaise = calculateAngle(poros.Position.X, poros.Position.Y,
+                start.Position.X, start.Position.Y, end.Position.X, end.Position.Y);
 
+            this.textUpperArm.Text = angle.ToString("0");
             RulaCalculation.calculateUpperArm(angle, angleAbduction, shoulderRaise);
         }
     }
@@ -304,15 +310,15 @@ namespace tutorShowSkeleton
             angle = calculateAngle(poros.Position.Y, poros.Position.Z, start.Position.Y, start.Position.Z,
                         end.Position.Y, end.Position.Z);
             angle = 180 - angle;
-            this.textLowerArm.Text = angle.ToString("0");
 
             // Cek arah lengan bwah apakah keluar dari batas midlane
             poros = start;
             start = kalmanFilterFull(convertJoinToMatrix(body.Joints[JointType.SpineShoulder]),
                 getBodyTypeSeq(JointType.SpineShoulder));
 
-            double deviasiWrist = poros.Angle(start, end) - 250; // dalam rentang -10 -> 10 masih dalam posisi tengah
-         
+            double deviasiWrist = poros.Angle(start, end); //  dalam rentang 240 -> 250 masih dalam posisi tengah
+
+            this.textLowerArm.Text = angle.ToString("0");
             RulaCalculation.calculateLowerArm(angle, deviasiWrist);
         }
         else
@@ -327,15 +333,18 @@ namespace tutorShowSkeleton
             poros = kalmanFilterFull(convertJoinToMatrix(body.Joints[JointType.ElbowRight]),
                 getBodyTypeSeq(JointType.ElbowRight));
 
-            angle = poros.Angle(start, end) - 180;
-            this.textLowerArm.Text = angle.ToString("0");
+            angle = calculateAngle(poros.Position.Y, poros.Position.Z, start.Position.Y, start.Position.Z,
+                        end.Position.Y, end.Position.Z);
+            angle = 180 - angle;
 
             // Cek arah lengan bwah apakah keluar dari batas midlane
             poros = start;
             start = kalmanFilterFull(convertJoinToMatrix(body.Joints[JointType.SpineShoulder]),
                 getBodyTypeSeq(JointType.SpineShoulder));
 
-            double deviasiWrist = poros.Angle(start, end) - 250; // dalam rentang -10 -> 10 masih dalam posisi tengah
+            double deviasiWrist = poros.Angle(start, end); // dalam rentang 240 -> 250 masih dalam posisi tengah
+
+            this.textLowerArm.Text = angle.ToString("0");
             RulaCalculation.calculateLowerArm(angle, deviasiWrist);
         }
     }
@@ -620,7 +629,7 @@ namespace tutorShowSkeleton
         // Measurement update ( Correction )
         K = Pp * H.Transpose() * (H * Pp * H.Transpose() + R).Inverse();
         Xk[pos] = Xp + (K * (z - (H * Xp)));
-        
+
         GeneralMatrix I = GeneralMatrix.Identity(Pp.RowDimension, Pp.ColumnDimension);
         P[pos] = (I - (K * H)) * Pp;
 
@@ -694,11 +703,16 @@ namespace tutorShowSkeleton
             P[c] = i;
 
             // Initialize Rv -> init: 0.01
-            Rv[c, 0] = 10;
-            Rv[c, 1] = 10;
-            Rv[c, 2] = 10;
+            Rv[c, 0] = 0.1;
+            Rv[c, 1] = 20;
+            Rv[c, 2] = 20;
         }
 
+        /*
+         *  Note: Tunning kalman filter (Give better result)
+         *      1. Q = 0.1; R = 0.01
+         *      2. 
+         */
     }
 
       // Calculate Rv[] Variance for every JointType

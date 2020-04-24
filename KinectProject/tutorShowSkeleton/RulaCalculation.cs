@@ -59,7 +59,7 @@ namespace tutorShowSkeleton
             }
 
             // Shoulder is raised
-            if (shoulderRaised > 262)
+            if (shoulderRaised < 108)
             {
                 tutorShowSkeleton.MainWindow.scorePosture[0] += 1;
             }
@@ -81,7 +81,7 @@ namespace tutorShowSkeleton
             }
 
             // Perhitungan sudut arah lower Arm
-            if (angleDeviation < -10 && angleDeviation > 10)
+            if (angleDeviation < 255 && angleDeviation > 235)
             {
                 tutorShowSkeleton.MainWindow.scorePosture[1] += 1;
             }
