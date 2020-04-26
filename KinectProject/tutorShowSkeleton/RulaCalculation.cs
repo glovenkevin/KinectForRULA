@@ -131,7 +131,7 @@ namespace tutorShowSkeleton
             }
 
             // Neck Bending
-            if (neckBending < 80 || neckBending > 70)
+            if (neckBending > 5)
             {
                 tutorShowSkeleton.MainWindow.scorePosture[3] += 1;
             }
@@ -161,7 +161,7 @@ namespace tutorShowSkeleton
             }
 
             // Side Bending
-            if (trunkBending < 100)
+            if (trunkBending < 105)
             {
                 tutorShowSkeleton.MainWindow.scorePosture[4] += 1;
             }

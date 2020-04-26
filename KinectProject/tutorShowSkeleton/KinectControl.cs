@@ -402,33 +402,33 @@ namespace tutorShowSkeleton
         start = kalmanFilterFull(convertJoinToMatrix(body.Joints[JointType.Head]),
                 getBodyTypeSeq(JointType.Head));
 
-        end = kalmanFilterFull(convertJoinToMatrix(body.Joints[JointType.SpineShoulder]),
-            getBodyTypeSeq(JointType.SpineShoulder));
+        end = kalmanFilterFull(convertJoinToMatrix(body.Joints[JointType.SpineBase]),
+            getBodyTypeSeq(JointType.SpineBase));
 
-        poros = kalmanFilterFull(convertJoinToMatrix(body.Joints[JointType.Neck]),
-            getBodyTypeSeq(JointType.Neck));
+        poros = kalmanFilterFull(convertJoinToMatrix(body.Joints[JointType.SpineShoulder]),
+            getBodyTypeSeq(JointType.SpineShoulder));
 
         angle = calculateAngle(poros.Position.Y, poros.Position.Z, start.Position.Y, start.Position.Z,
             end.Position.Y, end.Position.Z);
-        if (angle > 100)
+        if (angle > 90)
         {
             angle = 180 - angle;
         }
-        else if (angle < 100)
+        else
         {
-            angle = -1 * angle;
+            angle *= -1;
         }
 
         // Neck Bending
-        poros = end;
-        end = kalmanFilterFull(convertJoinToMatrix(body.Joints[JointType.ShoulderLeft]),
-            getBodyTypeSeq(JointType.ShoulderLeft));
-
-        double bendingAngle = calculateAngle(poros.Position.X, poros.Position.Y,
+        double bendingAngle = calculateAngle(poros.Position.X, poros.Position.Y, 
             start.Position.X, start.Position.Y, end.Position.X, end.Position.Y);
+        if (bendingAngle > 150)
+        {
+            bendingAngle = 180 - bendingAngle;
+        }
 
         RulaCalculation.calculateNeck(angle, bendingAngle);
-        this.textNeck.Text = angle.ToString("0");
+        this.textNeck.Text = bendingAngle.ToString("0");
     }
 
     private void calculateTrunk(Body body, Vector3D trunk)
@@ -444,8 +444,17 @@ namespace tutorShowSkeleton
 
         end = poros;
         end.Position.Z = 2 * poros.Position.Z;
-        angle = poros.Angle(start, end);
-        angle -= 85;
+        angle = calculateAngle(poros.Position.Y, poros.Position.Z,
+            start.Position.Y, start.Position.Z, end.Position.Y, end.Position.Z);
+        if (angle <= 90)
+        {
+            angle = 90 - angle;
+        }
+        else
+        {
+            angle -= 90;
+            angle *= -1;
+        }
 
         // Trunk twisted
         start = kalmanFilterFull(convertJoinToMatrix(body.Joints[JointType.SpineMid]),
@@ -470,10 +479,10 @@ namespace tutorShowSkeleton
 
         // Calculate between perpendicular to the horizontal vector 
         // and trunk vector to get the angle
-        double trunkBending = calculateAngle3D(perpendicularHorizontal, trunk);
+        double trunkBending = calculateAngle3D(perpendicularHorizontal, trunk); // Default position angle -> 108-110
 
         RulaCalculation.calculateTrunk(angle, trunkBending);
-        this.textTrunk.Text = angle.ToString("0");
+        this.textTrunk.Text = trunkBending.ToString("0");
     }
 
       // Calculate between 2 vector 2D using Cross Join
@@ -620,7 +629,7 @@ namespace tutorShowSkeleton
     {
         // Prepare 
         GeneralMatrix r = GeneralMatrix.Identity(3, 3);
-        R = r.MultiplyEquals(Rv[pos, 0]);
+        R = r.MultiplyEquals(0.01);
 
         // Predict
         GeneralMatrix Xp = F * Xk[pos];
@@ -660,7 +669,7 @@ namespace tutorShowSkeleton
     GeneralMatrix F, H, Q, R, K;
     GeneralMatrix[] P, Xk;
 
-    double dt = 30; // 30 Frame
+    double dt = 5; // 30 Frame
     double[] estimationVector = new double[6];
     double[,] Rv = new double[GlobalVal.BodyPart.Length, 3];   // 3 -> x,y,z
     double estimationX, estimationY, estimationZ;
@@ -703,7 +712,7 @@ namespace tutorShowSkeleton
             P[c] = i;
 
             // Initialize Rv -> init: 0.01
-            Rv[c, 0] = 0.1;
+            Rv[c, 0] = 10;
             Rv[c, 1] = 20;
             Rv[c, 2] = 20;
         }
