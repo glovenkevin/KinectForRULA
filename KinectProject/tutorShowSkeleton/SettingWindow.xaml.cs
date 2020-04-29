@@ -245,6 +245,7 @@ namespace tutorShowSkeleton
             tutorShowSkeleton.MainWindow.scoreSetting[4] = this.kondisiLeher;
             tutorShowSkeleton.MainWindow.scoreSetting[5] = this.kondisiBatangTubuh;
             tutorShowSkeleton.MainWindow.scoreSetting[6] = this.kondisiKaki;
+            GlobalVal.leg = this.kondisiKaki;
             
             tutorShowSkeleton.MainWindow.scoreSetting[7] = this.bebanOtotTangan;
             tutorShowSkeleton.MainWindow.scoreSetting[8] = this.totalBebanEksternalTangan;

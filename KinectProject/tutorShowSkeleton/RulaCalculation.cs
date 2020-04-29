@@ -185,6 +185,8 @@ namespace tutorShowSkeleton
                 ];
             ScoreGroupA += tutorShowSkeleton.MainWindow.scoreSetting[7] // Beban otot Group A
                 + tutorShowSkeleton.MainWindow.scoreSetting[8];         // Beban Eksternal
+            // Save to Static variable
+            GlobalVal.ScoreGroupA = ScoreGroupA;
 
             // Perhitungan nilai Group B
             ScoreGroupB = GlobalVal.GroupB [
@@ -194,6 +196,8 @@ namespace tutorShowSkeleton
                 ];
             ScoreGroupB += tutorShowSkeleton.MainWindow.scoreSetting[9] // Beban otot Group B
                 + tutorShowSkeleton.MainWindow.scoreSetting[10];        // Beban eksternal Group B
+            // Save to static variable
+            GlobalVal.ScoreGroupB = ScoreGroupB;
 
             // Cek apakah melebihi 7
             if (ScoreGroupA > 8)
@@ -207,6 +211,8 @@ namespace tutorShowSkeleton
 
             // Get Nilai Final
             ScoreGroupC = GlobalVal.GroupC[ScoreGroupA - 1, ScoreGroupB - 1];
+            //Save to static variable
+            GlobalVal.ScoreGroupC = ScoreGroupC;
 
             // Kembalikan nilai Final
             return ScoreGroupC;

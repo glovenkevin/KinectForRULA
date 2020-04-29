@@ -146,12 +146,39 @@ namespace tutorShowSkeleton
             {5, 5, 6, 7, 7, 7, 7}
         };
 
+        // Save every part of body that being investigate their angle
+        public static double upperArm = 0;
+        public static double uperArmAbduction = 0;
+        public static double shoulderAngle = 0;
+
+        public static double lowerArm = 0;
+        public static double lowerArmMidline = 0;
+
+        public static double wrist = 0;
+
+        public static double neck = 0;
+        public static double neckBending = 0;
+
+        public static double trunk = 0;
+        public static double trunkBending = 0;
+
+        // Leg is not main body part that being observe but RULA take a score with it
+        // Leg score come from manual setting window
+        // Default is 1 -> 
+        public static double leg = 1; 
+
+        // Save score in a global Variable so it can be called from anywhere
+        // purpose: For saving data on CSV
+        public static int ScoreGroupA = 0;
+        public static int ScoreGroupB = 0;
+        public static int ScoreGroupC = 0;
+
         // Pesan penjelasan nilai Final Score
         public static String[] Message = new String[] {
-            "Postur masih bisa diterima",                                           // 1 - 2
-            "Perlu investigasi lebih lanjut",                                       // 3 - 4
-            "Perlu investigasi lebih lanjut dan harus segera mengganti postur",     // 5 - 6
-            "Investigasi dan langsung mengganti postur"                             // 7
+            "Posture still acceptable",                                             // 1 - 2
+            "Posture need to investigate further",                                  // 3 - 4
+            "Posture need to investigate furthher and change soon",                 // 5 - 6
+            "Posture need to investigate and chan ge immediately"                   // 7
         };
     }
 }

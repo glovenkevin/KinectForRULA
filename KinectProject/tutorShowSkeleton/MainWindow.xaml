@@ -38,5 +38,10 @@
         <TextBlock Name="finalScore" HorizontalAlignment="Left" Margin="269,465,0,0" TextWrapping="Wrap" Text="TextBlock" Width="290" FontSize="36" TextAlignment="Center" Height="46" VerticalAlignment="Top"/>
         <TextBlock Name="finalScoreMsg" HorizontalAlignment="Left" Height="66" Margin="102,516,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="635" FontSize="24" TextAlignment="Center"/>
 
+        <!--Save to CSV-->
+        <Button Name="btnSaveCsv" Content="Save Data" Height="38" Margin="689,378,14,0" VerticalAlignment="Top"
+                Click="Save_to_CSV"/>
+        <Label Content="Save Data to CSV" Margin="689,347,1,0" VerticalAlignment="Top"/>
+
     </Grid>
 </Window>

@@ -62,3 +62,11 @@ F:\BackupGit\KinectForRULA\KinectProject\tutorShowSkeleton\obj\Debug\MainWindow.
 F:\BackupGit\KinectForRULA\KinectProject\tutorShowSkeleton\obj\Debug\tutorShowSkeleton.g.resources
 F:\BackupGit\KinectForRULA\KinectProject\tutorShowSkeleton\obj\Debug\tutorShowSkeleton.Properties.Resources.resources
 F:\BackupGit\KinectForRULA\KinectProject\tutorShowSkeleton\obj\Debug\tutorShowSkeleton.csproj.GenerateResource.Cache
+F:\BackupGit\KinectForRULA\KinectProject\tutorShowSkeleton\bin\Debug\CsvHelper.dll
+F:\BackupGit\KinectForRULA\KinectProject\tutorShowSkeleton\bin\Debug\Microsoft.Bcl.AsyncInterfaces.dll
+F:\BackupGit\KinectForRULA\KinectProject\tutorShowSkeleton\bin\Debug\System.Runtime.CompilerServices.Unsafe.dll
+F:\BackupGit\KinectForRULA\KinectProject\tutorShowSkeleton\bin\Debug\System.Threading.Tasks.Extensions.dll
+F:\BackupGit\KinectForRULA\KinectProject\tutorShowSkeleton\bin\Debug\CsvHelper.xml
+F:\BackupGit\KinectForRULA\KinectProject\tutorShowSkeleton\bin\Debug\Microsoft.Bcl.AsyncInterfaces.xml
+F:\BackupGit\KinectForRULA\KinectProject\tutorShowSkeleton\bin\Debug\System.Runtime.CompilerServices.Unsafe.xml
+F:\BackupGit\KinectForRULA\KinectProject\tutorShowSkeleton\bin\Debug\System.Threading.Tasks.Extensions.xml

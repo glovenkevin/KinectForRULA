@@ -111,14 +111,14 @@ namespace tutorShowSkeleton
             {
               this.bodyDrawers[i].DrawFrame(this.bodies[i]);
               
-              if (count < 30)
+              if (count < 5)
               {
                   rBody[count] = this.bodies[i];
               }
               else
               {
                   // Calculate R Variance every 30 Frame Body
-                  //calcRVariance();
+                  calcRVariance();
 
                   // Set the counter back to 0 (restart the frame tracked count)
                   // Set body hist
@@ -197,7 +197,7 @@ namespace tutorShowSkeleton
     private void calculateUpperArm(Body body, Vector3D trunk, int sisiBadan)
     {
         Joint start, end, poros;
-        double angle;
+        double angle, angleAbduction, shoulderRaise;
 
         if (0 == sisiBadan) // sisi Kiri
         {
@@ -228,7 +228,7 @@ namespace tutorShowSkeleton
             // Upper Arm Abduction
             end = kalmanFilterFull(convertJoinToMatrix(body.Joints[JointType.SpineShoulder]),
                 getBodyTypeSeq(JointType.SpineShoulder));
-            double angleAbduction = this.calculateAngle(poros.Position.X, poros.Position.Y,
+            angleAbduction = this.calculateAngle(poros.Position.X, poros.Position.Y,
                 start.Position.X, start.Position.Y, end.Position.X, end.Position.Y);
 
             // Shoulder is Raise 
@@ -238,7 +238,7 @@ namespace tutorShowSkeleton
             poros = kalmanFilterFull(convertJoinToMatrix(body.Joints[JointType.SpineShoulder]), 
                 getBodyTypeSeq(JointType.SpineShoulder));
 
-            double shoulderRaise = calculateAngle(poros.Position.X, poros.Position.Y,
+            shoulderRaise = calculateAngle(poros.Position.X, poros.Position.Y,
                 start.Position.X, start.Position.Y, end.Position.X, end.Position.Y);
 
             this.textUpperArm.Text = angle.ToString("0");
@@ -273,7 +273,7 @@ namespace tutorShowSkeleton
             // Upper Arm Abduction
             end = kalmanFilterFull(convertJoinToMatrix(body.Joints[JointType.SpineShoulder]),
                 getBodyTypeSeq(JointType.SpineShoulder));
-            double angleAbduction = this.calculateAngle(poros.Position.X, poros.Position.Y,
+            angleAbduction = this.calculateAngle(poros.Position.X, poros.Position.Y,
                 start.Position.X, start.Position.Y, trunk.X, trunk.Y);
 
             // Shoulder is Raise 
@@ -283,18 +283,23 @@ namespace tutorShowSkeleton
             poros = kalmanFilterFull(convertJoinToMatrix(body.Joints[JointType.SpineShoulder]),
                 getBodyTypeSeq(JointType.SpineShoulder));
 
-            double shoulderRaise = calculateAngle(poros.Position.X, poros.Position.Y,
+            shoulderRaise = calculateAngle(poros.Position.X, poros.Position.Y,
                 start.Position.X, start.Position.Y, end.Position.X, end.Position.Y);
 
             this.textUpperArm.Text = angle.ToString("0");
             RulaCalculation.calculateUpperArm(angle, angleAbduction, shoulderRaise);
         }
+
+        // Save data into static variable
+        GlobalVal.upperArm = angle;
+        GlobalVal.uperArmAbduction = angleAbduction;
+        GlobalVal.shoulderAngle = shoulderRaise;
     }
 
     private void calculateLowerArm(Body body, int sisiBadan)
     {
         Joint start, end, poros;
-        double angle;
+        double angle, deviasiWrist;
         if (0 == sisiBadan)
         {
             // Lengan Bawah - oke
@@ -316,7 +321,7 @@ namespace tutorShowSkeleton
             start = kalmanFilterFull(convertJoinToMatrix(body.Joints[JointType.SpineShoulder]),
                 getBodyTypeSeq(JointType.SpineShoulder));
 
-            double deviasiWrist = poros.Angle(start, end); //  dalam rentang 240 -> 250 masih dalam posisi tengah
+            deviasiWrist = poros.Angle(start, end); //  dalam rentang 240 -> 250 masih dalam posisi tengah
 
             this.textLowerArm.Text = angle.ToString("0");
             RulaCalculation.calculateLowerArm(angle, deviasiWrist);
@@ -342,11 +347,15 @@ namespace tutorShowSkeleton
             start = kalmanFilterFull(convertJoinToMatrix(body.Joints[JointType.SpineShoulder]),
                 getBodyTypeSeq(JointType.SpineShoulder));
 
-            double deviasiWrist = poros.Angle(start, end); // dalam rentang 240 -> 250 masih dalam posisi tengah
+            deviasiWrist = poros.Angle(start, end); // dalam rentang 240 -> 250 masih dalam posisi tengah
 
             this.textLowerArm.Text = angle.ToString("0");
             RulaCalculation.calculateLowerArm(angle, deviasiWrist);
         }
+
+        // Save data to static variable
+        GlobalVal.lowerArm = angle;
+        GlobalVal.lowerArmMidline = deviasiWrist;
     }
 
     private void calculateWrist(Body body, int sisiBadan)
@@ -391,12 +400,15 @@ namespace tutorShowSkeleton
             RulaCalculation.calculateWrist(angle);
             this.textWristArm.Text = angle.ToString("0");
         }
+
+        // Save to static variable
+        GlobalVal.wrist = angle;
     }
 
     private void calculateNeck(Body body)
     {
         Joint start, end, poros;
-        double angle;
+        double angle, bendingAngle;
 
         // Neck Angle corespondent to sagittal plane
         start = kalmanFilterFull(convertJoinToMatrix(body.Joints[JointType.Head]),
@@ -420,7 +432,7 @@ namespace tutorShowSkeleton
         }
 
         // Neck Bending
-        double bendingAngle = calculateAngle(poros.Position.X, poros.Position.Y, 
+        bendingAngle = calculateAngle(poros.Position.X, poros.Position.Y, 
             start.Position.X, start.Position.Y, end.Position.X, end.Position.Y);
         if (bendingAngle > 150)
         {
@@ -429,12 +441,16 @@ namespace tutorShowSkeleton
 
         RulaCalculation.calculateNeck(angle, bendingAngle);
         this.textNeck.Text = bendingAngle.ToString("0");
+
+        // Save data to static variable
+        GlobalVal.neck = angle;
+        GlobalVal.neckBending = bendingAngle;
     }
 
     private void calculateTrunk(Body body, Vector3D trunk)
     {
         Joint start, end, poros;
-        double angle;
+        double angle, trunkTwist, trunkBending;
 
         start = kalmanFilterFull(convertJoinToMatrix(body.Joints[JointType.SpineShoulder]),
                 getBodyTypeSeq(JointType.SpineShoulder));
@@ -462,7 +478,7 @@ namespace tutorShowSkeleton
         end = kalmanFilterFull(convertJoinToMatrix(body.Joints[JointType.AnkleLeft]),
             getBodyTypeSeq(JointType.AnkleLeft));
 
-        double trunkTwist = calculateAngle3D(convertJointoVector(start), convertJointoVector(end));
+        trunkTwist = calculateAngle3D(convertJointoVector(start), convertJointoVector(end));
 
         // Trunk side bending
         // Create Vector dan perpendicular between hip Joint
@@ -479,10 +495,14 @@ namespace tutorShowSkeleton
 
         // Calculate between perpendicular to the horizontal vector 
         // and trunk vector to get the angle
-        double trunkBending = calculateAngle3D(perpendicularHorizontal, trunk); // Default position angle -> 108-110
+        trunkBending = calculateAngle3D(perpendicularHorizontal, trunk); // Default position angle -> 108-110
 
         RulaCalculation.calculateTrunk(angle, trunkBending);
         this.textTrunk.Text = trunkBending.ToString("0");
+
+        // Save data to static variable
+        GlobalVal.trunk = angle;
+        GlobalVal.trunkBending = trunkBending;
     }
 
       // Calculate between 2 vector 2D using Cross Join
@@ -628,8 +648,13 @@ namespace tutorShowSkeleton
     private Joint kalmanFilterFull(GeneralMatrix z, int pos)
     {
         // Prepare 
+        //GeneralMatrix r = GeneralMatrix.Identity(3, 3);
+        //R = r.MultiplyEquals(0.01);
         GeneralMatrix r = GeneralMatrix.Identity(3, 3);
-        R = r.MultiplyEquals(0.01);
+        r.SetElement(0, 0, Rv[pos, 0]); // Variance Base on Joint Type , X
+        r.SetElement(1, 1, Rv[pos, 1]); // Variance Base on Joint Type , Z
+        r.SetElement(2, 2, Rv[pos, 2]); // Variance Base on Joint Type , Y
+        R = r;
 
         // Predict
         GeneralMatrix Xp = F * Xk[pos];
@@ -669,12 +694,12 @@ namespace tutorShowSkeleton
     GeneralMatrix F, H, Q, R, K;
     GeneralMatrix[] P, Xk;
 
-    double dt = 5; // 30 Frame
+    double dt = 5; // 5 Frame
     double[] estimationVector = new double[6];
     double[,] Rv = new double[GlobalVal.BodyPart.Length, 3];   // 3 -> x,y,z
     double estimationX, estimationY, estimationZ;
     int count = 0;
-    Body[] rBody = new Body[30]; // Save Body every frame for calculating Measurement Variance
+    Body[] rBody = new Body[5]; // Save Body every frame for calculating Measurement Variance
     bool first = true;
 
     // Inisiasi Variabel
@@ -712,9 +737,9 @@ namespace tutorShowSkeleton
             P[c] = i;
 
             // Initialize Rv -> init: 0.01
-            Rv[c, 0] = 10;
-            Rv[c, 1] = 20;
-            Rv[c, 2] = 20;
+            Rv[c, 0] = 0.01;
+            Rv[c, 1] = 0.01;
+            Rv[c, 2] = 0.01;
         }
 
         /*
