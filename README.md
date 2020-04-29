@@ -25,3 +25,6 @@ reference for calculating angle but on different condition, example: Upper arm m
 3. https://github.com/KonstantinosAng/Kinect2-Kalman/blob/master/depth_kalman_kinectv2.m
 4. http://bilgin.esme.org/BitsAndBytes/KalmanFilterforDummies
 5. https://docplayer.info/40536055-Pemanfaatan-filter-dalam-peningkatan-hasil-skeletal-tracking-pada-kinect.html (Erick Pranata Thesis for my kalman tunning by using variance of the body every 5 frame)
+
+# Some pict from my App
+![My Image](https://github.com/glovenkevin/img/blob/master/Data.png?raw=true)
