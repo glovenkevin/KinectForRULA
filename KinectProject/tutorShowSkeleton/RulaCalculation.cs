@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
+using CsvHelper;
+using System.Globalization;
 
 namespace tutorShowSkeleton
 {
@@ -241,6 +244,44 @@ namespace tutorShowSkeleton
 
             // Kembalikan Pesannya
             return msg;
+        }
+
+        public static void recordDataToCSV()
+        {
+            dynamic record = new DataCsv
+            {
+                GroupA = GlobalVal.ScoreGroupA,
+                GroupB = GlobalVal.ScoreGroupB,
+                GroupC = GlobalVal.ScoreGroupC,
+
+                upperArm = GlobalVal.upperArm,
+                upperArmAbduction = GlobalVal.uperArmAbduction,
+                shoulderArm = GlobalVal.shoulderAngle,
+
+                lowerArm = GlobalVal.lowerArm,
+                lowerArmMidline = GlobalVal.lowerArmMidline,
+
+                neck = GlobalVal.neck,
+                neckBending = GlobalVal.neckBending,
+
+                trunk = GlobalVal.trunk,
+                trunkBending = GlobalVal.trunkBending,
+
+                wrist = GlobalVal.wrist
+            };
+            GlobalVal.data.Add(record);
+
+            // Destination path for the CSV file
+            String filePath = @"D:\\Data.csv";
+            // Clear CSV data if the file 'exist'
+            System.IO.File.WriteAllText(filePath, string.Empty);
+            // If not exist -> create else Open it
+            StreamWriter writer = new StreamWriter(filePath, true);
+
+            using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
+            {
+                csv.WriteRecords(GlobalVal.data);
+            }
         }
     }
 }

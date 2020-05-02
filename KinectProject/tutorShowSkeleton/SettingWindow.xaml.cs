@@ -102,11 +102,11 @@ namespace tutorShowSkeleton
             // Menentukan Posisi badan 
             if (String.Equals(this.sidePosition.Text, sisiBadan[0]))
             {
-                tutorShowSkeleton.MainWindow.sisiBadan = 0;
+                GlobalVal.BODY_SIDE = 0;
             }
             else
             {
-                tutorShowSkeleton.MainWindow.sisiBadan = 1;
+                GlobalVal.BODY_SIDE = 1;
             }
 
             /******************** Group A ****************************************/

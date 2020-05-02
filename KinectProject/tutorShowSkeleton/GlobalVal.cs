@@ -9,6 +9,7 @@ namespace tutorShowSkeleton
 {
     static class GlobalVal
     {
+        #region Rula Group and Final Score
         // Body Part that being use for kalman filter
         public static JointType[] BodyPart = new JointType[] {
             // Group A
@@ -40,44 +41,44 @@ namespace tutorShowSkeleton
         // Score Group A
         // Urutan { Lengan Atas, Postur pergelangan, Putaran Pergelangan, Lengan Bawah }
         public static int[, , ,] GroupA = new int[6, 4, 2, 3]
-                {
-                    { 
-                        { {1, 2, 2}, {2, 2, 3} },
-                        { {2, 2, 3}, {2, 2, 3} },
-                        { {2, 3, 3}, {3, 3, 3} },
-                        { {3, 3, 4}, {3, 3, 4} }
-                    },
-                    {
-                        { {2, 3, 3}, {3, 3, 4} },
-                        { {3, 3, 4}, {3, 3, 4} },
-                        { {3, 3, 4}, {4, 4, 4} },
-                        { {4, 4, 5}, {4, 4, 5} }
-                    },
-                    {
-                        { {3, 3, 4}, {3, 4, 4} },
-                        { {4, 4, 4}, {4, 4, 4} },
-                        { {4, 4, 4}, {4, 4, 5} },
-                        { {5, 5, 5}, {5, 5, 5} }
-                    },
-                    {
-                        { {4, 4, 4}, {4, 4, 4} },
-                        { {4, 4, 4}, {4, 4, 5} },
-                        { {4, 4, 5}, {5, 5, 5} },
-                        { {5, 5, 6}, {5, 5, 6} }
-                    },
-                    {
-                        { {5, 5, 6}, {5, 6, 6} },
-                        { {5, 6, 6}, {5, 6, 7} },
-                        { {5, 6, 7}, {6, 7, 7} },
-                        { {6, 7, 7}, {7, 7, 8} }
-                    },
-                    {
-                        { {7, 8, 9}, {7, 8, 9} },
-                        { {7, 8, 9}, {7, 8, 9} },
-                        { {7, 8, 9}, {8, 9, 9} },
-                        { {8, 9, 9}, {9, 9, 9} }
-                    }
-                };
+        {
+            { 
+                { {1, 2, 2}, {2, 2, 3} },
+                { {2, 2, 3}, {2, 2, 3} },
+                { {2, 3, 3}, {3, 3, 3} },
+                { {3, 3, 4}, {3, 3, 4} }
+            },
+            {
+                { {2, 3, 3}, {3, 3, 4} },
+                { {3, 3, 4}, {3, 3, 4} },
+                { {3, 3, 4}, {4, 4, 4} },
+                { {4, 4, 5}, {4, 4, 5} }
+            },
+            {
+                { {3, 3, 4}, {3, 4, 4} },
+                { {4, 4, 4}, {4, 4, 4} },
+                { {4, 4, 4}, {4, 4, 5} },
+                { {5, 5, 5}, {5, 5, 5} }
+            },
+            {
+                { {4, 4, 4}, {4, 4, 4} },
+                { {4, 4, 4}, {4, 4, 5} },
+                { {4, 4, 5}, {5, 5, 5} },
+                { {5, 5, 6}, {5, 5, 6} }
+            },
+            {
+                { {5, 5, 6}, {5, 6, 6} },
+                { {5, 6, 6}, {5, 6, 7} },
+                { {5, 6, 7}, {6, 7, 7} },
+                { {6, 7, 7}, {7, 7, 8} }
+            },
+            {
+                { {7, 8, 9}, {7, 8, 9} },
+                { {7, 8, 9}, {7, 8, 9} },
+                { {7, 8, 9}, {8, 9, 9} },
+                { {8, 9, 9}, {9, 9, 9} }
+            }
+        };
         
         // Score untuk Group B
         // Urutan { Leher, Punggung , Kaki }
@@ -146,6 +147,34 @@ namespace tutorShowSkeleton
             {5, 5, 6, 7, 7, 7, 7}
         };
 
+        // Pesan penjelasan nilai Final Score
+        public static String[] Message = new String[] {
+            "Posture still acceptable",                                             // 1 - 2
+            "Posture need to investigate further",                                  // 3 - 4
+            "Posture need to investigate furthher and change soon",                 // 5 - 6
+            "Posture need to investigate and chan ge immediately"                   // 7
+        };
+        #endregion
+
+        // Global Condition
+        public static int BODY_SIDE = 0;     // 0 -> left | 1 -> right
+        public static bool RECORD_STATUS = false;
+
+        // Camera status
+        // For development purpose
+        public static String _mode;
+        public static readonly String DEPTH = "depth";
+        public static readonly String COLOR = "color";
+
+        // Global status 
+        public static readonly String CONNECT = "Connected";
+        public static readonly String DISCONNECT = "Disconnected";
+        public static readonly String START_RECORD = "Start Recording";
+        public static readonly String STOP_RECORD = "Stop Recording";
+
+        // Stack for saving data
+        public static List<dynamic> data = new List<dynamic>();
+
         // Save every part of body that being investigate their angle
         public static double upperArm = 0;
         public static double uperArmAbduction = 0;
@@ -173,12 +202,6 @@ namespace tutorShowSkeleton
         public static int ScoreGroupB = 0;
         public static int ScoreGroupC = 0;
 
-        // Pesan penjelasan nilai Final Score
-        public static String[] Message = new String[] {
-            "Posture still acceptable",                                             // 1 - 2
-            "Posture need to investigate further",                                  // 3 - 4
-            "Posture need to investigate furthher and change soon",                 // 5 - 6
-            "Posture need to investigate and chan ge immediately"                   // 7
-        };
+        
     }
 }

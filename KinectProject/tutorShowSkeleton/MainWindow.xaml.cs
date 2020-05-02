@@ -2,9 +2,7 @@
 using System.Windows;
 using Microsoft.Kinect;
 using System.Collections.Generic;
-using System.IO;
-using CsvHelper;
-using System.Globalization;
+using System.Windows.Media;
 
 namespace tutorShowSkeleton
 {
@@ -16,14 +14,6 @@ namespace tutorShowSkeleton
         KinectControl controller;
         public static MainWindow mainWindow;
         SettingWindow setWin = new SettingWindow();
-        
-        public static String _mode = "depth";
-
-        // Menyimpan setiap record yang dilakukan
-        List<dynamic> data = new List<dynamic>();
-
-        // 0 -> Kiri (default) || 1 -> Kanan
-        public static int sisiBadan = 0; 
 
         /*   
          *  0 -> upper arm
@@ -60,9 +50,9 @@ namespace tutorShowSkeleton
         public MainWindow()
         {
             InitializeComponent();
+            InitializeStartUpStatus();
             mainWindow = this;
             openSensor();
-            this.Status.Content = "Disconnect";
         }
 
         void Window_Closed(object sender, EventArgs eventArgs)
@@ -70,56 +60,54 @@ namespace tutorShowSkeleton
             this.controller.ReleaseSensor();
         }
 
+        void InitializeStartUpStatus()
+        {
+            // Connection to Kinect Status
+            this.Status.Content = GlobalVal.DISCONNECT;
+
+            // Condition of recording
+            this.recordStatus.Content = GlobalVal.STOP_RECORD;
+            this.btnSaveCsv.IsEnabled = false;
+
+            // Kinect Camera initial state (Depth , Color)
+            GlobalVal._mode = GlobalVal.DEPTH;
+        }
+
         void Connect_Event(object send, EventArgs eventArgs)
         {
-            if ("Disconnect".Equals(this.Status.Content))
+            if (GlobalVal.DISCONNECT.Equals(this.Status.Content))
             {
                 this.controller.openReader();
                 this.controller.OpenReaderBodySkeleton();
-                this.Status.Content = "Connected";
+                this.Status.Content = GlobalVal.CONNECT;
+                this.btnSaveCsv.IsEnabled = true;
             } 
             else
             {
                 this.controller.CloseReader();
-                this.Status.Content = "Disconnect";
+                this.Status.Content = GlobalVal.DISCONNECT;
                 this.camera.Source = null;
                 this.canvas.Children.Clear();
+                this.btnSaveCsv.IsEnabled = false;
             }
         }
 
-        void Save_to_CSV(object send, EventArgs eventArgs)
+        void Start_Stop_Record(object send, EventArgs eventArgs)
         {
-            dynamic record = new DataCsv { 
-                GroupA = GlobalVal.ScoreGroupA, 
-                GroupB = GlobalVal.ScoreGroupB, 
-                GroupC = GlobalVal.ScoreGroupC,
- 
-                upperArm = GlobalVal.upperArm, 
-                upperArmAbduction = GlobalVal.uperArmAbduction,
-                shoulderArm = GlobalVal.shoulderAngle,
-
-                lowerArm = GlobalVal.lowerArm,
-                lowerArmMidline = GlobalVal.lowerArmMidline,
-
-                neck = GlobalVal.neck, 
-                neckBending = GlobalVal.neckBending,
-
-                trunk = GlobalVal.trunk, 
-                trunkBending = GlobalVal.trunkBending,
-
-                wrist = GlobalVal.wrist
-            };
-            data.Add(record);
-            
-            String filePath = @"D:\\Data.csv";
-            System.IO.File.WriteAllText(filePath, string.Empty); // Clear CSV data
-            StreamWriter writer = new StreamWriter(filePath, true); // If not exist -> create else Open it
-
-            using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
+            if (!GlobalVal.RECORD_STATUS)
             {
-                csv.WriteRecords(data);
+                GlobalVal.RECORD_STATUS = true;
+                this.recordStatus.Content = GlobalVal.START_RECORD;
+                this.recordStatus.Foreground = Brushes.Green;
+                this.btnSaveCsv.Content = "Stop Record";
             }
-
+            else
+            {
+                GlobalVal.RECORD_STATUS = false;
+                this.recordStatus.Content = GlobalVal.STOP_RECORD;
+                this.recordStatus.Foreground = Brushes.Gray;
+                this.btnSaveCsv.Content = "Start Record";
+            }
         }
 
         void Call_Setting(object send, EventArgs eventArgs)

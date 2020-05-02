@@ -60,7 +60,7 @@ namespace tutorShowSkeleton
         {
             if (frame != null)
             {
-                if (String.Equals("color", tutorShowSkeleton.MainWindow._mode))
+                if (String.Equals(GlobalVal.COLOR, GlobalVal._mode))
                 {
                     this.camera.Source = frame.ToBitmap();
                 }
@@ -73,7 +73,7 @@ namespace tutorShowSkeleton
         {
             if (frame != null)
             {
-                if (String.Equals("depth", tutorShowSkeleton.MainWindow._mode))
+                if (String.Equals(GlobalVal.DEPTH, GlobalVal._mode))
                 {
                     this.camera.Source = frame.ToBitmap();
                 }
@@ -111,7 +111,7 @@ namespace tutorShowSkeleton
             {
               this.bodyDrawers[i].DrawFrame(this.bodies[i]);
               
-              if (count < 5)
+              if (count < dt)
               {
                   rBody[count] = this.bodies[i];
               }
@@ -173,25 +173,28 @@ namespace tutorShowSkeleton
         
     public void calculateAngle(Body body)
     {
-        int sisiBadan = tutorShowSkeleton.MainWindow.sisiBadan;
-        Joint spineShoulder = kalmanFilterFull(convertJoinToMatrix(body.Joints[JointType.SpineShoulder]),
-            getBodyTypeSeq(JointType.SpineShoulder));
-        Joint spineMid = kalmanFilterFull(convertJoinToMatrix(body.Joints[JointType.SpineMid]),
-            getBodyTypeSeq(JointType.SpineMid));
-        Joint spineBase = kalmanFilterFull(convertJoinToMatrix(body.Joints[JointType.SpineBase]),
-            getBodyTypeSeq(JointType.SpineBase));
+        Joint spineShoulder = kalmanFilterFull(getBodyTypeSeq(JointType.SpineShoulder));
+        Joint spineMid = kalmanFilterFull(getBodyTypeSeq(JointType.SpineMid));
+        Joint spineBase = kalmanFilterFull(getBodyTypeSeq(JointType.SpineBase));
         Vector3D trunk = convertJointoVector(spineBase) - convertJointoVector(spineMid) - convertJointoVector(spineShoulder);
 
         // Group A
-        calculateUpperArm(body, trunk, sisiBadan);
-        calculateLowerArm(body, sisiBadan);
-        calculateWrist(body, sisiBadan);
+        calculateUpperArm(body, trunk, GlobalVal.BODY_SIDE);
+        calculateLowerArm(body, GlobalVal.BODY_SIDE);
+        calculateWrist(body, GlobalVal.BODY_SIDE);
         
         // Group B
         calculateNeck(body);
         calculateTrunk(body, trunk);
+
+        // Check if data being recorded or not
+        if (GlobalVal.RECORD_STATUS)
+        {
+            RulaCalculation.recordDataToCSV();
+        }
     }
 
+    #region Body Calculation Angle
     /******************* Method Angle Calc Body Part ******************/
 
     private void calculateUpperArm(Body body, Vector3D trunk, int sisiBadan)
@@ -202,11 +205,8 @@ namespace tutorShowSkeleton
         if (0 == sisiBadan) // sisi Kiri
         {
             // Upper arm correspondent to sagittal Plane
-            start = kalmanFilterFull(convertJoinToMatrix(body.Joints[JointType.ElbowLeft]), 
-                getBodyTypeSeq(JointType.ElbowLeft));
-
-            poros = kalmanFilterFull(convertJoinToMatrix(body.Joints[JointType.ShoulderLeft]), 
-                getBodyTypeSeq(JointType.ShoulderLeft));
+            start = kalmanFilterFull(getBodyTypeSeq(JointType.ElbowLeft));
+            poros = kalmanFilterFull(getBodyTypeSeq(JointType.ShoulderLeft));
             
             // Calculate Angle
             angle = this.calculateAngle(poros.Position.Y, poros.Position.Z,
@@ -226,17 +226,14 @@ namespace tutorShowSkeleton
             }
 
             // Upper Arm Abduction
-            end = kalmanFilterFull(convertJoinToMatrix(body.Joints[JointType.SpineShoulder]),
-                getBodyTypeSeq(JointType.SpineShoulder));
+            end = kalmanFilterFull(getBodyTypeSeq(JointType.SpineShoulder));
             angleAbduction = this.calculateAngle(poros.Position.X, poros.Position.Y,
                 start.Position.X, start.Position.Y, end.Position.X, end.Position.Y);
 
             // Shoulder is Raise 
             start = poros;
-            end = kalmanFilterFull(convertJoinToMatrix(body.Joints[JointType.Neck]),
-                getBodyTypeSeq(JointType.Neck));
-            poros = kalmanFilterFull(convertJoinToMatrix(body.Joints[JointType.SpineShoulder]), 
-                getBodyTypeSeq(JointType.SpineShoulder));
+            end = kalmanFilterFull(getBodyTypeSeq(JointType.Neck));
+            poros = kalmanFilterFull(getBodyTypeSeq(JointType.SpineShoulder));
 
             shoulderRaise = calculateAngle(poros.Position.X, poros.Position.Y,
                 start.Position.X, start.Position.Y, end.Position.X, end.Position.Y);
@@ -247,11 +244,8 @@ namespace tutorShowSkeleton
         else
         {
             // Lengan atas Oke
-            start = kalmanFilterFull(convertJoinToMatrix(body.Joints[JointType.ElbowRight]), 
-                getBodyTypeSeq(JointType.ElbowRight));
-
-            poros = kalmanFilterFull(convertJoinToMatrix(body.Joints[JointType.ShoulderRight]), 
-                getBodyTypeSeq(JointType.ShoulderRight));
+            start = kalmanFilterFull(getBodyTypeSeq(JointType.ElbowRight));
+            poros = kalmanFilterFull(getBodyTypeSeq(JointType.ShoulderRight));
 
             // Calculate Angle
             angle = this.calculateAngle(poros.Position.Y, poros.Position.Z,
@@ -271,17 +265,14 @@ namespace tutorShowSkeleton
             }
 
             // Upper Arm Abduction
-            end = kalmanFilterFull(convertJoinToMatrix(body.Joints[JointType.SpineShoulder]),
-                getBodyTypeSeq(JointType.SpineShoulder));
+            end = kalmanFilterFull(getBodyTypeSeq(JointType.SpineShoulder));
             angleAbduction = this.calculateAngle(poros.Position.X, poros.Position.Y,
                 start.Position.X, start.Position.Y, trunk.X, trunk.Y);
 
             // Shoulder is Raise 
             start = poros;
-            end = kalmanFilterFull(convertJoinToMatrix(body.Joints[JointType.Neck]),
-                getBodyTypeSeq(JointType.Neck));
-            poros = kalmanFilterFull(convertJoinToMatrix(body.Joints[JointType.SpineShoulder]),
-                getBodyTypeSeq(JointType.SpineShoulder));
+            end = kalmanFilterFull(getBodyTypeSeq(JointType.Neck));
+            poros = kalmanFilterFull(getBodyTypeSeq(JointType.SpineShoulder));
 
             shoulderRaise = calculateAngle(poros.Position.X, poros.Position.Y,
                 start.Position.X, start.Position.Y, end.Position.X, end.Position.Y);
@@ -303,14 +294,9 @@ namespace tutorShowSkeleton
         if (0 == sisiBadan)
         {
             // Lengan Bawah - oke
-            start = kalmanFilterFull(convertJoinToMatrix(body.Joints[JointType.ShoulderLeft]), 
-                getBodyTypeSeq(JointType.ShoulderLeft));
-
-            end = kalmanFilterFull(convertJoinToMatrix(body.Joints[JointType.WristLeft]), 
-                getBodyTypeSeq(JointType.WristLeft));
-
-            poros = kalmanFilterFull(convertJoinToMatrix(body.Joints[JointType.ElbowLeft]), 
-                getBodyTypeSeq(JointType.ElbowLeft));
+            start = kalmanFilterFull(getBodyTypeSeq(JointType.ShoulderLeft));
+            end = kalmanFilterFull(getBodyTypeSeq(JointType.WristLeft));
+            poros = kalmanFilterFull(getBodyTypeSeq(JointType.ElbowLeft));
 
             angle = calculateAngle(poros.Position.Y, poros.Position.Z, start.Position.Y, start.Position.Z,
                         end.Position.Y, end.Position.Z);
@@ -318,8 +304,7 @@ namespace tutorShowSkeleton
 
             // Cek arah lengan bwah apakah keluar dari batas midlane
             poros = start;
-            start = kalmanFilterFull(convertJoinToMatrix(body.Joints[JointType.SpineShoulder]),
-                getBodyTypeSeq(JointType.SpineShoulder));
+            start = kalmanFilterFull(getBodyTypeSeq(JointType.SpineShoulder));
 
             deviasiWrist = poros.Angle(start, end); //  dalam rentang 240 -> 250 masih dalam posisi tengah
 
@@ -329,14 +314,9 @@ namespace tutorShowSkeleton
         else
         {
             // Lengan Bawah - oke
-            start = kalmanFilterFull(convertJoinToMatrix(body.Joints[JointType.ShoulderRight]),
-                getBodyTypeSeq(JointType.ShoulderRight));
-
-            end = kalmanFilterFull(convertJoinToMatrix(body.Joints[JointType.WristRight]),
-                getBodyTypeSeq(JointType.WristRight));
-
-            poros = kalmanFilterFull(convertJoinToMatrix(body.Joints[JointType.ElbowRight]),
-                getBodyTypeSeq(JointType.ElbowRight));
+            start = kalmanFilterFull(getBodyTypeSeq(JointType.ShoulderRight));
+            end = kalmanFilterFull(getBodyTypeSeq(JointType.WristRight));
+            poros = kalmanFilterFull(getBodyTypeSeq(JointType.ElbowRight));
 
             angle = calculateAngle(poros.Position.Y, poros.Position.Z, start.Position.Y, start.Position.Z,
                         end.Position.Y, end.Position.Z);
@@ -344,8 +324,7 @@ namespace tutorShowSkeleton
 
             // Cek arah lengan bwah apakah keluar dari batas midlane
             poros = start;
-            start = kalmanFilterFull(convertJoinToMatrix(body.Joints[JointType.SpineShoulder]),
-                getBodyTypeSeq(JointType.SpineShoulder));
+            start = kalmanFilterFull(getBodyTypeSeq(JointType.SpineShoulder));
 
             deviasiWrist = poros.Angle(start, end); // dalam rentang 240 -> 250 masih dalam posisi tengah
 
@@ -365,17 +344,14 @@ namespace tutorShowSkeleton
         if (0 == sisiBadan)
         {
             // Wrist Angle coresponding Horizontall plane
-            start = kalmanFilterFull(convertJoinToMatrix(body.Joints[JointType.ElbowLeft]),
-                getBodyTypeSeq(JointType.ElbowLeft));
+            start = kalmanFilterFull(getBodyTypeSeq(JointType.ElbowLeft));
 
-            end = kalmanFilterFull(convertJoinToMatrix(body.Joints[JointType.HandTipLeft]),
-                getBodyTypeSeq(JointType.HandTipLeft));
+            end = kalmanFilterFull(getBodyTypeSeq(JointType.HandTipLeft));
 
-            poros = kalmanFilterFull(convertJoinToMatrix(body.Joints[JointType.WristLeft]),
-                getBodyTypeSeq(JointType.HandLeft));
+            poros = kalmanFilterFull(getBodyTypeSeq(JointType.WristLeft));
 
-            //angle = calculateAngle(poros.Position.X, poros.Position.Y, start.Position.X, poros.Position.Y,
-            //    end.Position.X, end.Position.Y);
+            //angle = calculateAngle(poros.Position.Y, poros.Position.Z, start.Position.Y, poros.Position.Z,
+            //    end.Position.Y, end.Position.Z);
             angle = poros.Angle(start, end) - 180;
 
             RulaCalculation.calculateWrist(angle);
@@ -384,14 +360,11 @@ namespace tutorShowSkeleton
         else // sisi Kanan
         {
             // Pergelangan Tangan - oke
-            start = kalmanFilterFull(convertJoinToMatrix(body.Joints[JointType.ElbowRight]),
-                getBodyTypeSeq(JointType.ElbowRight));
+            start = kalmanFilterFull(getBodyTypeSeq(JointType.ElbowRight));
 
-            end = kalmanFilterFull(convertJoinToMatrix(body.Joints[JointType.HandTipRight]),
-                getBodyTypeSeq(JointType.HandTipRight));
+            end = kalmanFilterFull(getBodyTypeSeq(JointType.HandTipRight));
 
-            poros = kalmanFilterFull(convertJoinToMatrix(body.Joints[JointType.WristRight]),
-                getBodyTypeSeq(JointType.WristRight));
+            poros = kalmanFilterFull(getBodyTypeSeq(JointType.WristRight));
 
             //angle = calculateAngle(poros.Position.X, poros.Position.Y, start.Position.X, poros.Position.Y,
             //    end.Position.X, end.Position.Y);
@@ -411,14 +384,11 @@ namespace tutorShowSkeleton
         double angle, bendingAngle;
 
         // Neck Angle corespondent to sagittal plane
-        start = kalmanFilterFull(convertJoinToMatrix(body.Joints[JointType.Head]),
-                getBodyTypeSeq(JointType.Head));
+        start = kalmanFilterFull(getBodyTypeSeq(JointType.Head));
 
-        end = kalmanFilterFull(convertJoinToMatrix(body.Joints[JointType.SpineBase]),
-            getBodyTypeSeq(JointType.SpineBase));
+        end = kalmanFilterFull(getBodyTypeSeq(JointType.SpineBase));
 
-        poros = kalmanFilterFull(convertJoinToMatrix(body.Joints[JointType.SpineShoulder]),
-            getBodyTypeSeq(JointType.SpineShoulder));
+        poros = kalmanFilterFull(getBodyTypeSeq(JointType.SpineShoulder));
 
         angle = calculateAngle(poros.Position.Y, poros.Position.Z, start.Position.Y, start.Position.Z,
             end.Position.Y, end.Position.Z);
@@ -440,7 +410,7 @@ namespace tutorShowSkeleton
         }
 
         RulaCalculation.calculateNeck(angle, bendingAngle);
-        this.textNeck.Text = bendingAngle.ToString("0");
+        this.textNeck.Text = angle.ToString("0");
 
         // Save data to static variable
         GlobalVal.neck = angle;
@@ -452,11 +422,8 @@ namespace tutorShowSkeleton
         Joint start, end, poros;
         double angle, trunkTwist, trunkBending;
 
-        start = kalmanFilterFull(convertJoinToMatrix(body.Joints[JointType.SpineShoulder]),
-                getBodyTypeSeq(JointType.SpineShoulder));
-
-        poros = kalmanFilterFull(convertJoinToMatrix(body.Joints[JointType.SpineBase]),
-            getBodyTypeSeq(JointType.SpineBase));
+        start = kalmanFilterFull(getBodyTypeSeq(JointType.SpineShoulder));
+        poros = kalmanFilterFull(getBodyTypeSeq(JointType.SpineBase));
 
         end = poros;
         end.Position.Z = 2 * poros.Position.Z;
@@ -473,19 +440,15 @@ namespace tutorShowSkeleton
         }
 
         // Trunk twisted
-        start = kalmanFilterFull(convertJoinToMatrix(body.Joints[JointType.SpineMid]),
-            getBodyTypeSeq(JointType.SpineMid));
-        end = kalmanFilterFull(convertJoinToMatrix(body.Joints[JointType.AnkleLeft]),
-            getBodyTypeSeq(JointType.AnkleLeft));
+        start = kalmanFilterFull(getBodyTypeSeq(JointType.SpineMid));
+        end = kalmanFilterFull(getBodyTypeSeq(JointType.AnkleLeft));
 
         trunkTwist = calculateAngle3D(convertJointoVector(start), convertJointoVector(end));
 
         // Trunk side bending
         // Create Vector dan perpendicular between hip Joint
-        Vector3D hipLeft = convertJointoVector(kalmanFilterFull(convertJoinToMatrix(body.Joints[JointType.HipLeft]), 
-            getBodyTypeSeq(JointType.HipLeft)));
-        Vector3D hipRight = convertJointoVector(kalmanFilterFull(convertJoinToMatrix(body.Joints[JointType.HipRight]),
-            getBodyTypeSeq(JointType.HipRight)));
+        Vector3D hipLeft = convertJointoVector(kalmanFilterFull(getBodyTypeSeq(JointType.HipLeft)));
+        Vector3D hipRight = convertJointoVector(kalmanFilterFull(getBodyTypeSeq(JointType.HipRight)));
 
         Vector3D horizontalSide = hipLeft - hipRight;
         Vector3D perpendicularHorizontal = new Vector3D();
@@ -498,14 +461,18 @@ namespace tutorShowSkeleton
         trunkBending = calculateAngle3D(perpendicularHorizontal, trunk); // Default position angle -> 108-110
 
         RulaCalculation.calculateTrunk(angle, trunkBending);
-        this.textTrunk.Text = trunkBending.ToString("0");
+        this.textTrunk.Text = angle.ToString("0");
 
         // Save data to static variable
         GlobalVal.trunk = angle;
         GlobalVal.trunkBending = trunkBending;
     }
+    /******************* End Method Angle Calc Body Part ******************/
+    #endregion
 
-      // Calculate between 2 vector 2D using Cross Join
+    #region Method Calculation Angle
+    /******************* Function for calculate Angle  ******************/
+    // Calculate between 2 vector 2D using Cross Join
     private double calculateAngle(double P1X, double P1Y, double P2X, double P2Y,
             double P3X, double P3Y)
     {   
@@ -576,6 +543,8 @@ namespace tutorShowSkeleton
         v.Z = j.Position.Z;
         return v;
     }
+    /******************* End Function for calculate Angle  ******************/
+    #endregion
 
     private void calculateRulaEngine()
     {
@@ -605,9 +574,8 @@ namespace tutorShowSkeleton
 
         this.finalScoreMsg.Text = finalMsg;
     }
-      
 
-
+    #region Kalman Filter
     /******************* Method Kalman Filter ******************/
 
     // Variable A,B, and H we will asumtion this is a constant value
@@ -645,16 +613,22 @@ namespace tutorShowSkeleton
     }
 
     // Here define A,B, and H Matrice
-    private Joint kalmanFilterFull(GeneralMatrix z, int pos)
+    private Joint kalmanFilterFull(int pos)
     {
         // Prepare 
         //GeneralMatrix r = GeneralMatrix.Identity(3, 3);
         //R = r.MultiplyEquals(0.01);
+        // Set r from Deviation Standard
         GeneralMatrix r = GeneralMatrix.Identity(3, 3);
         r.SetElement(0, 0, Rv[pos, 0]); // Variance Base on Joint Type , X
         r.SetElement(1, 1, Rv[pos, 1]); // Variance Base on Joint Type , Z
         r.SetElement(2, 2, Rv[pos, 2]); // Variance Base on Joint Type , Y
         R = r;
+        // Set estimation from coordinate average in frame buffer
+        GeneralMatrix Z = GeneralMatrix.Random(3, 1);
+        Z.SetElement(0, 0, jointAveragePart[pos, 0]);
+        Z.SetElement(1, 0, jointAveragePart[pos, 1]);
+        Z.SetElement(2, 0, jointAveragePart[pos, 2]);
 
         // Predict
         GeneralMatrix Xp = F * Xk[pos];
@@ -662,7 +636,7 @@ namespace tutorShowSkeleton
 
         // Measurement update ( Correction )
         K = Pp * H.Transpose() * (H * Pp * H.Transpose() + R).Inverse();
-        Xk[pos] = Xp + (K * (z - (H * Xp)));
+        Xk[pos] = Xp + (K * (Z - (H * Xp)));
 
         GeneralMatrix I = GeneralMatrix.Identity(Pp.RowDimension, Pp.ColumnDimension);
         P[pos] = (I - (K * H)) * Pp;
@@ -671,15 +645,9 @@ namespace tutorShowSkeleton
     }
 
     /***********************************************************/
+    #endregion
 
-    Body[] bodies;
-    KinectSensor sensor;
-    BodyFrameReader reader;
-    IBodyDrawer[] bodyDrawers;
-    Func<IBodyDrawer> bodyDrawerFactory;
-    Image camera;
-    MultiSourceFrameReader colorReader;
-    
+    #region Kalman Filter Variable
     // FinalScore Item
     int finalResult;
     String finalMsg;
@@ -687,30 +655,35 @@ namespace tutorShowSkeleton
     // Kinect Filter (Default Smoothing vector for minimalize Jitter on Kinect)
     KinectJointFilter filter = new KinectJointFilter();
 
-    //------------------------------------------
+    //-------------------------------------------
     // Kalman variabel
     //-------------------------------------------
 
     GeneralMatrix F, H, Q, R, K;
     GeneralMatrix[] P, Xk;
 
-    double dt = 5; // 5 Frame
-    double[] estimationVector = new double[6];
-    double[,] Rv = new double[GlobalVal.BodyPart.Length, 3];   // 3 -> x,y,z
+    int dt = 10; // Total Frame that being calculate/save
+    double[] estimationVector;
+    double[,] Rv, jointAveragePart;
     double estimationX, estimationY, estimationZ;
     int count = 0;
-    Body[] rBody = new Body[5]; // Save Body every frame for calculating Measurement Variance
-    bool first = true;
+    Body[] rBody;
+    bool first;
 
     // Inisiasi Variabel
     private void initializeKalmanVar()
     {
-        // Prepare 
+        // Prepare Variable
         int length = GlobalVal.BodyPart.Length;
         P = new GeneralMatrix[length];
         Xk = new GeneralMatrix[length];
-        GeneralMatrix i = GeneralMatrix.Identity(6, 6);
-
+        // 3 -> x,y,z
+        Rv = new double[length, 3];   
+        jointAveragePart = new double[length, 3];
+        estimationVector = new double[6];
+        rBody = new Body[dt]; // Save Body every frame for calculating Measurement Variance
+        first = true; // Initial State
+        
         // Inisialisasi matrik fungsi transisi (F / A)
         double[][] matrikA = { new double[]  {1,   0,   0,    dt,  0,   0}, 
                                 new double[] {0,   1,   0,    0,   dt,  0}, 
@@ -731,6 +704,7 @@ namespace tutorShowSkeleton
         GeneralMatrix Qq = GeneralMatrix.Identity(6, 6);
         Q = Qq.MultiplyEquals(0.1);
 
+        GeneralMatrix i = GeneralMatrix.Identity(6, 6);
         for (int c = 0; c < length; c++)
         {
             // Prior error covariance matrix (P)
@@ -749,8 +723,8 @@ namespace tutorShowSkeleton
          */
     }
 
-      // Calculate Rv[] Variance for every JointType
-      // This methods come from Erick Pranata Thesis (2016)
+    // Calculate Rv[] Variance for every JointType
+    // This methods come from Erick Pranata Thesis (2016)
     private void calcRVariance()
     {
         // Remove Rv existing value
@@ -765,7 +739,7 @@ namespace tutorShowSkeleton
         foreach (JointType bodyPart in GlobalVal.BodyPart)
         {
             // Get Sum
-            foreach (Body body in rBody) // 30 Frame
+            foreach (Body body in rBody) // Base on total Frame that being saved
             {
                 if (null == body)
                 {
@@ -782,9 +756,15 @@ namespace tutorShowSkeleton
         // Get mean for every x,y,z in BodyPart
         for (int i = 0; i < GlobalVal.BodyPart.Length; i++)
         {
+            // Average data
             sumX[i] = sumX[i] / totalData;
             sumY[i] = sumY[i] / totalData;
             sumZ[i] = sumZ[i] / totalData;
+
+            // Save average data to Array for calculating 
+            jointAveragePart[i, 0] = sumX[i];
+            jointAveragePart[i, 1] = sumY[i];
+            jointAveragePart[i, 2] = sumZ[i];
         }
 
         // Calculate Variance
@@ -792,7 +772,7 @@ namespace tutorShowSkeleton
         foreach (JointType bodyPart in GlobalVal.BodyPart)
         {
             // Get Σ[X¯ - Xi]^2
-            foreach (Body body in rBody) // 30 Frame
+            foreach (Body body in rBody) // Base on total Frame that being saved
             {
                 if (null == body) continue;
 
@@ -811,6 +791,17 @@ namespace tutorShowSkeleton
     }
 
     /******************************************************/
+    #endregion
+
+    #region Default Variable
+
+    Body[] bodies;
+    KinectSensor sensor;
+    BodyFrameReader reader;
+    IBodyDrawer[] bodyDrawers;
+    Func<IBodyDrawer> bodyDrawerFactory;
+    Image camera;
+    MultiSourceFrameReader colorReader;
 
     //Text box and Information collumn
     TextBox textUpperArm;
@@ -832,4 +823,5 @@ namespace tutorShowSkeleton
       Brushes.Yellow
     };
   }
+  #endregion
 }

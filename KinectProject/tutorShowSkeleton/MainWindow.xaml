@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Closed="Window_Closed"
         ResizeMode="NoResize"
-        Title="MainWindow" Height="614" Width="804">
+        Title="Rula Calculation" Height="614" Width="804">
     <Grid Margin="0,0,-6,0">
         <Image Name="camera" Height="424" Width="512" Margin="147,36,147,35" VerticalAlignment="Top"/>
         <Canvas Name="canvas" Height="424" Width="512"  Margin="147,36,147,0" VerticalAlignment="Top"/>
@@ -35,13 +35,14 @@
                 Click="Call_Setting"/>
 
         <!--Final Score-->
-        <TextBlock Name="finalScore" HorizontalAlignment="Left" Margin="269,465,0,0" TextWrapping="Wrap" Text="TextBlock" Width="290" FontSize="36" TextAlignment="Center" Height="46" VerticalAlignment="Top"/>
-        <TextBlock Name="finalScoreMsg" HorizontalAlignment="Left" Height="66" Margin="102,516,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="635" FontSize="24" TextAlignment="Center"/>
+        <TextBlock Name="finalScore" HorizontalAlignment="Left" Margin="250,458,0,0" TextWrapping="Wrap" Text="None" Width="290" FontSize="36" TextAlignment="Center" Height="46" VerticalAlignment="Top"/>
+        <TextBlock Name="finalScoreMsg" HorizontalAlignment="Left" Height="66" Margin="76,509,0,0" TextWrapping="Wrap" Text="None" VerticalAlignment="Top" Width="635" FontSize="24" TextAlignment="Center"/>
 
         <!--Save to CSV-->
-        <Button Name="btnSaveCsv" Content="Save Data" Height="38" Margin="689,378,14,0" VerticalAlignment="Top"
-                Click="Save_to_CSV"/>
-        <Label Content="Save Data to CSV" Margin="689,347,1,0" VerticalAlignment="Top"/>
+        <Button Name="btnSaveCsv" Content="Start Record" Height="38" Margin="665,378,14,0" VerticalAlignment="Top"
+                Click="Start_Stop_Record"/>
+        <Label Content="Save Data to CSV" Margin="0,316,30,0" VerticalAlignment="Top" HorizontalAlignment="Right"/>
+        <Label Name="recordStatus" Content="Not Recording" Margin="665,342,14,0" VerticalAlignment="Top" Foreground="Gray" FontSize="14" />
 
     </Grid>
 </Window>
