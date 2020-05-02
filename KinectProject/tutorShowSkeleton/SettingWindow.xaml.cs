@@ -19,6 +19,21 @@ namespace tutorShowSkeleton
     /// </summary>
     public partial class SettingWindow : Window
     {
+
+        private void setStatus(Label label, bool status)
+        {
+            if (status)
+            {
+                label.Content = "True";
+                label.Foreground = Brushes.Green;
+            }
+            else
+            {
+                label.Content = "False";
+                label.Foreground = Brushes.Gray;
+            }
+        }
+
         // Variabel Nilai Tambahan untuk postur Tubuh A
         private int statusLenganAtas = 0;
         private int statusLenganBawah = 0;
@@ -57,11 +72,17 @@ namespace tutorShowSkeleton
             "Load 2 kg - 10 kg (static or repeated)", // 2 
             "Load more than 10 kg or repeated or shock" // 3
         };
+        private Label txtTrunkTwist;
+        private Label txtWristDeviation;
+        private Label txtNeckTwist;
 
-        public SettingWindow()
+        public SettingWindow(Label txtTrunkTwist, Label txtWristDeviation, Label txtNeckTwist)
         {
             InitializeComponent();
             InitializeComboboxItem();
+            this.txtTrunkTwist = txtTrunkTwist;
+            this.txtWristDeviation = txtWristDeviation;
+            this.txtNeckTwist = txtNeckTwist;
         }
 
         void Apply_Setting(object sender, EventArgs eventArgs)
@@ -121,6 +142,11 @@ namespace tutorShowSkeleton
             if (this.wristDeviation.IsChecked == true)
             {
                 this.pergelanganTangan = 1;
+                setStatus(this.txtWristDeviation, true);
+            }
+            else
+            {
+                setStatus(this.txtWristDeviation, false);
             }
 
             temp = this.putaranPergelanganTangan.Text;
@@ -178,12 +204,22 @@ namespace tutorShowSkeleton
             if (this.neckTwist.IsChecked == true)
             {
                 this.kondisiLeher = 1;
+                setStatus(this.txtNeckTwist, true);
+            }
+            else
+            {
+                setStatus(this.txtNeckTwist, false);
             }
 
             // Kondisi sudut batang tubuh
             if (trunkTwist.IsChecked == true)
             {
                 this.kondisiBatangTubuh = 1;
+                setStatus(this.txtTrunkTwist, true);
+            }
+            else
+            {
+                setStatus(this.txtTrunkTwist, false);
             }
 
             // Beban postur B
@@ -237,23 +273,21 @@ namespace tutorShowSkeleton
              *  10 -> beban eksternal Postur B
              */
 
-            tutorShowSkeleton.MainWindow.scoreSetting[0] = this.statusLenganAtas;
-            tutorShowSkeleton.MainWindow.scoreSetting[1] = this.statusLenganBawah;
-            tutorShowSkeleton.MainWindow.scoreSetting[2] = this.pergelanganTangan;
-            tutorShowSkeleton.MainWindow.scoreSetting[3] = this.rotasiPergelanganTangan;
+            GlobalVal.scoreSetting[0] = this.statusLenganAtas;
+            GlobalVal.scoreSetting[1] = this.statusLenganBawah;
+            GlobalVal.scoreSetting[2] = this.pergelanganTangan;
+            GlobalVal.scoreSetting[3] = this.rotasiPergelanganTangan;
 
-            tutorShowSkeleton.MainWindow.scoreSetting[4] = this.kondisiLeher;
-            tutorShowSkeleton.MainWindow.scoreSetting[5] = this.kondisiBatangTubuh;
-            tutorShowSkeleton.MainWindow.scoreSetting[6] = this.kondisiKaki;
+            GlobalVal.scoreSetting[4] = this.kondisiLeher;
+            GlobalVal.scoreSetting[5] = this.kondisiBatangTubuh;
+            GlobalVal.scoreSetting[6] = this.kondisiKaki;
             GlobalVal.leg = this.kondisiKaki;
             
-            tutorShowSkeleton.MainWindow.scoreSetting[7] = this.bebanOtotTangan;
-            tutorShowSkeleton.MainWindow.scoreSetting[8] = this.totalBebanEksternalTangan;
-            tutorShowSkeleton.MainWindow.scoreSetting[9] = this.bebanOtotBadan;
-            tutorShowSkeleton.MainWindow.scoreSetting[10] = this.totalBebanEksternalBadan;
+            GlobalVal.scoreSetting[7] = this.bebanOtotTangan;
+            GlobalVal.scoreSetting[8] = this.totalBebanEksternalTangan;
+            GlobalVal.scoreSetting[9] = this.bebanOtotBadan;
+            GlobalVal.scoreSetting[10] = this.totalBebanEksternalBadan;
         }
-
-
     }
 }
    

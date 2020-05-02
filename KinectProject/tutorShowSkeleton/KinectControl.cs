@@ -11,17 +11,35 @@ namespace tutorShowSkeleton
 {
   class KinectControl
   {
-    public KinectControl(Func<IBodyDrawer> bodyDrawerFactory, Image image, 
-        TextBox textUpperArm, TextBox textLowerArm, TextBox textWristArm, TextBox textNeck, TextBox textTrunk,
+    public KinectControl(Func<IBodyDrawer> bodyDrawerFactory, Image image,
+        TextBox textUpperArm, Label txtUpperArmAbduction, Label txtShoulderRaise,
+        TextBox textLowerArm, Label txtLowerArmMidline,
+        TextBox textWristArm, Label txtWristDeviation,
+        TextBox textNeck, Label txtNeckBending, Label txtNeckTwist,
+        TextBox textTrunk, Label txtTrunkBending, Label txtTrunkTwist,
         TextBlock finalScore, TextBlock finalScoreMsg)
     {
       this.bodyDrawerFactory = bodyDrawerFactory;
       this.camera = image;
+
       this.textUpperArm = textUpperArm;
+      this.txtUpperArmAbduction = txtUpperArmAbduction;
+      this.txtShoulderRaise = txtShoulderRaise;
+
       this.textLowerArm = textLowerArm;
+      this.txtLowerArmMidline = txtLowerArmMidline;
+
       this.textWristArm = textWristArm;
+      this.txtWristDeviation = txtWristDeviation;
+
       this.textNeck = textNeck;
+      this.txtNeckBending = txtNeckBending;
+      this.txtNeckTwist = txtNeckTwist;
+
       this.textTrunk = textTrunk;
+      this.txtTrunkBending = txtTrunkBending;
+      this.txtTrunkTwist = txtTrunkTwist;
+
       this.finalScore = finalScore;
       this.finalScoreMsg = finalScoreMsg;
     }
@@ -201,6 +219,7 @@ namespace tutorShowSkeleton
     {
         Joint start, end, poros;
         double angle, angleAbduction, shoulderRaise;
+        bool isAbducted, isRaised;
 
         if (0 == sisiBadan) // sisi Kiri
         {
@@ -239,7 +258,14 @@ namespace tutorShowSkeleton
                 start.Position.X, start.Position.Y, end.Position.X, end.Position.Y);
 
             this.textUpperArm.Text = angle.ToString("0");
-            RulaCalculation.calculateUpperArm(angle, angleAbduction, shoulderRaise);
+            RulaCalculation.calculateUpperArm(angle);
+
+            // Abduction
+            isAbducted = RulaCalculation.calculateUpperArmAbduction(angleAbduction);
+            setStatus(this.txtUpperArmAbduction, isAbducted);
+            // Shoulder is Raise
+            isRaised = RulaCalculation.calcShoulderRaise(shoulderRaise);
+            setStatus(this.txtShoulderRaise, isRaised);
         }
         else
         {
@@ -278,7 +304,14 @@ namespace tutorShowSkeleton
                 start.Position.X, start.Position.Y, end.Position.X, end.Position.Y);
 
             this.textUpperArm.Text = angle.ToString("0");
-            RulaCalculation.calculateUpperArm(angle, angleAbduction, shoulderRaise);
+            RulaCalculation.calculateUpperArm(angle);
+
+            // Abduction
+            isAbducted = RulaCalculation.calculateUpperArmAbduction(angleAbduction);
+            setStatus(this.txtUpperArmAbduction, isAbducted);
+            // Shoulder is Raise
+            isRaised = RulaCalculation.calcShoulderRaise(shoulderRaise);
+            setStatus(this.txtShoulderRaise, isRaised);
         }
 
         // Save data into static variable
@@ -290,7 +323,8 @@ namespace tutorShowSkeleton
     private void calculateLowerArm(Body body, int sisiBadan)
     {
         Joint start, end, poros;
-        double angle, deviasiWrist;
+        double angle, lowerArmMidline;
+        bool isDeviation;
         if (0 == sisiBadan)
         {
             // Lengan Bawah - oke
@@ -306,10 +340,14 @@ namespace tutorShowSkeleton
             poros = start;
             start = kalmanFilterFull(getBodyTypeSeq(JointType.SpineShoulder));
 
-            deviasiWrist = poros.Angle(start, end); //  dalam rentang 240 -> 250 masih dalam posisi tengah
+            lowerArmMidline = poros.Angle(start, end); //  dalam rentang 240 -> 250 masih dalam posisi tengah
 
             this.textLowerArm.Text = angle.ToString("0");
-            RulaCalculation.calculateLowerArm(angle, deviasiWrist);
+            RulaCalculation.calculateLowerArm(angle);
+
+            // Lower Arm Deviation
+            isDeviation = RulaCalculation.calcLowerArmDeviation(lowerArmMidline);
+            setStatus(this.txtLowerArmMidline, isDeviation);
         }
         else
         {
@@ -326,15 +364,19 @@ namespace tutorShowSkeleton
             poros = start;
             start = kalmanFilterFull(getBodyTypeSeq(JointType.SpineShoulder));
 
-            deviasiWrist = poros.Angle(start, end); // dalam rentang 240 -> 250 masih dalam posisi tengah
+            lowerArmMidline = poros.Angle(start, end); // dalam rentang 240 -> 250 masih dalam posisi tengah
 
             this.textLowerArm.Text = angle.ToString("0");
-            RulaCalculation.calculateLowerArm(angle, deviasiWrist);
+            RulaCalculation.calculateLowerArm(angle);
+
+            // Lower Arm Deviation
+            isDeviation = RulaCalculation.calcLowerArmDeviation(lowerArmMidline);
+            setStatus(this.txtLowerArmMidline, isDeviation);
         }
 
         // Save data to static variable
         GlobalVal.lowerArm = angle;
-        GlobalVal.lowerArmMidline = deviasiWrist;
+        GlobalVal.lowerArmMidline = lowerArmMidline;
     }
 
     private void calculateWrist(Body body, int sisiBadan)
@@ -346,7 +388,7 @@ namespace tutorShowSkeleton
             // Wrist Angle coresponding Horizontall plane
             start = kalmanFilterFull(getBodyTypeSeq(JointType.ElbowLeft));
 
-            end = kalmanFilterFull(getBodyTypeSeq(JointType.HandTipLeft));
+            end = kalmanFilterFull(getBodyTypeSeq(JointType.HandLeft));
 
             poros = kalmanFilterFull(getBodyTypeSeq(JointType.WristLeft));
 
@@ -382,6 +424,7 @@ namespace tutorShowSkeleton
     {
         Joint start, end, poros;
         double angle, bendingAngle;
+        bool isBending;
 
         // Neck Angle corespondent to sagittal plane
         start = kalmanFilterFull(getBodyTypeSeq(JointType.Head));
@@ -409,8 +452,12 @@ namespace tutorShowSkeleton
             bendingAngle = 180 - bendingAngle;
         }
 
-        RulaCalculation.calculateNeck(angle, bendingAngle);
+        RulaCalculation.calculateNeck(angle);
         this.textNeck.Text = angle.ToString("0");
+
+        // Neck Bending
+        isBending = RulaCalculation.calcNeckBending(bendingAngle);
+        setStatus(this.txtNeckBending, isBending);
 
         // Save data to static variable
         GlobalVal.neck = angle;
@@ -421,6 +468,7 @@ namespace tutorShowSkeleton
     {
         Joint start, end, poros;
         double angle, trunkTwist, trunkBending;
+        bool isBending;
 
         start = kalmanFilterFull(getBodyTypeSeq(JointType.SpineShoulder));
         poros = kalmanFilterFull(getBodyTypeSeq(JointType.SpineBase));
@@ -460,8 +508,12 @@ namespace tutorShowSkeleton
         // and trunk vector to get the angle
         trunkBending = calculateAngle3D(perpendicularHorizontal, trunk); // Default position angle -> 108-110
 
-        RulaCalculation.calculateTrunk(angle, trunkBending);
+        RulaCalculation.calculateTrunk(angle);
         this.textTrunk.Text = angle.ToString("0");
+
+        // Trunk Bending
+        isBending = RulaCalculation.calcTrunkbending(trunkBending);
+        setStatus(this.txtTrunkBending, isBending);
 
         // Save data to static variable
         GlobalVal.trunk = angle;
@@ -515,7 +567,10 @@ namespace tutorShowSkeleton
         }
         return -1;
     }
+    /******************* End Function for calculate Angle  ******************/
+    #endregion
 
+    #region Support Function
     private GeneralMatrix convertJoinToMatrix(Joint j)
     {
         GeneralMatrix matrix = GeneralMatrix.Identity(3,1);
@@ -543,7 +598,20 @@ namespace tutorShowSkeleton
         v.Z = j.Position.Z;
         return v;
     }
-    /******************* End Function for calculate Angle  ******************/
+
+    private void setStatus(Label label, bool status)
+    {
+        if (status)
+        {
+            label.Content = "True";
+            label.Foreground = Brushes.Green;
+        }
+        else
+        {
+            label.Content = "False";
+            label.Foreground = Brushes.Gray;
+        }
+    }
     #endregion
 
     private void calculateRulaEngine()
@@ -805,10 +873,18 @@ namespace tutorShowSkeleton
 
     //Text box and Information collumn
     TextBox textUpperArm;
+    Label txtUpperArmAbduction;
+    Label txtShoulderRaise;
     TextBox textLowerArm;
+    Label txtLowerArmMidline;
     TextBox textWristArm;
+    Label txtWristDeviation;
     TextBox textNeck;
+    Label txtNeckBending;
+    Label txtNeckTwist;
     TextBox textTrunk;
+    Label txtTrunkBending;
+    Label txtTrunkTwist;
     TextBlock finalScore;
     TextBlock finalScoreMsg;
 
@@ -822,6 +898,23 @@ namespace tutorShowSkeleton
       Brushes.Purple,
       Brushes.Yellow
     };
+    private Func<IBodyDrawer> func;
+    private Image image;
+    private TextBox textBox1;
+    private Label label1;
+    private Label label2;
+    private TextBox textBox2;
+    private Label label3;
+    private TextBox textBox3;
+    private Label label4;
+    private TextBox textBox4;
+    private Label label5;
+    private Label label6;
+    private TextBox textBox5;
+    private Label label7;
+    private Label label8;
+    private TextBlock textBlock1;
+    private TextBlock textBlock2;
   }
   #endregion
 }

@@ -7,42 +7,64 @@
         mc:Ignorable="d"
         Closed="Window_Closed"
         ResizeMode="NoResize"
-        Title="Rula Calculation" Height="614" Width="804">
+        Title="Rula Calculation" Height="614" Width="843">
     <Grid Margin="0,0,-6,0">
         <Image Name="camera" Height="424" Width="512" Margin="147,36,147,35" VerticalAlignment="Top"/>
         <Canvas Name="canvas" Height="424" Width="512"  Margin="147,36,147,0" VerticalAlignment="Top"/>
 
-        <Label Content="Upper Arm" HorizontalAlignment="Left" Margin="10,96,0,0" VerticalAlignment="Top"/>
+        <!--Upper Arm-->
+        <Label Content="UPPER ARM" HorizontalAlignment="Left" Margin="10,99,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
         <TextBox IsReadOnly="True" HorizontalAlignment="Left" Height="46" Margin="10,127,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="125" Name="textUpperArm" FontSize="36"/>
+        <Label Content="Abduction:" HorizontalAlignment="Left" Margin="10,178,0,0" VerticalAlignment="Top"/>
+        <Label Name="txtAbductionStatus" Content="False" HorizontalAlignment="Left" Margin="71,178,0,0" VerticalAlignment="Top" Foreground="Gray"/>
+        <Label Content="Shoulder is Raise:" HorizontalAlignment="Left" Margin="10,201,0,0" VerticalAlignment="Top"/>
+        <Label Name="txtShoulderRaise" Content="False" HorizontalAlignment="Left" Margin="106,201,0,0" VerticalAlignment="Top" Foreground="Gray"/>
 
-        <Label Content="Lower Arm" HorizontalAlignment="Left" Margin="10,187,0,0" VerticalAlignment="Top"/>
-        <TextBox IsReadOnly="True" HorizontalAlignment="Left" Height="46" Margin="10,213,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="125" x:Name="textLowerArm" FontSize="36"/>
+        <!--Lower Arm-->
+        <Label Content="LOWER ARM" HorizontalAlignment="Left" Margin="10,236,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+        <TextBox IsReadOnly="True" HorizontalAlignment="Left" Height="46" Margin="10,262,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="125" x:Name="textLowerArm" FontSize="36"/>
+        <Label Content="Lower Arm Midline:" HorizontalAlignment="Left" Margin="10,315,0,0" VerticalAlignment="Top"/>
+        <Label Name="txtLowerArmMidline" Content="False" HorizontalAlignment="Left" Margin="118,315,0,0" VerticalAlignment="Top" Foreground="Gray"/>
 
-        <Label Content="Wrist arm" HorizontalAlignment="Left" Margin="10,271,0,0" VerticalAlignment="Top"/>
-        <TextBox IsReadOnly="True" HorizontalAlignment="Left" Height="46" Margin="10,302,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="125" x:Name="textWristArm" FontSize="36"/>
 
-        <Label Content="Neck" Margin="0,96,14,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="37"/>
-        <TextBox IsReadOnly="True" Height="46" Margin="665,127,14,0" TextWrapping="Wrap" VerticalAlignment="Top" x:Name="textNeck" FontSize="36"/>
+        <!--Wrist-->
+        <Label Content="WRIST" HorizontalAlignment="Left" Margin="10,353,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
+        <TextBox IsReadOnly="True" HorizontalAlignment="Left" Height="46" Margin="10,382,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="125" x:Name="textWristArm" FontSize="36"/>
+        <Label Content="Wrist Deviation:" HorizontalAlignment="Left" Margin="10,434,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="txtWristDeviation" Content="False" HorizontalAlignment="Left" Margin="97,434,0,0" VerticalAlignment="Top" Foreground="Gray"/>
 
-        <Label Content="Trunk" Margin="0,187,14,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="39"/>
-        <TextBox IsReadOnly="True" Height="46" Margin="665,213,14,0" TextWrapping="Wrap" VerticalAlignment="Top" x:Name="textTrunk" FontSize="36"/>
+        <!--Neck-->
+        <Label Content="NECK" Margin="0,51,14,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="49" FontWeight="Bold"/>
+        <TextBox IsReadOnly="True" Height="46" Margin="0,82,14,0" TextWrapping="Wrap" VerticalAlignment="Top" x:Name="textNeck" FontSize="36" HorizontalAlignment="Right" Width="125"/>
+        <Label Content="Neck is bended:" HorizontalAlignment="Left" Margin="700,135,0,0" VerticalAlignment="Top"/>
+        <Label Name="txtNeckBending" Content="False" HorizontalAlignment="Left" Margin="790,135,0,0" VerticalAlignment="Top" Foreground="Gray"/>
+        <Label Content="Neck twisted:" HorizontalAlignment="Left" Margin="700,159,0,0" VerticalAlignment="Top"/>
+        <Label Name="txtNeckIsTwisted" Content="False" HorizontalAlignment="Left" Margin="774,159,0,0" VerticalAlignment="Top" Foreground="Gray"/>
 
+        <!--Trunk-->
+        <Label Content="TRUNK" Margin="0,197,14,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="59" FontWeight="Bold"/>
+        <TextBox IsReadOnly="True" Height="46" Margin="0,223,14,0" TextWrapping="Wrap" VerticalAlignment="Top" x:Name="textTrunk" FontSize="36" HorizontalAlignment="Right" Width="125"/>
+        <Label Content="Trunk is bended:" HorizontalAlignment="Left" Margin="700,274,0,0" VerticalAlignment="Top"/>
+        <Label Name="txtTrunkBending" Content="False" HorizontalAlignment="Left" Margin="790,274,0,0" VerticalAlignment="Top" Foreground="Gray"/>
+        <Label Content="Trunk twisted:" HorizontalAlignment="Left" Margin="700,297,0,0" VerticalAlignment="Top"/>
+        <Label Name="txtTrunkTwisted" Content="False" HorizontalAlignment="Left" Margin="777,297,0,0" VerticalAlignment="Top" Foreground="Gray"/>
+
+        <!--Button for Some Condition-->
         <Button Content="Connect" HorizontalAlignment="Left" Height="33" Margin="10,34,0,0" VerticalAlignment="Top" Width="54"
                 Click="Connect_Event"/>
-        <Label Content="Label" HorizontalAlignment="Left" Margin="76,38,0,0" VerticalAlignment="Top" Name="Status"/>
+        <Label Content="Disconnected" HorizontalAlignment="Left" Margin="76,38,0,0" VerticalAlignment="Top" Name="Status"/>
 
-        <Button Content="Default Setting" HorizontalAlignment="Left" Height="38" Margin="10,378,0,0" VerticalAlignment="Top" Width="101"
-                Click="Call_Setting"/>
+        <Button Content="Default Setting" Height="38" Margin="0,456,14,0" VerticalAlignment="Top"
+                Click="Call_Setting" HorizontalAlignment="Right" Width="125"/>
 
         <!--Final Score-->
-        <TextBlock Name="finalScore" HorizontalAlignment="Left" Margin="250,458,0,0" TextWrapping="Wrap" Text="None" Width="290" FontSize="36" TextAlignment="Center" Height="46" VerticalAlignment="Top"/>
-        <TextBlock Name="finalScoreMsg" HorizontalAlignment="Left" Height="66" Margin="76,509,0,0" TextWrapping="Wrap" Text="None" VerticalAlignment="Top" Width="635" FontSize="24" TextAlignment="Center"/>
+        <TextBlock Name="finalScore" HorizontalAlignment="Left" Margin="285,474,0,0" TextWrapping="Wrap" Text="None" Width="290" FontSize="36" TextAlignment="Center" Height="46" VerticalAlignment="Top" FontWeight="Bold"/>
+        <TextBlock Name="finalScoreMsg" HorizontalAlignment="Left" Height="50" Margin="110,525,0,0" TextWrapping="Wrap" Text="None" VerticalAlignment="Top" Width="635" FontSize="24" TextAlignment="Center"/>
 
         <!--Save to CSV-->
-        <Button Name="btnSaveCsv" Content="Start Record" Height="38" Margin="665,378,14,0" VerticalAlignment="Top"
-                Click="Start_Stop_Record"/>
-        <Label Content="Save Data to CSV" Margin="0,316,30,0" VerticalAlignment="Top" HorizontalAlignment="Right"/>
-        <Label Name="recordStatus" Content="Not Recording" Margin="665,342,14,0" VerticalAlignment="Top" Foreground="Gray" FontSize="14" />
+        <Button Name="btnSaveCsv" Content="Start Record" Height="38" Margin="0,398,14,0" VerticalAlignment="Top"
+                Click="Start_Stop_Record" HorizontalAlignment="Right" Width="125"/>
+        <Label Name="recordStatus" Content="Not Recording" Margin="0,362,14,0" VerticalAlignment="Top" Foreground="Gray" FontSize="14" HorizontalAlignment="Right" Width="125" />
 
     </Grid>
 </Window>

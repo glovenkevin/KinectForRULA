@@ -154,6 +154,38 @@ namespace tutorShowSkeleton
             "Posture need to investigate furthher and change soon",                 // 5 - 6
             "Posture need to investigate and chan ge immediately"                   // 7
         };
+
+        /*   
+         *  0 -> upper arm
+         *  1 -> lower arm
+         *  2 -> pergelangan tangan
+         *  3 -> putaran pergelangan tangan
+         *  
+         *  4 -> leher
+         *  5 -> batang tubuh
+         *  6 -> kaki
+         *  
+         *  7 -> otot Postur A
+         *  8 -> beban eksternal postur A
+         *  
+         *  9 -> otot postur B
+         *  10 -> beban eksternal Postur B
+         */
+        public static int[] scoreSetting = new int[11] {
+            0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0                 // Inisialisasi Awal
+        };
+
+        /*
+         *  Group A:
+         *      0 -> Upper Arm
+         *      1 -> Lower Arm
+         *      2 -> Wrist
+         *     
+         *  Group B:
+         *      3 -> Leher
+         *      4 -> Punggung
+         */
+        public static int[] scorePosture = new int[5];
         #endregion
 
         // Global Condition

@@ -12,47 +12,15 @@ namespace tutorShowSkeleton
     public partial class MainWindow : Window
     {
         KinectControl controller;
-        public static MainWindow mainWindow;
-        SettingWindow setWin = new SettingWindow();
-
-        /*   
-         *  0 -> upper arm
-         *  1 -> lower arm
-         *  2 -> pergelangan tangan
-         *  3 -> putaran pergelangan tangan
-         *  
-         *  4 -> leher
-         *  5 -> batang tubuh
-         *  6 -> kaki
-         *  
-         *  7 -> otot Postur A
-         *  8 -> beban eksternal postur A
-         *  
-         *  9 -> otot postur B
-         *  10 -> beban eksternal Postur B
-         */
-        public static int[] scoreSetting = new int[11] {
-            0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0                 // Inisialisasi Awal
-        };
-        
-        /*
-         *  Group A:
-         *      0 -> Upper Arm
-         *      1 -> Lower Arm
-         *      2 -> Wrist
-         *     
-         *  Group B:
-         *      3 -> Leher
-         *      4 -> Punggung
-         */ 
-        public static int[] scorePosture = new int[5];
+        SettingWindow setWin;
 
         public MainWindow()
         {
             InitializeComponent();
             InitializeStartUpStatus();
-            mainWindow = this;
             openSensor();
+            setWin = new SettingWindow(this.txtTrunkTwisted,
+                this.txtWristDeviation, this.txtNeckIsTwisted);
         }
 
         void Window_Closed(object sender, EventArgs eventArgs)
@@ -119,11 +87,22 @@ namespace tutorShowSkeleton
         public void openSensor()
         {
             this.controller = new KinectControl(() => new CanvasBodyDrawer(this.canvas), this.camera, 
-                this.textUpperArm , 
-                this.textLowerArm ,
-                this.textWristArm ,
+                // Angle Text Box
+                this.textUpperArm,
+                this.txtAbductionStatus,
+                this.txtShoulderRaise,
+                this.textLowerArm,
+                this.txtLowerArmMidline,
+                this.textWristArm,
+                this.txtWristDeviation,
                 this.textNeck,
+                this.txtNeckBending,
+                this.txtNeckIsTwisted,
                 this.textTrunk,
+                this.txtTrunkBending,
+                this.txtTrunkTwisted,
+
+                // Final Score
                 this.finalScore,
                 this.finalScoreMsg
                 );

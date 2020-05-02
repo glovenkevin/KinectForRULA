@@ -5,14 +5,14 @@
         ResizeMode="NoResize"
         WindowStyle="ToolWindow">
     <Grid>
-        <StackPanel Orientation="Horizontal" Margin="43,0,46,532" Height="32" VerticalAlignment="Bottom" HorizontalAlignment="Center" Width="208" >
+        <StackPanel Orientation="Horizontal" Margin="43,10,43,0" Height="32" VerticalAlignment="Top" >
             <Label Content="Body Position: " Height="30" VerticalAlignment="Top"/>
-            <ComboBox Name="sidePosition" IsEditable="False" Width="120" Height="20"></ComboBox>
+            <ComboBox Name="sidePosition" IsEditable="False" Width="109" Height="20" Margin="0,6"></ComboBox>
         </StackPanel>
 
         <TextBlock TextAlignment="Center" Padding="10" Margin="0,45,0,0" Height="35" VerticalAlignment="Top" ><Run Text="Arms and Wrists manual Settings" /></TextBlock>
 
-        <GroupBox Header="Arm and Wrist" Margin="10,85,0,0" Height="197" VerticalAlignment="Top" HorizontalAlignment="Left" Width="278">
+        <GroupBox Header="Arm and Wrist" Margin="10,85,10,0" Height="197" VerticalAlignment="Top">
             <StackPanel Margin="0,0,0,2">
                 <!-- Lengan -->
                 <StackPanel Orientation="Horizontal" Margin="5, 5, 0, 0" >
@@ -41,7 +41,7 @@
         </GroupBox>
 
         <TextBlock TextAlignment="Center" Padding="10" Margin="0,287,0,0" Height="38" VerticalAlignment="Top" ><Run Text="Neck and Trunk manual Settings" /></TextBlock>
-        <GroupBox Header="Neck and Trunk" HorizontalAlignment="Left" Margin="10,325,0,0" Height="182" VerticalAlignment="Top">
+        <GroupBox Header="Neck and Trunk" Margin="10,325,10,0" Height="182" VerticalAlignment="Top">
             <StackPanel VerticalAlignment="Top" Orientation="Vertical" Width="263">
                 <!--Tambahan pada postur B-->
                 <StackPanel Orientation="Horizontal" Margin="5, 5, 0, 0" >
