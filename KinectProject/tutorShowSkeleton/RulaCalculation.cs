@@ -65,7 +65,7 @@ namespace tutorShowSkeleton
         public static bool calcShoulderRaise(double shoulderRaised) 
         {
             // Shoulder is raised
-            if (shoulderRaised < 108)
+            if (shoulderRaised < 15)
             {
                 GlobalVal.scorePosture[0] += 1;
                 return true;
@@ -274,17 +274,28 @@ namespace tutorShowSkeleton
                 upperArm = GlobalVal.upperArm,
                 upperArmAbduction = GlobalVal.uperArmAbduction,
                 shoulderArm = GlobalVal.shoulderAngle,
+                upperArmLean = GlobalVal.upperArmLean,
 
                 lowerArm = GlobalVal.lowerArm,
                 lowerArmMidline = GlobalVal.lowerArmMidline,
 
                 neck = GlobalVal.neck,
                 neckBending = GlobalVal.neckBending,
+                neckTwisted = GlobalVal.neckTwisted,
 
                 trunk = GlobalVal.trunk,
                 trunkBending = GlobalVal.trunkBending,
+                trunkTwist = GlobalVal.trunkTwisted,
 
-                wrist = GlobalVal.wrist
+                wrist = GlobalVal.wrist,
+                wristDeviation = GlobalVal.wristDeviation,
+
+                leg = GlobalVal.leg,
+
+                loadUseA = GlobalVal.loadUseA,
+                muscleUseA = GlobalVal.muscleUseA,
+                loadUseB = GlobalVal.loadUseB,
+                muscleUseB = GlobalVal.muscleUseB
             };
             GlobalVal.data.Add(record);
 

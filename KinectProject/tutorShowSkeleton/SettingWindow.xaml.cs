@@ -51,8 +51,8 @@ namespace tutorShowSkeleton
 
         // List jawaban
         private String[] sisiBadan = new String[] {
-            "kiri",
-            "kanan"
+            "Left side",
+            "Right side"
         };
 
         private String[] wristRotation = new String[] {
@@ -136,6 +136,12 @@ namespace tutorShowSkeleton
             if (this.upperArmLean.IsChecked == true)
             {
                 this.statusLenganAtas = -1;
+                GlobalVal.upperArmLean = true;
+            }
+            else
+            {
+                this.statusLenganAtas = 0;
+                GlobalVal.upperArmLean = false;
             }
 
             // Pergelangan tangan
@@ -143,20 +149,24 @@ namespace tutorShowSkeleton
             {
                 this.pergelanganTangan = 1;
                 setStatus(this.txtWristDeviation, true);
+                GlobalVal.wristDeviation = true;
             }
             else
             {
                 setStatus(this.txtWristDeviation, false);
+                GlobalVal.wristDeviation = false;
             }
 
             temp = this.putaranPergelanganTangan.Text;
             if (String.Equals(temp, wristRotation[0]))
             {
                 this.rotasiPergelanganTangan = 1;
+                GlobalVal.wristTwist = 1;
             }
             else if (String.Equals(temp, wristRotation[1]))
             {
                 this.rotasiPergelanganTangan = 2;
+                GlobalVal.wristTwist = 2;
             }
 
             // Beban Postur A 
@@ -284,9 +294,13 @@ namespace tutorShowSkeleton
             GlobalVal.leg = this.kondisiKaki;
             
             GlobalVal.scoreSetting[7] = this.bebanOtotTangan;
+            GlobalVal.muscleUseA = this.bebanOtotTangan;
             GlobalVal.scoreSetting[8] = this.totalBebanEksternalTangan;
+            GlobalVal.loadUseA = this.totalBebanEksternalTangan;
             GlobalVal.scoreSetting[9] = this.bebanOtotBadan;
+            GlobalVal.muscleUseB = this.bebanOtotBadan;
             GlobalVal.scoreSetting[10] = this.totalBebanEksternalBadan;
+            GlobalVal.loadUseB = this.totalBebanEksternalBadan;
         }
     }
 }

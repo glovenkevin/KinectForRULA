@@ -72,7 +72,7 @@ namespace tutorShowSkeleton
 
     void OnColorFrameArrived(Object sender, MultiSourceFrameArrivedEventArgs e)
     {
-        // Warna
+        // Color
         var reference = e.FrameReference.AcquireFrame();
         using (var frame = reference.ColorFrameReference.AcquireFrame())
         {
@@ -144,7 +144,7 @@ namespace tutorShowSkeleton
                   rBody[count] = this.bodies[i];
               }
 
-              if ((count + 1) % 5 == 0 && count != 0) // Calculate every 5 frame
+              if ((count + 1) % dt == 0 && count != 0) // Calculate every dt frame
               {
                   // Hitung sudut dari sensor kamera RULA
                   this.calculateAngle(this.bodies[i]);
@@ -155,7 +155,7 @@ namespace tutorShowSkeleton
               // Initialize Xk-1
               if (first)
               {
-                  if (count +1 == 4)
+                  if (count +1 == dt)
                   {
                       for (int c = 0; c < Xk.Length; c++)
                       {
@@ -197,13 +197,13 @@ namespace tutorShowSkeleton
         Vector3D trunk = convertJointoVector(spineBase) - convertJointoVector(spineMid) - convertJointoVector(spineShoulder);
 
         // Group A
-        calculateUpperArm(body, trunk, GlobalVal.BODY_SIDE);
-        calculateLowerArm(body, GlobalVal.BODY_SIDE);
-        calculateWrist(body, GlobalVal.BODY_SIDE);
+        calculateUpperArm(trunk, GlobalVal.BODY_SIDE);
+        calculateLowerArm(GlobalVal.BODY_SIDE);
+        calculateWrist( GlobalVal.BODY_SIDE);
         
         // Group B
-        calculateNeck(body);
-        calculateTrunk(body, trunk);
+        calculateNeck();
+        calculateTrunk(trunk);
 
         // Check if data being recorded or not
         if (GlobalVal.RECORD_STATUS)
@@ -215,7 +215,7 @@ namespace tutorShowSkeleton
     #region Body Calculation Angle
     /******************* Method Angle Calc Body Part ******************/
 
-    private void calculateUpperArm(Body body, Vector3D trunk, int sisiBadan)
+    private void calculateUpperArm(Vector3D trunk, int sisiBadan)
     {
         Joint start, end, poros;
         double angle, angleAbduction, shoulderRaise;
@@ -255,7 +255,7 @@ namespace tutorShowSkeleton
             poros = kalmanFilterFull(getBodyTypeSeq(JointType.SpineShoulder));
 
             shoulderRaise = calculateAngle(poros.Position.X, poros.Position.Y,
-                start.Position.X, start.Position.Y, end.Position.X, end.Position.Y);
+                start.Position.X, start.Position.Y, 2 * poros.Position.X, poros.Position.Y);
 
             this.textUpperArm.Text = angle.ToString("0");
             RulaCalculation.calculateUpperArm(angle);
@@ -297,11 +297,10 @@ namespace tutorShowSkeleton
 
             // Shoulder is Raise 
             start = poros;
-            end = kalmanFilterFull(getBodyTypeSeq(JointType.Neck));
             poros = kalmanFilterFull(getBodyTypeSeq(JointType.SpineShoulder));
 
             shoulderRaise = calculateAngle(poros.Position.X, poros.Position.Y,
-                start.Position.X, start.Position.Y, end.Position.X, end.Position.Y);
+                start.Position.X, start.Position.Y, 2 * poros.Position.X, poros.Position.Y);
 
             this.textUpperArm.Text = angle.ToString("0");
             RulaCalculation.calculateUpperArm(angle);
@@ -316,11 +315,11 @@ namespace tutorShowSkeleton
 
         // Save data into static variable
         GlobalVal.upperArm = angle;
-        GlobalVal.uperArmAbduction = angleAbduction;
-        GlobalVal.shoulderAngle = shoulderRaise;
+        GlobalVal.uperArmAbduction = isAbducted;
+        GlobalVal.shoulderAngle = isRaised;
     }
 
-    private void calculateLowerArm(Body body, int sisiBadan)
+    private void calculateLowerArm(int sisiBadan)
     {
         Joint start, end, poros;
         double angle, lowerArmMidline;
@@ -376,10 +375,10 @@ namespace tutorShowSkeleton
 
         // Save data to static variable
         GlobalVal.lowerArm = angle;
-        GlobalVal.lowerArmMidline = lowerArmMidline;
+        GlobalVal.lowerArmMidline = isDeviation;
     }
 
-    private void calculateWrist(Body body, int sisiBadan)
+    private void calculateWrist(int sisiBadan)
     {
         Joint start, end, poros;
         double angle;
@@ -420,7 +419,7 @@ namespace tutorShowSkeleton
         GlobalVal.wrist = angle;
     }
 
-    private void calculateNeck(Body body)
+    private void calculateNeck()
     {
         Joint start, end, poros;
         double angle, bendingAngle;
@@ -461,10 +460,10 @@ namespace tutorShowSkeleton
 
         // Save data to static variable
         GlobalVal.neck = angle;
-        GlobalVal.neckBending = bendingAngle;
+        GlobalVal.neckBending = isBending;
     }
 
-    private void calculateTrunk(Body body, Vector3D trunk)
+    private void calculateTrunk(Vector3D trunk)
     {
         Joint start, end, poros;
         double angle, trunkTwist, trunkBending;
@@ -477,13 +476,13 @@ namespace tutorShowSkeleton
         end.Position.Z = 2 * poros.Position.Z;
         angle = calculateAngle(poros.Position.Y, poros.Position.Z,
             start.Position.Y, start.Position.Z, end.Position.Y, end.Position.Z);
-        if (angle <= 90)
+        if (angle <= 100) // overestimate -> +-10 degree, actualy must be 90 degree
         {
-            angle = 90 - angle;
+            angle = 100 - angle;
         }
         else
         {
-            angle -= 90;
+            angle -= 100;
             angle *= -1;
         }
 
@@ -517,7 +516,7 @@ namespace tutorShowSkeleton
 
         // Save data to static variable
         GlobalVal.trunk = angle;
-        GlobalVal.trunkBending = trunkBending;
+        GlobalVal.trunkBending = isBending;
     }
     /******************* End Method Angle Calc Body Part ******************/
     #endregion
@@ -741,6 +740,8 @@ namespace tutorShowSkeleton
     // Inisiasi Variabel
     private void initializeKalmanVar()
     {
+        // Return count for frame to 0
+        count = 0;
         // Prepare Variable
         int length = GlobalVal.BodyPart.Length;
         P = new GeneralMatrix[length];

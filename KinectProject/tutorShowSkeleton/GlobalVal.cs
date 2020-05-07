@@ -209,24 +209,35 @@ namespace tutorShowSkeleton
 
         // Save every part of body that being investigate their angle
         public static double upperArm = 0;
-        public static double uperArmAbduction = 0;
-        public static double shoulderAngle = 0;
+        public static bool uperArmAbduction = false;
+        public static bool shoulderAngle = false;
+        public static bool upperArmLean = false;
 
         public static double lowerArm = 0;
-        public static double lowerArmMidline = 0;
+        public static bool lowerArmMidline = false;
 
         public static double wrist = 0;
+        public static bool wristDeviation = false;
+
+        public static int wristTwist = 1;
 
         public static double neck = 0;
-        public static double neckBending = 0;
+        public static bool neckBending = false;
+        public static bool neckTwisted = false;
 
         public static double trunk = 0;
-        public static double trunkBending = 0;
+        public static bool trunkBending = false;
+        public static bool trunkTwisted = false;
+
+        public static int muscleUseA = 0;
+        public static int loadUseA = 0;
+        public static int muscleUseB = 0;
+        public static int loadUseB = 0;
 
         // Leg is not main body part that being observe but RULA take a score with it
         // Leg score come from manual setting window
         // Default is 1 -> 
-        public static double leg = 1; 
+        public static int leg = 1; 
 
         // Save score in a global Variable so it can be called from anywhere
         // purpose: For saving data on CSV
