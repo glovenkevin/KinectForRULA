@@ -155,7 +155,7 @@ namespace tutorShowSkeleton
               // Initialize Xk-1
               if (first)
               {
-                  if (count +1 == dt)
+                  if (count +1 == dt -1)
                   {
                       for (int c = 0; c < Xk.Length; c++)
                       {
@@ -257,7 +257,7 @@ namespace tutorShowSkeleton
             shoulderRaise = calculateAngle(poros.Position.X, poros.Position.Y,
                 start.Position.X, start.Position.Y, 2 * poros.Position.X, poros.Position.Y);
 
-            this.textUpperArm.Text = angle.ToString("0");
+            this.textUpperArm.Text = shoulderRaise.ToString("0");
             RulaCalculation.calculateUpperArm(angle);
 
             // Abduction
@@ -493,7 +493,7 @@ namespace tutorShowSkeleton
         trunkTwist = calculateAngle3D(convertJointoVector(start), convertJointoVector(end));
 
         // Trunk side bending
-        // Create Vector dan perpendicular between hip Joint
+        // Create a Vector that perpendicular between hip Joint
         Vector3D hipLeft = convertJointoVector(kalmanFilterFull(getBodyTypeSeq(JointType.HipLeft)));
         Vector3D hipRight = convertJointoVector(kalmanFilterFull(getBodyTypeSeq(JointType.HipRight)));
 
@@ -505,7 +505,8 @@ namespace tutorShowSkeleton
 
         // Calculate between perpendicular to the horizontal vector 
         // and trunk vector to get the angle
-        trunkBending = calculateAngle3D(perpendicularHorizontal, trunk); // Default position angle -> 108-110
+        //trunkBending = calculateAngle3D(perpendicularHorizontal, trunk); // Default position angle -> 108-110
+        trunkBending = calculateAngle2D(perpendicularHorizontal, trunk);
 
         RulaCalculation.calculateTrunk(angle);
         this.textTrunk.Text = angle.ToString("0");
@@ -550,6 +551,15 @@ namespace tutorShowSkeleton
 
         result = Math.Acos(Vector3D.DotProduct(a, b) / (normA * normB)) * (360 / (2 * Math.PI));
         return result;
+    }
+
+    private double calculateAngle2D(Vector3D a, Vector3D b)
+    {
+        double product = (a.X * b.X) + (a.Y * b.Y);
+        double magnitude = (Math.Sqrt(Math.Pow(a.X, 2) + Math.Pow(a.Y, 2)) * Math.Sqrt(Math.Pow(b.X, 2) + Math.Pow(b.Y, 2)));
+
+        double angle = Math.Acos(product / magnitude) * (360 / (2 * Math.PI));
+        return angle;
     }
 
       // Set Measurement Error Base on Joint Type
@@ -729,7 +739,7 @@ namespace tutorShowSkeleton
     GeneralMatrix F, H, Q, R, K;
     GeneralMatrix[] P, Xk;
 
-    int dt = 10; // Total Frame that being calculate/save
+    int dt = 30; // Total Frame that being calculate/save
     double[] estimationVector;
     double[,] Rv, jointAveragePart;
     double estimationX, estimationY, estimationZ;
@@ -899,23 +909,6 @@ namespace tutorShowSkeleton
       Brushes.Purple,
       Brushes.Yellow
     };
-    private Func<IBodyDrawer> func;
-    private Image image;
-    private TextBox textBox1;
-    private Label label1;
-    private Label label2;
-    private TextBox textBox2;
-    private Label label3;
-    private TextBox textBox3;
-    private Label label4;
-    private TextBox textBox4;
-    private Label label5;
-    private Label label6;
-    private TextBox textBox5;
-    private Label label7;
-    private Label label8;
-    private TextBlock textBlock1;
-    private TextBlock textBlock2;
   }
   #endregion
 }

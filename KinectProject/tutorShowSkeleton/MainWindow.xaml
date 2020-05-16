@@ -10,7 +10,7 @@
         Title="Rula Calculation" Height="614" Width="843">
     <Grid Margin="0,0,-6,0">
         <Image Name="camera" Height="424" Width="512" Margin="147,36,147,35" VerticalAlignment="Top"/>
-        <Canvas Name="canvas" Height="424" Width="512"  Margin="147,36,147,0" VerticalAlignment="Top"/>
+        <Canvas Name="canvas" Height="424" Width="512"  Margin="166,34,165,0" VerticalAlignment="Top"/>
 
         <!--Upper Arm-->
         <Label Content="UPPER ARM" HorizontalAlignment="Left" Margin="10,99,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
@@ -32,6 +32,8 @@
         <TextBox IsReadOnly="True" HorizontalAlignment="Left" Height="46" Margin="10,382,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="125" x:Name="textWristArm" FontSize="36"/>
         <Label Content="Wrist Deviation:" HorizontalAlignment="Left" Margin="10,434,0,0" VerticalAlignment="Top"/>
         <Label x:Name="txtWristDeviation" Content="False" HorizontalAlignment="Left" Margin="97,434,0,0" VerticalAlignment="Top" Foreground="Gray"/>
+        <Label Content="Wrist Twist Score:" HorizontalAlignment="Left" Margin="10,456,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="txtWristTwist" Content="1" HorizontalAlignment="Left" Margin="106,456,0,0" VerticalAlignment="Top"/>
 
         <!--Neck-->
         <Label Content="NECK" Margin="0,51,14,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="49" FontWeight="Bold"/>
@@ -49,12 +51,16 @@
         <Label Content="Trunk twisted:" HorizontalAlignment="Left" Margin="700,297,0,0" VerticalAlignment="Top"/>
         <Label Name="txtTrunkTwisted" Content="False" HorizontalAlignment="Left" Margin="777,297,0,0" VerticalAlignment="Top" Foreground="Gray"/>
 
+        <!--Leg-->
+        <Label Content="Leg Score:" HorizontalAlignment="Left" Margin="700,334,0,0" VerticalAlignment="Top" FontWeight="Bold" />
+        <Label x:Name="txtLeg" Content="1" HorizontalAlignment="Left" Margin="762,334,0,0" VerticalAlignment="Top" />
+        
         <!--Button for Some Condition-->
         <Button Content="Connect" HorizontalAlignment="Left" Height="33" Margin="10,34,0,0" VerticalAlignment="Top" Width="54"
                 Click="Connect_Event"/>
         <Label Content="Disconnected" HorizontalAlignment="Left" Margin="76,38,0,0" VerticalAlignment="Top" Name="Status"/>
 
-        <Button Content="Default Setting" Height="38" Margin="0,456,14,0" VerticalAlignment="Top"
+        <Button Content="Default Setting" Height="38" Margin="0,466,14,0" VerticalAlignment="Top"
                 Click="Call_Setting" HorizontalAlignment="Right" Width="125"/>
 
         <!--Final Score-->
@@ -62,9 +68,10 @@
         <TextBlock Name="finalScoreMsg" HorizontalAlignment="Left" Height="50" Margin="110,525,0,0" TextWrapping="Wrap" Text="None" VerticalAlignment="Top" Width="635" FontSize="24" TextAlignment="Center"/>
 
         <!--Save to CSV-->
-        <Button Name="btnSaveCsv" Content="Start Record" Height="38" Margin="0,398,14,0" VerticalAlignment="Top"
+        <Button Name="btnSaveCsv" Content="Start Record" Height="38" Margin="0,408,14,0" VerticalAlignment="Top"
                 Click="Start_Stop_Record" HorizontalAlignment="Right" Width="125"/>
-        <Label Name="recordStatus" Content="Not Recording" Margin="0,362,14,0" VerticalAlignment="Top" Foreground="Gray" FontSize="14" HorizontalAlignment="Right" Width="125" />
+        <Label Name="recordStatus" Content="Not Recording" Margin="0,372,14,0" VerticalAlignment="Top" Foreground="Gray" FontSize="14" HorizontalAlignment="Right" Width="125" />
+        
 
     </Grid>
 </Window>

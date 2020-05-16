@@ -73,16 +73,22 @@ namespace tutorShowSkeleton
             "Load more than 10 kg or repeated or shock" // 3
         };
         private Label txtTrunkTwist;
-        private Label txtWristDeviation;
+        private Label txtWristDeviation, txtWristTwist;
         private Label txtNeckTwist;
+        private Label txtLeg;
 
-        public SettingWindow(Label txtTrunkTwist, Label txtWristDeviation, Label txtNeckTwist)
+        public SettingWindow(Label txtTrunkTwist, 
+            Label txtWristDeviation, Label txtWristTwist, 
+            Label txtNeckTwist,
+            Label txtLeg)
         {
             InitializeComponent();
             InitializeComboboxItem();
             this.txtTrunkTwist = txtTrunkTwist;
             this.txtWristDeviation = txtWristDeviation;
+            this.txtWristTwist = txtWristTwist;
             this.txtNeckTwist = txtNeckTwist;
+            this.txtLeg = txtLeg;
         }
 
         void Apply_Setting(object sender, EventArgs eventArgs)
@@ -168,6 +174,7 @@ namespace tutorShowSkeleton
                 this.rotasiPergelanganTangan = 2;
                 GlobalVal.wristTwist = 2;
             }
+            this.txtWristTwist.Content = GlobalVal.wristTwist.ToString();
 
             // Beban Postur A 
             // kekuatan otot tangan 
@@ -209,6 +216,7 @@ namespace tutorShowSkeleton
             } else {
                 this.kondisiKaki = 2;
             }
+            this.txtLeg.Content = this.kondisiKaki;
 
             // Kondisi Leher
             if (this.neckTwist.IsChecked == true)

@@ -182,7 +182,7 @@ namespace tutorShowSkeleton
         public static bool calcTrunkbending(double trunkBending)
         {
             // Side Bending
-            if (trunkBending < 105)
+            if (trunkBending < 160)
             {
                 GlobalVal.scorePosture[4] += 1;
                 return true;
@@ -273,7 +273,7 @@ namespace tutorShowSkeleton
 
                 upperArm = GlobalVal.upperArm,
                 upperArmAbduction = GlobalVal.uperArmAbduction,
-                shoulderArm = GlobalVal.shoulderAngle,
+                shoulderArmIsRaised = GlobalVal.shoulderAngle,
                 upperArmLean = GlobalVal.upperArmLean,
 
                 lowerArm = GlobalVal.lowerArm,

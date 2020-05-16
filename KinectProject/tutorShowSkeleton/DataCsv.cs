@@ -11,7 +11,7 @@ namespace tutorShowSkeleton
         // Body part item
         public double upperArm { get; set; }
         public bool upperArmAbduction { get; set; }
-        public bool shoulderArm { get; set; }
+        public bool shoulderArmIsRaised { get; set; }
         public bool upperArmLean { get; set; }
 
         public double lowerArm { get; set; }

@@ -20,7 +20,9 @@ namespace tutorShowSkeleton
             InitializeStartUpStatus();
             openSensor();
             setWin = new SettingWindow(this.txtTrunkTwisted,
-                this.txtWristDeviation, this.txtNeckIsTwisted);
+                this.txtWristDeviation, this.txtWristTwist,
+                this.txtNeckIsTwisted,
+                this.txtLeg);
         }
 
         void Window_Closed(object sender, EventArgs eventArgs)
@@ -57,6 +59,7 @@ namespace tutorShowSkeleton
                 this.camera.Source = null;
                 this.canvas.Children.Clear();
                 this.btnSaveCsv.IsEnabled = false;
+                setDefaultLabelTextbox();
             }
         }
 
@@ -112,6 +115,51 @@ namespace tutorShowSkeleton
         public void setBodySkeleton()
         {
             controller.OpenReaderBodySkeleton();
+        }
+
+        public void setDefaultLabelTextbox()
+        {
+            // Set the textbox and label to default
+            this.textUpperArm.Text = "";
+            this.txtAbductionStatus.Content = "false";
+            this.txtAbductionStatus.Foreground = Brushes.Gray;
+
+            this.txtShoulderRaise.Content = "false";
+            this.txtShoulderRaise.Foreground = Brushes.Gray;
+
+            this.textLowerArm.Text = "";
+            this.txtLowerArmMidline.Content = "false";
+            this.txtLowerArmMidline.Foreground = Brushes.Gray;
+
+            this.textWristArm.Text = "";
+            this.txtWristDeviation.Content = "false";
+            this.txtWristDeviation.Foreground = Brushes.Gray;
+            this.txtWristTwist.Content = "1";
+
+            this.textNeck.Text = "";
+            this.txtNeckBending.Content = "false";
+            this.txtNeckBending.Foreground = Brushes.Gray;
+            this.txtNeckIsTwisted.Content = "false";
+            this.txtNeckIsTwisted.Foreground = Brushes.Gray;
+
+            this.textTrunk.Text = "";
+            this.txtTrunkBending.Content = "false";
+            this.txtTrunkBending.Foreground = Brushes.Gray;
+            this.txtTrunkTwisted.Content = "false";
+            this.txtTrunkTwisted.Foreground = Brushes.Gray;
+
+            this.txtLeg.Content = 1;
+
+            this.finalScore.Text = "None";
+            this.finalScore.Foreground = Brushes.Black;
+            this.finalScoreMsg.Text = "None";
+            this.finalScore.Foreground = Brushes.Black;
+
+            // re-initialize every variable in GlobalVal
+            GlobalVal.scorePosture = new int[5];
+            GlobalVal.scoreSetting = new int[11] {
+                0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0
+            };
         }
     }
 }
