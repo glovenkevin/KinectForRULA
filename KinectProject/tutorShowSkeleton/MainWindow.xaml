@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Closed="Window_Closed"
         ResizeMode="NoResize"
-        Title="Rula Calculation" Height="614" Width="843">
+        Title="KV2RULA" Height="614" Width="843">
     <Grid Margin="0,0,-6,0">
         <Image Name="camera" Height="424" Width="512" Margin="147,36,147,35" VerticalAlignment="Top"/>
         <Canvas Name="canvas" Height="424" Width="512"  Margin="166,34,165,0" VerticalAlignment="Top"/>

@@ -249,6 +249,9 @@ namespace tutorShowSkeleton
             angleAbduction = this.calculateAngle(poros.Position.X, poros.Position.Y,
                 start.Position.X, start.Position.Y, end.Position.X, end.Position.Y);
 
+            isAbducted = RulaCalculation.calculateUpperArmAbduction(angleAbduction, angle);
+            setStatus(this.txtUpperArmAbduction, isAbducted);
+
             // Shoulder is Raise 
             start = poros;
             end = kalmanFilterFull(getBodyTypeSeq(JointType.Neck));
@@ -257,15 +260,13 @@ namespace tutorShowSkeleton
             shoulderRaise = calculateAngle(poros.Position.X, poros.Position.Y,
                 start.Position.X, start.Position.Y, 2 * poros.Position.X, poros.Position.Y);
 
-            this.textUpperArm.Text = shoulderRaise.ToString("0");
-            RulaCalculation.calculateUpperArm(angle);
-
-            // Abduction
-            isAbducted = RulaCalculation.calculateUpperArmAbduction(angleAbduction);
-            setStatus(this.txtUpperArmAbduction, isAbducted);
-            // Shoulder is Raise
             isRaised = RulaCalculation.calcShoulderRaise(shoulderRaise);
             setStatus(this.txtShoulderRaise, isRaised);
+
+            this.textUpperArm.Text = angleAbduction.ToString("0");
+            RulaCalculation.calculateUpperArm(angle);
+
+            
         }
         else
         {
@@ -295,22 +296,23 @@ namespace tutorShowSkeleton
             angleAbduction = this.calculateAngle(poros.Position.X, poros.Position.Y,
                 start.Position.X, start.Position.Y, trunk.X, trunk.Y);
 
+            isAbducted = RulaCalculation.calculateUpperArmAbduction(angleAbduction, angle);
+            setStatus(this.txtUpperArmAbduction, isAbducted);
+
             // Shoulder is Raise 
             start = poros;
+            end = kalmanFilterFull(getBodyTypeSeq(JointType.Neck));
             poros = kalmanFilterFull(getBodyTypeSeq(JointType.SpineShoulder));
 
             shoulderRaise = calculateAngle(poros.Position.X, poros.Position.Y,
                 start.Position.X, start.Position.Y, 2 * poros.Position.X, poros.Position.Y);
 
-            this.textUpperArm.Text = angle.ToString("0");
-            RulaCalculation.calculateUpperArm(angle);
-
-            // Abduction
-            isAbducted = RulaCalculation.calculateUpperArmAbduction(angleAbduction);
-            setStatus(this.txtUpperArmAbduction, isAbducted);
-            // Shoulder is Raise
             isRaised = RulaCalculation.calcShoulderRaise(shoulderRaise);
             setStatus(this.txtShoulderRaise, isRaised);
+
+            this.textUpperArm.Text = angle.ToString("0");
+            RulaCalculation.calculateUpperArm(angle);
+            
         }
 
         // Save data into static variable
@@ -339,9 +341,10 @@ namespace tutorShowSkeleton
             poros = start;
             start = kalmanFilterFull(getBodyTypeSeq(JointType.SpineShoulder));
 
-            lowerArmMidline = poros.Angle(start, end); //  dalam rentang 240 -> 250 masih dalam posisi tengah
+            lowerArmMidline = calculateAngle(poros.Position.X, poros.Position.Y,
+                start.Position.X, start.Position.Y, end.Position.X, end.Position.Y); // midline position in range 90-120
 
-            this.textLowerArm.Text = angle.ToString("0");
+            this.textLowerArm.Text = lowerArmMidline.ToString("0");
             RulaCalculation.calculateLowerArm(angle);
 
             // Lower Arm Deviation
@@ -363,7 +366,8 @@ namespace tutorShowSkeleton
             poros = start;
             start = kalmanFilterFull(getBodyTypeSeq(JointType.SpineShoulder));
 
-            lowerArmMidline = poros.Angle(start, end); // dalam rentang 240 -> 250 masih dalam posisi tengah
+            lowerArmMidline = calculateAngle(poros.Position.X, poros.Position.Y,
+                start.Position.X, start.Position.Y, end.Position.X, end.Position.Y); // midline position in range 90-120
 
             this.textLowerArm.Text = angle.ToString("0");
             RulaCalculation.calculateLowerArm(angle);
@@ -387,12 +391,12 @@ namespace tutorShowSkeleton
             // Wrist Angle coresponding Horizontall plane
             start = kalmanFilterFull(getBodyTypeSeq(JointType.ElbowLeft));
 
-            end = kalmanFilterFull(getBodyTypeSeq(JointType.HandLeft));
+            end = kalmanFilterFull(getBodyTypeSeq(JointType.HandTipLeft));
 
             poros = kalmanFilterFull(getBodyTypeSeq(JointType.WristLeft));
 
-            //angle = calculateAngle(poros.Position.Y, poros.Position.Z, start.Position.Y, poros.Position.Z,
-            //    end.Position.Y, end.Position.Z);
+            //angle = calculateAngle(poros.Position.X, poros.Position.Y, start.Position.X, poros.Position.Y,
+            //    end.Position.X, end.Position.Y);
             angle = poros.Angle(start, end) - 180;
 
             RulaCalculation.calculateWrist(angle);

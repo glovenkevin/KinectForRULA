@@ -52,13 +52,35 @@ namespace tutorShowSkeleton
             GlobalVal.scorePosture[0] += GlobalVal.scoreSetting[0];
         }
 
-        public static bool calculateUpperArmAbduction(double angleAbduction)
+        public static bool calculateUpperArmAbduction(double angleAbduction, double angleUpperArm)
         {
-            if (angleAbduction < 55)
+            // Note: if elbow, shoulder and spine coordinate parralel it will cause the angle degree on range 150-180
+            // add other condition to solve it
+            if (angleUpperArm < 90)
             {
-                GlobalVal.scorePosture[0] += 1;
-                return true;
+                if (angleAbduction < 55 || angleAbduction > 150)
+                {
+                    GlobalVal.scorePosture[0] += 1;
+                    return true;
+                }
             }
+            else if (angleUpperArm > 110)
+            {
+                if (angleAbduction > 100)
+                {
+                    GlobalVal.scorePosture[0] += 1;
+                    return true;
+                }
+            }
+            else
+            {
+                if (angleAbduction < 20)
+                {
+                    GlobalVal.scorePosture[0] += 1;
+                    return true;
+                }
+            }
+            
             return false;
         }
 
@@ -92,7 +114,7 @@ namespace tutorShowSkeleton
         public static bool calcLowerArmDeviation(double angleDeviation)
         {
             // Perhitungan sudut arah lower Arm
-            if (angleDeviation > 255 || angleDeviation < 235)
+            if (angleDeviation > 115 || angleDeviation < 90)
             {
                 GlobalVal.scorePosture[1] += 1;
                 return true;

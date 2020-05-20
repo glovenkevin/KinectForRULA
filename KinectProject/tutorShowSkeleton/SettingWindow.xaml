@@ -1,7 +1,7 @@
 ﻿<Window x:Class="tutorShowSkeleton.SettingWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="SettingWindow" Height="602.5" Width="303"
+        Title="KV2RULA Manual Setting" Height="602.5" Width="303"
         ResizeMode="NoResize"
         WindowStyle="ToolWindow">
     <Grid>
