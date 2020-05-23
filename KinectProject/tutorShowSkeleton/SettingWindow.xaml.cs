@@ -212,9 +212,9 @@ namespace tutorShowSkeleton
             // Beban Kaki
             if (this.bebanKaki.IsChecked == true)
             {
-                this.kondisiKaki = 1;
-            } else {
                 this.kondisiKaki = 2;
+            } else {
+                this.kondisiKaki = 1;
             }
             this.txtLeg.Content = this.kondisiKaki;
 
@@ -226,6 +226,7 @@ namespace tutorShowSkeleton
             }
             else
             {
+                this.kondisiLeher = 0;
                 setStatus(this.txtNeckTwist, false);
             }
 
@@ -237,6 +238,7 @@ namespace tutorShowSkeleton
             }
             else
             {
+                this.kondisiBatangTubuh = 0;
                 setStatus(this.txtTrunkTwist, false);
             }
 
@@ -292,7 +294,7 @@ namespace tutorShowSkeleton
              */
 
             GlobalVal.scoreSetting[0] = this.statusLenganAtas;
-            GlobalVal.scoreSetting[1] = this.statusLenganBawah;
+            // GlobalVal.scoreSetting[1] = this.statusLenganBawah;
             GlobalVal.scoreSetting[2] = this.pergelanganTangan;
             GlobalVal.scoreSetting[3] = this.rotasiPergelanganTangan;
 

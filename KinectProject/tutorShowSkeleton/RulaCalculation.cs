@@ -30,58 +30,55 @@ namespace tutorShowSkeleton
 
         public static void calculateUpperArm(double angle)
         {
+            GlobalVal.scorePosture[0] = 1;
+
             // Hitung sudut dari inputan sensor
             if (-20 >= angle && angle <= 20)
             {
                 GlobalVal.scorePosture[0] = 1;
             }
-            else if (-20 < angle || (angle > 20 && angle <= 45 ))
+            else if (-20 > angle)
             {
                 GlobalVal.scorePosture[0] = 2;
-            } 
-            else if (angle > 45 && angle <= 90) 
+            }
+            else if (angle > 20 && angle <= 45)
+            {
+                GlobalVal.scorePosture[0] = 2;
+            }
+            else if (angle > 45 && angle <= 105) 
             {
                 GlobalVal.scorePosture[0] = 3;
             }
-            else if (angle > 90)
+            else if (angle > 105)
             {
                 GlobalVal.scorePosture[0] = 4;
             }
 
-            // Tambahkan nilai sudut dengan setting yang diberikan
+            // Add Upper arm is lean -> 0 / -1
             GlobalVal.scorePosture[0] += GlobalVal.scoreSetting[0];
         }
 
-        public static bool calculateUpperArmAbduction(double angleAbduction, double angleUpperArm)
+        public static bool calculateUpperArmAbduction(double elbowX, double shoulderX)
         {
-            // Note: if elbow, shoulder and spine coordinate parralel it will cause the angle degree on range 150-180
-            // add other condition to solve it
-            if (angleUpperArm < 90)
+            // Note: calculation with angle don't give an acurate calculation
+            // Solution: move to coordinate analys
+            bool status = false;
+            double range = shoulderX - elbowX;
+            if (range < 0)
             {
-                if (angleAbduction < 55 || angleAbduction > 150)
-                {
-                    GlobalVal.scorePosture[0] += 1;
-                    return true;
-                }
+                range *= -1;
             }
-            else if (angleUpperArm > 110)
+
+            if (range > 0.1)
             {
-                if (angleAbduction > 100)
-                {
-                    GlobalVal.scorePosture[0] += 1;
-                    return true;
-                }
+                status = true;
             }
-            else
+
+            if (status)
             {
-                if (angleAbduction < 20)
-                {
-                    GlobalVal.scorePosture[0] += 1;
-                    return true;
-                }
+                GlobalVal.scorePosture[0] += 1;
             }
-            
-            return false;
+            return status;
         }
 
         public static bool calcShoulderRaise(double shoulderRaised) 
@@ -108,18 +105,24 @@ namespace tutorShowSkeleton
             }
 
             // Tambahkan nilai setting
-            GlobalVal.scorePosture[1] += GlobalVal.scoreSetting[1];
+            // GlobalVal.scorePosture[1] += GlobalVal.scoreSetting[1];
         }
 
-        public static bool calcLowerArmDeviation(double angleDeviation)
+        public static bool calcLowerArmDeviation(double wrist, double shoulder)
         {
+            bool status = false;
             // Perhitungan sudut arah lower Arm
-            if (angleDeviation > 115 || angleDeviation < 90)
+            if (wrist < shoulder - 0.1 || wrist > shoulder + 0.1)
+            {
+                status = true;
+            }
+
+            if (status)
             {
                 GlobalVal.scorePosture[1] += 1;
-                return true;
             }
-            return false;
+                
+            return status;
         }
 
         public static void calculateWrist(double angle)
@@ -149,7 +152,7 @@ namespace tutorShowSkeleton
             {
                 GlobalVal.scorePosture[3] = 4;
             }
-            else if (angle > 0 && angle <= 10)
+            else if (angle >= 0 && angle <= 10)
             {
                 GlobalVal.scorePosture[3] = 1;
             }
@@ -188,11 +191,11 @@ namespace tutorShowSkeleton
             {
                 GlobalVal.scorePosture[4] = 2;
             }
-            else if (angle > 20 && angle <= 60)
+            else if (angle > 20 && angle <= 50)
             {
                 GlobalVal.scorePosture[4] = 3;
             }
-            else if (angle > 60)
+            else if (angle > 50)
             {
                 GlobalVal.scorePosture[4] = 4;
             }
@@ -204,11 +207,23 @@ namespace tutorShowSkeleton
         public static bool calcTrunkbending(double trunkBending)
         {
             // Side Bending
-            if (trunkBending < 160)
+            if (trunkBending < 90) // Actor sit
             {
-                GlobalVal.scorePosture[4] += 1;
-                return true;
+                if (trunkBending > 15)
+                {
+                    GlobalVal.scorePosture[4] += 1;
+                    return true;
+                }
             }
+            else // Actor standing 
+            {
+                if (trunkBending < 165)
+                {
+                    GlobalVal.scorePosture[4] += 1;
+                    return true;
+                }
+            }
+            
             return false;
         }
 
@@ -222,7 +237,7 @@ namespace tutorShowSkeleton
             ScoreGroupA = GlobalVal.GroupA[
                     GlobalVal.scorePosture[0] - 1,    // Upper Arm
                     GlobalVal.scorePosture[2] - 1,    // Wrist
-                    GlobalVal.scoreSetting[3] - 1,    // Putaran pergelangan tangan
+                    GlobalVal.scoreSetting[3] - 1,    // Wrist Twist
                     GlobalVal.scorePosture[1] - 1     // Lower Arm
                 ];
             ScoreGroupA += GlobalVal.scoreSetting[7] // Beban otot Group A
@@ -311,6 +326,7 @@ namespace tutorShowSkeleton
 
                 wrist = GlobalVal.wrist,
                 wristDeviation = GlobalVal.wristDeviation,
+                wristTwist = GlobalVal.wristTwist,
 
                 leg = GlobalVal.leg,
 
@@ -321,12 +337,10 @@ namespace tutorShowSkeleton
             };
             GlobalVal.data.Add(record);
 
-            // Destination path for the CSV file
-            String filePath = @"D:\\Data.csv";
             // Clear CSV data if the file 'exist'
-            System.IO.File.WriteAllText(filePath, string.Empty);
+            System.IO.File.WriteAllText(GlobalVal.CSV_SAVE_LOCATION, string.Empty);
             // If not exist -> create else Open it
-            StreamWriter writer = new StreamWriter(filePath, true);
+            StreamWriter writer = new StreamWriter(GlobalVal.CSV_SAVE_LOCATION, true);
 
             using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
             {

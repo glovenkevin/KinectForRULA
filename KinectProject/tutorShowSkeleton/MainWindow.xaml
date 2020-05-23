@@ -10,7 +10,9 @@
         Title="KV2RULA" Height="614" Width="843">
     <Grid Margin="0,0,-6,0">
         <Image Name="camera" Height="424" Width="512" Margin="147,36,147,35" VerticalAlignment="Top"/>
-        <Canvas Name="canvas" Height="424" Width="512"  Margin="166,34,165,0" VerticalAlignment="Top"/>
+        <Canvas Name="canvas" Height="424" Width="512"  Margin="166,34,165,0" VerticalAlignment="Top">
+            <Border BorderBrush="Black" BorderThickness="1" Height="422" Canvas.Top="2" Width="512"/>
+        </Canvas>
 
         <!--Upper Arm-->
         <Label Content="UPPER ARM" HorizontalAlignment="Left" Margin="10,99,0,0" VerticalAlignment="Top" FontWeight="Bold"/>
@@ -54,7 +56,7 @@
         <!--Leg-->
         <Label Content="Leg Score:" HorizontalAlignment="Left" Margin="700,334,0,0" VerticalAlignment="Top" FontWeight="Bold" />
         <Label x:Name="txtLeg" Content="1" HorizontalAlignment="Left" Margin="762,334,0,0" VerticalAlignment="Top" />
-        
+
         <!--Button for Some Condition-->
         <Button Content="Connect" HorizontalAlignment="Left" Height="33" Margin="10,34,0,0" VerticalAlignment="Top" Width="54"
                 Click="Connect_Event"/>
@@ -64,14 +66,15 @@
                 Click="Call_Setting" HorizontalAlignment="Right" Width="125"/>
 
         <!--Final Score-->
-        <TextBlock Name="finalScore" HorizontalAlignment="Left" Margin="285,474,0,0" TextWrapping="Wrap" Text="None" Width="290" FontSize="36" TextAlignment="Center" Height="46" VerticalAlignment="Top" FontWeight="Bold"/>
-        <TextBlock Name="finalScoreMsg" HorizontalAlignment="Left" Height="50" Margin="110,525,0,0" TextWrapping="Wrap" Text="None" VerticalAlignment="Top" Width="635" FontSize="24" TextAlignment="Center"/>
+        <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="51" Margin="166,474,0,0" VerticalAlignment="Top" Width="512"/>
+        <TextBlock HorizontalAlignment="Left" Margin="270,476,0,0" Text="Final Score:" Width="210" FontSize="36" TextAlignment="Center" Height="46" VerticalAlignment="Top" FontWeight="Bold"/>
+        <TextBlock Name="finalScore" HorizontalAlignment="Left" Margin="478,476,0,0" Text="None" Width="94" FontSize="36" TextAlignment="Left" Height="46" VerticalAlignment="Top" FontWeight="Bold"/>
+        <TextBlock Name="finalScoreMsg" HorizontalAlignment="Left" Height="50" Margin="97,525,0,0" TextWrapping="Wrap" Text="None" VerticalAlignment="Top" Width="635" FontSize="24" TextAlignment="Center"/>
 
         <!--Save to CSV-->
         <Button Name="btnSaveCsv" Content="Start Record" Height="38" Margin="0,408,14,0" VerticalAlignment="Top"
                 Click="Start_Stop_Record" HorizontalAlignment="Right" Width="125"/>
         <Label Name="recordStatus" Content="Not Recording" Margin="0,372,14,0" VerticalAlignment="Top" Foreground="Gray" FontSize="14" HorizontalAlignment="Right" Width="125" />
-        
 
     </Grid>
 </Window>

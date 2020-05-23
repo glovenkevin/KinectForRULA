@@ -149,10 +149,10 @@ namespace tutorShowSkeleton
 
         // Pesan penjelasan nilai Final Score
         public static String[] Message = new String[] {
-            "Posture still acceptable",                                             // 1 - 2
-            "Posture need to investigate further",                                  // 3 - 4
-            "Posture need to investigate furthher and change soon",                 // 5 - 6
-            "Posture need to investigate and chan ge immediately"                   // 7
+            "Neglibible risk, no action required",                                  // 1 - 2
+            "Low risk, change may be needed",                                       // 3 - 4
+            "Medium risk, further investigation, change soon",                      // 5 - 6
+            "Very high risk, implement change now"                                  // 7
         };
 
         /*   
@@ -245,6 +245,7 @@ namespace tutorShowSkeleton
         public static int ScoreGroupB = 0;
         public static int ScoreGroupC = 0;
 
-        
+        // Location file CSV saved
+        public static readonly string CSV_SAVE_LOCATION = @"F:\\Data.csv";
     }
 }

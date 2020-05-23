@@ -197,7 +197,7 @@ namespace tutorShowSkeleton
         Vector3D trunk = convertJointoVector(spineBase) - convertJointoVector(spineMid) - convertJointoVector(spineShoulder);
 
         // Group A
-        calculateUpperArm(trunk, GlobalVal.BODY_SIDE);
+        calculateUpperArm(GlobalVal.BODY_SIDE);
         calculateLowerArm(GlobalVal.BODY_SIDE);
         calculateWrist( GlobalVal.BODY_SIDE);
         
@@ -215,10 +215,10 @@ namespace tutorShowSkeleton
     #region Body Calculation Angle
     /******************* Method Angle Calc Body Part ******************/
 
-    private void calculateUpperArm(Vector3D trunk, int sisiBadan)
+    private void calculateUpperArm(int sisiBadan)
     {
         Joint start, end, poros;
-        double angle, angleAbduction, shoulderRaise;
+        double angle, shoulderRaise;
         bool isAbducted, isRaised;
 
         if (0 == sisiBadan) // sisi Kiri
@@ -229,7 +229,7 @@ namespace tutorShowSkeleton
             
             // Calculate Angle
             angle = this.calculateAngle(poros.Position.Y, poros.Position.Z,
-                start.Position.Y, start.Position.Z, poros.Position.Y, -2 * poros.Position.Z);
+                start.Position.Y, start.Position.Z, poros.Position.Y, 2 * poros.Position.Z);
             // 0 -> full to backward, 90 -> at stright to the trunk, 180 -> pararell to shoulder
             if (angle > 90)
             {
@@ -243,13 +243,10 @@ namespace tutorShowSkeleton
             {
                 angle += 90;
             }
+            RulaCalculation.calculateUpperArm(angle);
 
             // Upper Arm Abduction
-            end = kalmanFilterFull(getBodyTypeSeq(JointType.SpineShoulder));
-            angleAbduction = this.calculateAngle(poros.Position.X, poros.Position.Y,
-                start.Position.X, start.Position.Y, end.Position.X, end.Position.Y);
-
-            isAbducted = RulaCalculation.calculateUpperArmAbduction(angleAbduction, angle);
+            isAbducted = RulaCalculation.calculateUpperArmAbduction(start.Position.X, poros.Position.X);
             setStatus(this.txtUpperArmAbduction, isAbducted);
 
             // Shoulder is Raise 
@@ -263,10 +260,8 @@ namespace tutorShowSkeleton
             isRaised = RulaCalculation.calcShoulderRaise(shoulderRaise);
             setStatus(this.txtShoulderRaise, isRaised);
 
-            this.textUpperArm.Text = angleAbduction.ToString("0");
-            RulaCalculation.calculateUpperArm(angle);
-
-            
+            // Update on GUI
+            this.textUpperArm.Text = angle.ToString("0");
         }
         else
         {
@@ -290,13 +285,10 @@ namespace tutorShowSkeleton
             {
                 angle += 90;
             }
+            RulaCalculation.calculateUpperArm(angle);
 
             // Upper Arm Abduction
-            end = kalmanFilterFull(getBodyTypeSeq(JointType.SpineShoulder));
-            angleAbduction = this.calculateAngle(poros.Position.X, poros.Position.Y,
-                start.Position.X, start.Position.Y, trunk.X, trunk.Y);
-
-            isAbducted = RulaCalculation.calculateUpperArmAbduction(angleAbduction, angle);
+            isAbducted = RulaCalculation.calculateUpperArmAbduction(start.Position.X, poros.Position.X);
             setStatus(this.txtUpperArmAbduction, isAbducted);
 
             // Shoulder is Raise 
@@ -310,9 +302,8 @@ namespace tutorShowSkeleton
             isRaised = RulaCalculation.calcShoulderRaise(shoulderRaise);
             setStatus(this.txtShoulderRaise, isRaised);
 
+            // Update on GUI
             this.textUpperArm.Text = angle.ToString("0");
-            RulaCalculation.calculateUpperArm(angle);
-            
         }
 
         // Save data into static variable
@@ -324,8 +315,8 @@ namespace tutorShowSkeleton
     private void calculateLowerArm(int sisiBadan)
     {
         Joint start, end, poros;
-        double angle, lowerArmMidline;
-        bool isDeviation;
+        double angle;
+        bool isDeviation = false;
         if (0 == sisiBadan)
         {
             // Lengan Bawah - oke
@@ -336,20 +327,16 @@ namespace tutorShowSkeleton
             angle = calculateAngle(poros.Position.Y, poros.Position.Z, start.Position.Y, start.Position.Z,
                         end.Position.Y, end.Position.Z);
             angle = 180 - angle;
-
-            // Cek arah lengan bwah apakah keluar dari batas midlane
-            poros = start;
-            start = kalmanFilterFull(getBodyTypeSeq(JointType.SpineShoulder));
-
-            lowerArmMidline = calculateAngle(poros.Position.X, poros.Position.Y,
-                start.Position.X, start.Position.Y, end.Position.X, end.Position.Y); // midline position in range 90-120
-
-            this.textLowerArm.Text = lowerArmMidline.ToString("0");
             RulaCalculation.calculateLowerArm(angle);
 
-            // Lower Arm Deviation
-            isDeviation = RulaCalculation.calcLowerArmDeviation(lowerArmMidline);
+            // Cek arah lengan bwah apakah keluar dari batas midlane
+            // Analyze relative position of the wrist X coordinate towards the shoulder position
+            // Check deviation base on coordinate
+            isDeviation = RulaCalculation.calcLowerArmDeviation(end.Position.X, start.Position.X); 
             setStatus(this.txtLowerArmMidline, isDeviation);
+
+            this.textLowerArm.Text = angle.ToString("0");
+            
         }
         else
         {
@@ -361,20 +348,15 @@ namespace tutorShowSkeleton
             angle = calculateAngle(poros.Position.Y, poros.Position.Z, start.Position.Y, start.Position.Z,
                         end.Position.Y, end.Position.Z);
             angle = 180 - angle;
-
-            // Cek arah lengan bwah apakah keluar dari batas midlane
-            poros = start;
-            start = kalmanFilterFull(getBodyTypeSeq(JointType.SpineShoulder));
-
-            lowerArmMidline = calculateAngle(poros.Position.X, poros.Position.Y,
-                start.Position.X, start.Position.Y, end.Position.X, end.Position.Y); // midline position in range 90-120
-
-            this.textLowerArm.Text = angle.ToString("0");
             RulaCalculation.calculateLowerArm(angle);
 
-            // Lower Arm Deviation
-            isDeviation = RulaCalculation.calcLowerArmDeviation(lowerArmMidline);
+            // Cek arah lengan bwah apakah keluar dari batas midlane
+            // Analyze relative position of the wrist X coordinate towards the shoulder position
+            // Check deviation base on coordinate
+            isDeviation = RulaCalculation.calcLowerArmDeviation(end.Position.X, start.Position.X);
             setStatus(this.txtLowerArmMidline, isDeviation);
+
+            this.textLowerArm.Text = angle.ToString("0");
         }
 
         // Save data to static variable
@@ -489,12 +471,13 @@ namespace tutorShowSkeleton
             angle -= 100;
             angle *= -1;
         }
+        RulaCalculation.calculateTrunk(angle);
 
-        // Trunk twisted
-        start = kalmanFilterFull(getBodyTypeSeq(JointType.SpineMid));
-        end = kalmanFilterFull(getBodyTypeSeq(JointType.AnkleLeft));
+        // Trunk twistedi -> not done : Next Development
+        //start = kalmanFilterFull(getBodyTypeSeq(JointType.SpineMd));
+        //end = kalmanFilterFull(getBodyTypeSeq(JointType.AnkleLeft));
 
-        trunkTwist = calculateAngle3D(convertJointoVector(start), convertJointoVector(end));
+        //trunkTwist = calculateAngle3D(convertJointoVector(start), convertJointoVector(end));
 
         // Trunk side bending
         // Create a Vector that perpendicular between hip Joint
@@ -503,7 +486,7 @@ namespace tutorShowSkeleton
 
         Vector3D horizontalSide = hipLeft - hipRight;
         Vector3D perpendicularHorizontal = new Vector3D();
-        perpendicularHorizontal.X = trunk.X;
+        perpendicularHorizontal.X = horizontalSide.Y;
         perpendicularHorizontal.Y = -1 * horizontalSide.X;
         perpendicularHorizontal.Z = horizontalSide.Z;
 
@@ -512,12 +495,12 @@ namespace tutorShowSkeleton
         //trunkBending = calculateAngle3D(perpendicularHorizontal, trunk); // Default position angle -> 108-110
         trunkBending = calculateAngle2D(perpendicularHorizontal, trunk);
 
-        RulaCalculation.calculateTrunk(angle);
-        this.textTrunk.Text = angle.ToString("0");
-
         // Trunk Bending
         isBending = RulaCalculation.calcTrunkbending(trunkBending);
         setStatus(this.txtTrunkBending, isBending);
+
+        // Set on GUI
+        this.textTrunk.Text = angle.ToString("0");
 
         // Save data to static variable
         GlobalVal.trunk = angle;
