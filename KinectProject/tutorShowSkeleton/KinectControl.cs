@@ -452,7 +452,7 @@ namespace tutorShowSkeleton
     private void calculateTrunk(Vector3D trunk)
     {
         Joint start, end, poros;
-        double angle, trunkTwist, trunkBending;
+        double angle, trunkBending;
         bool isBending;
 
         start = kalmanFilterFull(getBodyTypeSeq(JointType.SpineShoulder));
@@ -474,6 +474,7 @@ namespace tutorShowSkeleton
         RulaCalculation.calculateTrunk(angle);
 
         // Trunk twistedi -> not done : Next Development
+        //double trunkTwist;
         //start = kalmanFilterFull(getBodyTypeSeq(JointType.SpineMd));
         //end = kalmanFilterFull(getBodyTypeSeq(JointType.AnkleLeft));
 

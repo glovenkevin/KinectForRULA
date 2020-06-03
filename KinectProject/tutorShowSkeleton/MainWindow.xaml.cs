@@ -28,6 +28,7 @@ namespace tutorShowSkeleton
         void Window_Closed(object sender, EventArgs eventArgs)
         {
             this.controller.ReleaseSensor();
+            Environment.Exit(0); // shutdown the app / terminate
         }
 
         void InitializeStartUpStatus()

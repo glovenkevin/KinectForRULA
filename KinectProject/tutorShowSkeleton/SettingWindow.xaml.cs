@@ -222,11 +222,13 @@ namespace tutorShowSkeleton
             if (this.neckTwist.IsChecked == true)
             {
                 this.kondisiLeher = 1;
+                GlobalVal.neckTwisted = true;
                 setStatus(this.txtNeckTwist, true);
             }
             else
             {
                 this.kondisiLeher = 0;
+                GlobalVal.neckTwisted = false;
                 setStatus(this.txtNeckTwist, false);
             }
 

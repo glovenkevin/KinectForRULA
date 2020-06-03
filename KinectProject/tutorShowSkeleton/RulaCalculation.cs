@@ -33,23 +33,23 @@ namespace tutorShowSkeleton
             GlobalVal.scorePosture[0] = 1;
 
             // Hitung sudut dari inputan sensor
-            if (-20 >= angle && angle <= 20)
+            if (-20.0 >= angle && angle <= 20.0)
             {
                 GlobalVal.scorePosture[0] = 1;
             }
-            else if (-20 > angle)
+            else if (-20.0 > angle)
             {
                 GlobalVal.scorePosture[0] = 2;
             }
-            else if (angle > 20 && angle <= 45)
+            else if (angle > 20.0 && angle <= 45.0)
             {
                 GlobalVal.scorePosture[0] = 2;
             }
-            else if (angle > 45 && angle <= 105) 
+            else if (angle > 45.0 && angle <= 105.0) 
             {
                 GlobalVal.scorePosture[0] = 3;
             }
-            else if (angle > 105)
+            else if (angle > 105.0)
             {
                 GlobalVal.scorePosture[0] = 4;
             }
@@ -64,12 +64,12 @@ namespace tutorShowSkeleton
             // Solution: move to coordinate analys
             bool status = false;
             double range = shoulderX - elbowX;
-            if (range < 0)
+            if (range < 0.0)
             {
                 range *= -1;
             }
 
-            if (range > 0.1)
+            if (range > 0.05)
             {
                 status = true;
             }
@@ -83,8 +83,8 @@ namespace tutorShowSkeleton
 
         public static bool calcShoulderRaise(double shoulderRaised) 
         {
-            // Shoulder is raised
-            if (shoulderRaised < 15)
+            // Shoulder is raised - ada selisih sebesar 10 derajat
+            if (shoulderRaised < 10.0)
             {
                 GlobalVal.scorePosture[0] += 1;
                 return true;
@@ -95,11 +95,11 @@ namespace tutorShowSkeleton
         public static void calculateLowerArm(double angle)
         {
             // Hitung sudut lower arm berdasarkan input sensor
-            if ((angle > 0 && angle < 60) || angle > 100)
+            if ((angle > 0.0 && angle < 60.0) || angle > 100.0)
             {
                 GlobalVal.scorePosture[1] = 2;
             }
-            else if (angle >= 60 && angle <= 100)
+            else if (angle >= 60.0 && angle <= 100.0)
             {
                 GlobalVal.scorePosture[1] = 1;
             }
@@ -111,8 +111,14 @@ namespace tutorShowSkeleton
         public static bool calcLowerArmDeviation(double wrist, double shoulder)
         {
             bool status = false;
-            // Perhitungan sudut arah lower Arm
-            if (wrist < shoulder - 0.1 || wrist > shoulder + 0.1)
+            double range = wrist - shoulder;
+
+            if (range < 0.0)
+            {
+                range *= -1;
+            }
+
+            if (range > 0.05)
             {
                 status = true;
             }
@@ -128,15 +134,15 @@ namespace tutorShowSkeleton
         public static void calculateWrist(double angle)
         {
             // Hitung sudut pergelangan tangan dari sensor
-            if ( angle < 10)
+            if (angle < 10.0)
             {
                 GlobalVal.scorePosture[2] = 1;
-            } 
-            else if (angle < 25 && angle > 10)
+            }
+            else if (angle < 25.0 && angle > 10.0)
             {
                 GlobalVal.scorePosture[2] = 2;
             }
-            else if (angle > 25)
+            else if (angle > 25.0)
             {
                 GlobalVal.scorePosture[2] = 3;
             }
@@ -148,19 +154,19 @@ namespace tutorShowSkeleton
         public static void calculateNeck(double angle)
         {
             // Hitung sudut leher terhadap garis tegak lurus dari punggung
-            if (angle < 0)
+            if (angle < 0.0)
             {
                 GlobalVal.scorePosture[3] = 4;
             }
-            else if (angle >= 0 && angle <= 10)
+            else if (angle >= 0.0 && angle <= 10.0)
             {
                 GlobalVal.scorePosture[3] = 1;
             }
-            else if (angle > 10 && angle <= 20)
+            else if (angle > 10.0 && angle <= 20.0)
             {
                 GlobalVal.scorePosture[3] = 2;
             }
-            else if (angle > 20)
+            else if (angle > 20.0)
             {
                 GlobalVal.scorePosture[3] = 3;
             }
@@ -172,7 +178,7 @@ namespace tutorShowSkeleton
         public static bool calcNeckBending(double neckBending)
         {
             // Neck Bending
-            if (neckBending > 5)
+            if (neckBending > 5.0)
             {
                 GlobalVal.scorePosture[3] += 1;
                 return true;
@@ -183,19 +189,19 @@ namespace tutorShowSkeleton
         public static void calculateTrunk(double angle)
         {
             // Hitung sudut punggung / trunk dari nilai sensor
-            if (angle <= 10)
+            if (angle <= 10.0)
             {
                 GlobalVal.scorePosture[4] = 1;
             }
-            else if (angle > 10 && angle <= 20)
+            else if (angle > 10.0 && angle <= 20.0)
             {
                 GlobalVal.scorePosture[4] = 2;
             }
-            else if (angle > 20 && angle <= 50)
+            else if (angle > 20.0 && angle <= 50.0)
             {
                 GlobalVal.scorePosture[4] = 3;
             }
-            else if (angle > 50)
+            else if (angle > 50.0)
             {
                 GlobalVal.scorePosture[4] = 4;
             }
@@ -207,9 +213,9 @@ namespace tutorShowSkeleton
         public static bool calcTrunkbending(double trunkBending)
         {
             // Side Bending
-            if (trunkBending < 90) // Actor sit
+            if (trunkBending < 90.0) // Actor sit
             {
-                if (trunkBending > 15)
+                if (trunkBending > 15.0)
                 {
                     GlobalVal.scorePosture[4] += 1;
                     return true;
@@ -217,7 +223,7 @@ namespace tutorShowSkeleton
             }
             else // Actor standing 
             {
-                if (trunkBending < 165)
+                if (trunkBending < 165.0)
                 {
                     GlobalVal.scorePosture[4] += 1;
                     return true;
@@ -232,6 +238,13 @@ namespace tutorShowSkeleton
             int ScoreGroupA = 0;
             int ScoreGroupB = 0;
             int ScoreGroupC = 0;
+
+            // if upper arm angle between -20 and 20, and upper arm lean true the score will be 0 
+            // it will throw error so that in the here need a guard for it
+            if (0 == GlobalVal.scorePosture[0])
+            {
+                GlobalVal.scorePosture[0] = 1;
+            }
 
             // Perhitungan nilai group A
             ScoreGroupA = GlobalVal.GroupA[

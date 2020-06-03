@@ -201,8 +201,8 @@ namespace tutorShowSkeleton
         // Global status 
         public static readonly String CONNECT = "Connected";
         public static readonly String DISCONNECT = "Disconnected";
-        public static readonly String START_RECORD = "Start Recording";
-        public static readonly String STOP_RECORD = "Stop Recording";
+        public static readonly String START_RECORD = "Recording";
+        public static readonly String STOP_RECORD = "Not Recording";
 
         // Stack for saving data
         public static List<dynamic> data = new List<dynamic>();
