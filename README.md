@@ -27,4 +27,4 @@ reference for calculating angle but on different condition, example: Upper arm m
 5. https://docplayer.info/40536055-Pemanfaatan-filter-dalam-peningkatan-hasil-skeletal-tracking-pada-kinect.html (Erick Pranata Thesis for my kalman tunning by using variance of the body every 5 frame)
 
 # Some pict from my App
-![My Image](https://github.com/glovenkevin/img/blob/master/Data.png?raw=true)
+![My Image](https://github.com/glovenkevin/img/blob/master/KV2RULA-v1.0.png?raw=true)
