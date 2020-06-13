@@ -51,6 +51,7 @@ namespace tutorShowSkeleton
                 this.controller.openReader();
                 this.controller.OpenReaderBodySkeleton();
                 this.Status.Content = GlobalVal.CONNECT;
+                this.canvas.Visibility = System.Windows.Visibility.Visible;
                 this.btnSaveCsv.IsEnabled = true;
             } 
             else
@@ -58,7 +59,7 @@ namespace tutorShowSkeleton
                 this.controller.CloseReader();
                 this.Status.Content = GlobalVal.DISCONNECT;
                 this.camera.Source = null;
-                this.canvas.Children.Clear();
+                this.canvas.Visibility = System.Windows.Visibility.Hidden;
                 this.btnSaveCsv.IsEnabled = false;
                 setDefaultLabelTextbox();
             }
