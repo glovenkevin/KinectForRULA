@@ -86,7 +86,7 @@ namespace tutorShowSkeleton
         void Call_Setting(object send, EventArgs eventArgs)
         {
             // Initialize setting window
-            setWin.ShowDialog();
+            setWin.Visibility = Visibility.Visible;
         }
 
         public void openSensor()

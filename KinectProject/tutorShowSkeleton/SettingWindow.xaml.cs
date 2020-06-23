@@ -94,7 +94,7 @@ namespace tutorShowSkeleton
         void Apply_Setting(object sender, EventArgs eventArgs)
         {
             applyData();
-            this.Hide();
+            this.Visibility = Visibility.Hidden;
         }
 
         void InitializeComboboxItem()
